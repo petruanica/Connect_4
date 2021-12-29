@@ -61,6 +61,9 @@ h2 {
 }
 
 #back{
+    font-family: Virgil, serif;
+
+    font-size: 20px;
     color:black;
     text-decoration: none;
     width: 100px;
@@ -74,5 +77,4 @@ h2 {
 }
 #back:hover{
     background-color: #6ebbd573;
-    color:rgba(20, 0, 202, 0.726);
 }

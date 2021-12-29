@@ -15,7 +15,7 @@
                 font-family: "Virgil";
                 src: url("https://excalidraw.com/Virgil.woff2");
             }
-            
+
             @font-face {
                 font-family: "Cascadia";
                 src: url("https://excalidraw.com/Cascadia.woff2");
@@ -30,13 +30,17 @@
             <h1> CONNECT 4</h1>
         </div>
         <div class="menu">
-            <button id="play">
-                Play
-                <div id="online-players">
-                    online: <span>10</span>
-                </div>
-            </button>
-            <button id="tutorial">Tutorial</button>
+            <form action="/game">
+                <button type="submit" id="play"> Play
+                    <div id="online-players">
+                        online: <span>10</span>
+                    </div>
+                </button>
+            </form>
+            <form action="/tutorial">
+                <button type='submit' id="tutorial">Tutorial</button>
+
+            </form>
             <div id="stats">
                 <div id="games total">
                     games total: <span>10</span>
@@ -47,7 +51,6 @@
             </div>
     </main>
 
-    <script src="javascripts/splash.js" async defer></script>
 </body>
 
 </html>
