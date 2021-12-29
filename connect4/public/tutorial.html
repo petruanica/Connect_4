@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Connect 4</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./stylesheets/tutorial.css">
+
+    <defs>
+        <style>
+            @font-face {
+                font-family: "Virgil";
+                src: url("https://excalidraw.com/Virgil.woff2");
+            }
+            
+            @font-face {
+                font-family: "Cascadia";
+                src: url("https://excalidraw.com/Cascadia.woff2");
+            }
+        </style>
+    </defs>
+</head>
+
+<body>
+    <main>
+        <div id="title">
+            <h1> CONNECT 4</h1>
+        </div>
+        <div class="menu">
+            <h2>Tutorial</h2>
+
+            <div id="tutorial-text">
+
+                You need to connect <span style="color:red">4</span> disks and have them on the same line/columnn/diagonal in order to win the game.🚀
+                <br /> <br />
+                In each turn you can click on a cell to place a disk there. 
+                <br/>  <br/>
+                You have <span style="color:red">15</span> seconds to make each move, so make your move before the times runs out ⏰
+                <br /> 
+                Have fun and good luck!
+            </div>
+         </div>
+         <button id="back">
+             Back
+         </button>   
+    </main>
+
+
+    <script>
+        const backButton = document.querySelector("#back");
+        backButton.addEventListener('click',() => location = '/');
+    </script>
+</body>
+
+</html>
