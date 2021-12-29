@@ -2,20 +2,26 @@
     --font-size: 30px;
 }
 
+@font-face {
+    font-family: Virgil;
+    src: url("./fonts/Virgil.woff2");
+    font-display: swap;
+}
+
 #title {
     position: absolute;
     top: 20px;
     width: 400px;
     height: 100px;
-    border: 2px dashed black;
+    border: 2px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(252, 252, 252);
+    /* background-color: rgb(252, 252, 252); */
 }
 
 h1 {
-    font-family: 'Roboto Slab', serif;
+    font-family: Virgil, serif;
 }
 
 html,
@@ -26,7 +32,7 @@ body {
 }
 
 main {
-    background: repeating-linear-gradient(45deg, #c0e0e9, #c0e0e9 2.5px, white 2.5px, white 5px);
+    background: repeating-linear-gradient(-45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,41 +47,36 @@ main {
     margin: -10px 0;
 }
 
-@font-face {
-    font-family: Virgil;
-    src: url("https://github.com/excalidraw/virgil/blob/main/Virgil.woff2");
-    font-display: swap;
-}
-
 button {
     font-size: var(--font-size);
-    font-family: 'Roboto Slab', serif;
+    font-family: Virgil, serif;
     margin: 30px 0;
     width: 300px;
     height: 100px;
     align-self: center;
-    background-color: white;
+    background-color: transparent;
+    /* background-color: white; */
     border: 2px dashed black;
 }
 
 button:hover {
-    background-color: rgb(163, 163, 163);
+    background-color: #6ebbd573;
 }
 
 #stats {
-    font-family: 'Roboto Slab', serif;
+    font-family: Virgil, serif;
     font-size: 25px;
-    background-color: white;
+    /* background-color: white; */
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 20px;
+    right: 20px;
     width: 200px;
     height: 100px;
     display: flex;
     flex-direction: column;
     padding-left: 20px;
     padding-right: 20px;
-    border: 2px dashed black;
+    border: 2px solid black;
 }
 
 #stats>div {
