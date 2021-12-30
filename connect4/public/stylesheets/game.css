@@ -41,6 +41,10 @@ section {
     display: table-cell;
     vertical-align: middle;
 }
+#win-message{
+    width: 200px;
+    height: 200px;
+}
 
 #clock {
     background-color: white;
@@ -67,7 +71,7 @@ section {
 }
 
 #timer>span {
-    /* margin-top: 25%; */
+    margin-top: 25%;
 }
 
 #title {
@@ -108,12 +112,24 @@ section {
 }
 #board {
     flex-grow: 1;
+    /* Daca vrei padding stanga dreapta la tabla
+    /* padding-left: 5px;
+    padding-right: 5px; */
+
     background-color: rgba(0, 136, 170, 255);
-    padding: 5px;
     display: flex;
     justify-content: space-around;
     align-content: space-between;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
+}
+.board-column{
+    padding-top: 5px;
+
+    display: flex;
+    flex-direction: column;
+}
+.board-column:hover{
+    background-color: rgba(197, 197, 197, 0.555);
 }
 
 .board-cell {
