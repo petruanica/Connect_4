@@ -1,16 +1,14 @@
-@font-face {
-    font-family: Virgil;
-    src: url("./fonts/Virgil.woff2");
-    font-display: swap;
-}
-
 /* make body full screen */
-html, body {
+
+html,
+body {
     margin: 0;
     height: 100%;
 }
 
+
 /* center elements */
+
 body {
     background: repeating-linear-gradient(-45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
     display: flex;
@@ -19,9 +17,10 @@ body {
     font-family: Virgil, serif;
 }
 
-
 main {
     display: table;
+    height: 100%;
+    width: 100%;
     padding: 20px;
 }
 
@@ -68,30 +67,72 @@ section {
 }
 
 #timer>span {
-    margin-top: 25%;
-}
-
-td {
-    border: 3px solid;
-    padding: 30px;
-    background-color: white;
-    border-radius: 50%;
+    /* margin-top: 25%; */
 }
 
 #title {
     font-size: 40px;
     font-weight: bold;
-    margin-bottom: 50px;
+    margin:0px;
+    /* margin-bottom: 50px; */
     background: repeating-linear-gradient(45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
     border: 3px solid black;
     border-radius: 10px;
 }
-
-#board-container {
-    background-color: cornflowerblue;
-    border-radius: 10px;
-    padding: 5px;
+#board-big{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 330px;
 }
+
+#board-container{
+    height: 330px;
+    display: flex;
+    flex-flow: row,wrap;
+}
+.margin{
+    flex-grow: 1;
+    padding-left: 5px;
+    padding-right: 5px;
+    position: relative;
+    height: 100%;
+    min-width: 10px;
+    background-color: rgba(0,170,212,255);
+}
+.left{
+    border-top-left-radius: 25px;
+}
+.right{
+    border-top-right-radius: 25px;
+}
+#board {
+    flex-grow: 1;
+    background-color: rgba(0, 136, 170, 255);
+    padding: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-content: space-between;
+    flex-flow: row wrap;
+}
+
+.board-cell {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    margin: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.margin-bottom{
+    height: 20px;
+    width: 100%;
+    background-color: rgba(0,102,128,255);
+
+}
+
 
 button {
     font-size: 30px;

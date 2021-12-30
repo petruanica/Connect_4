@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>CONNECT 4</title>
-    <link rel="stylesheet" href="./stylesheets/game.css" >
+    <link rel="stylesheet" href="./stylesheets/game.css">
     <defs>
         <style>
             @font-face {
                 font-family: "Virgil";
                 src: url("https://excalidraw.com/Virgil.woff2");
             }
-            
+
             @font-face {
                 font-family: "Cascadia";
                 src: url("https://excalidraw.com/Cascadia.woff2");
@@ -21,6 +22,7 @@
         </style>
     </defs>
 </head>
+
 <body>
     <main>
         <div class="container">
@@ -34,68 +36,79 @@
                 <span>CONNECT 4 </span>
             </section>
 
-            <section id="board-container">
-                <table>
-                    <tr>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                    </tr>
-                    <tr>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                    </tr>
-                    <tr>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                    </tr>
-                    <tr>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                    </tr>
-                    <tr>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                    </tr>
-                    <tr>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                        <td>  </td>
-                    </tr>
-                </table>
+            <section>
+                <div id="board-big">
+                    <div id="board-container">
+                        <div class="margin left">
+                        </div>
+    
+                        <div id="board">
+    
+    
+                            <div class="board-cell"> 1 </div>
+                            <div class="board-cell"> 2</div>
+                            <div class="board-cell"> 3</div>
+                            <div class="board-cell"> 4</div>
+                            <div class="board-cell"> 5</div>
+                            <div class="board-cell"> 6</div>
+                            <div class="board-cell"> 7</div>
+    
+                            <div class="board-cell"> 1 </div>
+                            <div class="board-cell"> 2</div>
+                            <div class="board-cell"> 3</div>
+                            <div class="board-cell"> 4</div>
+                            <div class="board-cell"> 5</div>
+                            <div class="board-cell"> 6</div>
+                            <div class="board-cell"> 7</div>
+    
+                            <div class="board-cell"> 1 </div>
+                            <div class="board-cell"> 2</div>
+                            <div class="board-cell"> 3</div>
+                            <div class="board-cell"> 4</div>
+                            <div class="board-cell"> 5</div>
+                            <div class="board-cell"> 6</div>
+                            <div class="board-cell"> 7</div>
+    
+                            <div class="board-cell"> 1 </div>
+                            <div class="board-cell"> 2</div>
+                            <div class="board-cell"> 3</div>
+                            <div class="board-cell"> 4</div>
+                            <div class="board-cell"> 5</div>
+                            <div class="board-cell"> 6</div>
+                            <div class="board-cell"> 7</div>
+    
+                            <div class="board-cell"> 1 </div>
+                            <div class="board-cell"> 2</div>
+                            <div class="board-cell"> 3</div>
+                            <div class="board-cell"> 4</div>
+                            <div class="board-cell"> 5</div>
+                            <div class="board-cell"> 6</div>
+                            <div class="board-cell"> 7</div>
+    
+                            <div class="board-cell"> 1 </div>
+                            <div class="board-cell"> 2</div>
+                            <div class="board-cell"> 3</div>
+                            <div class="board-cell"> 4</div>
+                            <div class="board-cell"> 5</div>
+                            <div class="board-cell"> 6</div>
+                            <div class="board-cell"> 7</div>
+                        </div>
+                        <div class="margin right">
+                        </div>
+                    </div>
+                    <div class="margin-bottom">
+                </div>
+              
+
+
+
+
             </section>
 
+            </div>
             <section>
                 <div class="player-div" style="border: 3px solid red;">
-                    <img src="images/tudelft_logo.png" alt="logo" width="25" height="25" >
+                    <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
                     <span>Player 1</span>
                 </div>
 
@@ -105,16 +118,36 @@
 
                 <div class="player-div" style="border: 3px solid orange;">
                     <span>Player 2</span>
-                    <img src="images/tudelft_logo.png" alt="logo" width="25" height="25" >
+                    <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
                 </div>
             </section>
         </div>
 
         <div class="container">
             <div id="clock">
-                 <span>0:59</span>
+                <span>0:58</span>
             </div>
         </div>
     </main>
 </body>
+<script>
+    const timer = document.querySelector("#clock>span");
+    let seconds = 0;
+    function addOneSecond() {
+        seconds++;
+        displayTimer();
+    }
+    function displayTimer() {
+        let sec = seconds % 60;
+        if (sec < 10)
+            sec = "0" + sec.toString();
+        else
+            sec = sec.toString();
+        let min = Math.floor(seconds / 60).toString();
+        timer.innerHTML = min + ":" + sec;
+
+    }
+    setInterval(addOneSecond, 1000);
+</script>
+
 </html>
