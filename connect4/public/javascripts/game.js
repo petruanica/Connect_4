@@ -1,8 +1,3 @@
-/* eslint-disable no-invalid-this */
-/* eslint-disable linebreak-style */
-/* eslint-disable max-len */
-/* eslint-disable linebreak-style */
-
 'use strict';
 // @ts-check
 
