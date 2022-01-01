@@ -20,14 +20,9 @@ body {
 main {
     display: table;
     height: 100%;
-    width: 100%;
     padding: 20px;
 }
 
-section {
-    text-align: center;
-    margin: 20px;
-}
 
 .player-div {
     display: inline-block;
@@ -41,6 +36,15 @@ section {
     display: table-cell;
     vertical-align: middle;
 }
+
+.container>section {
+    text-align: center;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #win-message{
     width: 200px;
     height: 200px;
@@ -77,25 +81,27 @@ section {
 #title {
     font-size: 40px;
     font-weight: bold;
-    margin:0px;
-    /* margin-bottom: 50px; */
+    margin-bottom: 10%;
     background: repeating-linear-gradient(45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
     border: 3px solid black;
     border-radius: 10px;
+    padding: 10px 20px;
 }
-#board-big{
+
+#board-big {
     display: flex;
     flex-direction: column;
     width: 400px;
     height: 330px;
 }
 
-#board-container{
+#board-container {
     height: 330px;
     display: flex;
     flex-flow: row,wrap;
 }
-.margin{
+
+.margin {
     flex-grow: 1;
     padding-left: 5px;
     padding-right: 5px;
@@ -104,12 +110,15 @@ section {
     min-width: 10px;
     background-color: rgba(0,170,212,255);
 }
-.left{
+
+.left {
     border-top-left-radius: 25px;
 }
-.right{
+
+.right {
     border-top-right-radius: 25px;
 }
+
 #board {
     flex-grow: 1;
     /* Daca vrei padding stanga dreapta la tabla
@@ -122,13 +131,15 @@ section {
     align-content: space-between;
     flex-flow: row nowrap;
 }
-.board-column{
+
+.board-column {
     padding-top: 5px;
 
     display: flex;
     flex-direction: column;
 }
-.board-column:hover{
+
+.board-column:hover {
     background-color: rgba(197, 197, 197, 0.555);
 }
 
@@ -142,13 +153,13 @@ section {
     align-items: center;
     justify-content: center;
 }
-.margin-bottom{
+
+.margin-bottom {
     height: 20px;
     width: 100%;
     background-color: rgba(0,102,128,255);
 
 }
-
 
 button {
     font-size: 30px;
@@ -165,4 +176,9 @@ button:hover {
 
 button:active {
     background-color: #c0e0e98e;
+}
+
+form {
+    margin: 10px;
+    width: fit-content;
 }

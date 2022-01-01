@@ -28,9 +28,16 @@
         <div class="container">
             <form action="/">
                 <button type="submit"> Menu </button>
+                
+            </form>
+
+            <form action="/">
                 <button type="button" id='reset-board'> Reset </button>
             </form>
-            <p id='win-message' style="display:nonegi">Player <span id='win-player'>red</span>  has won the game. <br/>Click the reset button to play again.</p>
+            
+            <p id='win-message' style="display:none"> 
+                Player <span id='win-player'>red</span>  has won the game. <br/>Click the reset button to play again.
+            </p>
         </div>
 
         <div class="container">
@@ -117,24 +124,24 @@
 
                     </div>
                     <div class="margin-bottom"></div>
-
+                </div>
             </section>
-        </div>
-        <section>
-            <div class="player-div" style="border: 3px solid red;">
-                <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
-                <span>Player 1</span>
-            </div>
+        
+            <section>
+                <div class="player-div" style="border: 3px solid red;">
+                    <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
+                    <span>Player 1</span>
+                </div>
 
-            <div id="timer">
-                <span style="display:block; transform: rotate(-45deg);"> 15 </span>
-            </div>
+                <div id="timer">
+                    <span style="display:block; transform: rotate(-45deg);"> 15 </span>
+                </div>
 
-            <div class="player-div" style="border: 3px solid orange;">
-                <span>Player 2</span>
-                <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
-            </div>
-        </section>
+                <div class="player-div" style="border: 3px solid orange;">
+                    <span>Player 2</span>
+                    <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
+                </div>
+            </section>
         </div>
 
         <div class="container">
