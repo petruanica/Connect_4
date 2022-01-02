@@ -1,47 +1,74 @@
-const createError = require('http-errors');
+//@ts-check
+
+const path = require("path");
 const express = require('express');
 const http = require("http");
-
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const websocket = require("ws");
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-
+const { on } = require("events");
 const app = express();
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-console.log(__dirname);
 app.use(express.static(__dirname + "/public"));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-});
-
-module.exports = app;
 const server = http.createServer(app);
-server.listen(4000);
+server.listen(3000);
+
+const webSocketServer = new websocket.Server({ server });
+let clients = [];
+
+function updateClients() {
+    for (const client of clients) {
+        client.send(clients.length);
+    }
+}
+
+function addClient(webSocket) {
+    clients.push(webSocket);
+    updateClients();
+}
+
+function removeClient(webSocket) {
+    clients = clients.filter(socket => socket !== webSocket);
+    updateClients();
+}
+let gamers = [];
+const names = ["name1","name2","name3","name4","name5"]
+
+function updateGamers() {
+    for(const socket of gamers ){
+        socket.send(gamers.length);
+    }
+}
+
+function addGamer(webSocket) {
+    gamers.push(websocket);
+    updateGamers();
+}
+
+function removeGamer(webSocket) {
+    gamers = gamers.filter(socket => socket !== webSocket);
+    updateGamers();
+}
+
+webSocketServer.on("connection", (webSocket) => {
+    addClient(webSocket);
+    // console.log("Someone connected", clients.length);
+
+    webSocket.on("message", (message) => {
+        console.log("[LOG] " + message);
+        const mes = message.toString();
+        if (mes.includes("game")) {
+            gamers.push(webSocket);
+        }
+    });
+    webSocket.on("close", () => {
+        removeClient(webSocket);
+        // console.log("Someone disconected!", clients.length);
+    })
+});
