@@ -1,6 +1,8 @@
 'use strict';
 // @ts-check
 
+
+
 class Game {
     constructor() {
         this.board = new Board();
@@ -17,8 +19,8 @@ class Game {
         const columns = document.querySelectorAll('.board-column');
         let columnIndex = 0;
         for (const column of columns) {
-            const clickFunc = this.clickColumnWrapper(columnIndex).bind(this);
-            column.addEventListener('click', clickFunc);
+            const click = this.clickColumn.bind(this, columnIndex);
+            column.addEventListener('click', click);
             columnIndex++;
         }
     }
@@ -33,30 +35,30 @@ class Game {
     }
 
     /**
-     * Returns a function that manages the click event on a column
+     * Handles click event on column
      * @param {number} column
      * @return {function} a function that manages the click
      */
-    clickColumnWrapper(column) {
-        return function clickColumn() {
-            // this will be the game in this function
-            if (this.gameEnded == true) {
-                return;
-            }
-            const row = this.board.placePiece(column, this.playerTurnColor);
-            if (row == undefined) {
-                return;
-            }
-            const outcome = this.board.checkWin(column, row, this.playerTurnColor);
-            console.log('Game ended is: ', outcome);
-            if (outcome == true) {
-                this.gameEnded = true;
-                this.handleWonGame();
-            }
-            this.changePlayerTurn(); // change the color of the next turn
-        };
+    clickColumn(column) {
+        // this will be the game in this function
+        if (this.gameEnded == true) {
+            return;
+        }
+        const row = this.board.placePiece(column, this.playerTurnColor);
+        if (row == undefined) {
+            return;
+        }
+        const outcome = this.board.checkWin(column, row, this.playerTurnColor);
+        console.log('Game ended is: ', outcome);
+        if (outcome == true) {
+            this.gameEnded = true;
+            this.handleWonGame();
+        }
+        this.changePlayerTurn(); // change the color of the next turn
     }
 
+
+    
     /**
      * changes the player's turn
      */
@@ -210,7 +212,7 @@ class Board {
             let col = column;
             let r = row;
             let win = true;
-            const positions = [{'col': col, 'row': row}];
+            const positions = [{ 'col': col, 'row': row }];
             for (let x = 1; x <= left; x++) {
                 col -= dcol;
                 r += drow;
@@ -268,4 +270,4 @@ const game = new Game();
 
 const wonMessageText = document.querySelector('#win-message');
 const resetButton = document.querySelector('#reset-board');
-resetButton.addEventListener('click', () => game.resetGame());// don't lose this https://javascript.info/bind
+resetButton.addEventListener('click', () => game.resetGame()); // don't lose this https://javascript.info/bind

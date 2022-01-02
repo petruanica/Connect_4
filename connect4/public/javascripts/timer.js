@@ -1,5 +1,8 @@
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
+const button = document.querySelector('#reset-board');
+button.addEventListener("click",() => {seconds = -1; secondsLeft = 16;});
+
 let seconds = 0;
 let secondsLeft = 15;
 
@@ -31,5 +34,5 @@ function displayTimer() {
     timer.innerHTML = secondsLeft.toString();
 }
 
-setInterval(addOneSecond, 1000);
-setInterval(substractOneSecond, 1000);
+const clockInterval = setInterval(addOneSecond, 1000);
+const timerInterval = setInterval(substractOneSecond, 1000);
