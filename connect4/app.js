@@ -13,4 +13,4 @@ app.use('/', indexRouter);
 app.use(express.static(__dirname + "/public"));
 
 const server = http.createServer(app);
-server.listen(4000);
+server.listen(3000);
