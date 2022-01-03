@@ -42,14 +42,14 @@ main {
     margin: -10px 0;
 }
 
-#online-players {
+button div {
     position: absolute;
     font-size: 20px;
     bottom: 0;
     right: 4px;
 }
 
-#online-players>span {
+button div span {
     color: red;
 }
 
@@ -93,13 +93,13 @@ button>a {
     border: 2px solid black;
 }
 
-#stats>div {
+#stats div {
     flex-grow: 1;
     display: flex;
     align-items: center;
 }
 
-#stats>div>span {
+#stats div >span {
     color: red;
     position: absolute;
     right: 10px;

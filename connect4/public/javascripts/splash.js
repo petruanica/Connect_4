@@ -1,8 +1,8 @@
 const socket = new WebSocket("ws://localhost:3000/");
-const message = document.querySelector("#online-players span");
+const onlinePlayers = document.querySelector("#play span");
 socket.onmessage = (event) => {
-    message.innerHTML = event.data;
-}
-socket.onopen = () =>{
-    message.innerHTML = "Message send to server";
+    const data = JSON.parse(event.data);
+    if(data.event == "onlinePlayers"){
+        onlinePlayers.innerHTML = data.onlinePlayers;
+    }
 }

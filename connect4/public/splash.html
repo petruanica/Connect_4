@@ -30,13 +30,19 @@
             <h1> CONNECT 4</h1>
         </div>
         <div class="menu">
-            <form action="/game">
-                <button type="submit" id="play"> Play
-                    <div id="online-players">
-                        online: <span>10</span>
-                    </div>
-                </button>
-            </form>
+            <!-- <form action="/game"> -->
+            <button type="submit" id="play"> Play
+                <div>
+                    online: <span>10</span>
+                </div>
+            </button>
+
+            <button type="submit" id="wait"> Waiting...
+                <div>
+                    queue: <span>10</span>
+                </div>
+            </button>
+            <!-- </form> -->
             <form action="/tutorial">
                 <button type='submit' id="tutorial">Tutorial</button>
 

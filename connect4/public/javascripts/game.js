@@ -21,7 +21,6 @@ socket.onmessage = (event) => {
         document.querySelector('#color').innerHTML = "I am " + data.color;
         startGame();
     }
-
 }
 socket.onopen = () => {
     const data = {

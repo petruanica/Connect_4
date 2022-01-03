@@ -22,8 +22,12 @@ const webSocketServer = new websocket.Server({ server });
 let clients = [];
 
 function updateClients() {
+    const data = {
+        "event": "onlinePlayers",
+        "onlinePlayers": clients.length,
+    }
     for (const client of clients) {
-        client.send(clients.length);
+        client.send(JSON.stringify(data));
     }
 }
 
@@ -67,9 +71,12 @@ const mapSocketToGame = {};
 webSocketServer.on("connection", (webSocket) => {
     addClient(webSocket);
 
+
+    //.
     webSocket.on("message", (message) => {
         // console.log("[LOG] " + message.toString());
         const received = JSON.parse(message.toString());
+        //{"event": ceva, "asdadada"}
         console.log(received);
         if (received.event == "gameStart") {
             addGamer(webSocket);
@@ -98,6 +105,10 @@ webSocketServer.on("connection", (webSocket) => {
         }else if(received.event == "move"){
             const index = mapSocketToGame[webSocket];
             const theGame = games[index];
+            if(theGame == undefined){
+                console.log("An odd number of players joined");
+                return;
+            }
             if(theGame.player1 == undefined || theGame.player2 == undefined){
                 console.log("No matching player!");
                 return;
