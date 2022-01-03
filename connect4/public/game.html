@@ -29,13 +29,13 @@
             <form action="/">
                 <button type="submit"> Menu </button>
             </form>
-                 
+
             <form action="/">
                 <button type="button" id='reset-board'> Reset </button>
             </form>
-                
-            <p id='win-message' style="display: none"> 
-                Player <span id='win-player'>red</span>  has won the game. <br/>Click the reset button to play again.
+
+            <p id='win-message' style="display: none">
+                Player <span id='win-player'>red</span> has won the game. <br />Click the reset button to play again.
             </p>
         </div>
 
@@ -123,7 +123,7 @@
                     <div class="margin-bottom"></div>
                 </div>
             </section>
-    
+
             <section>
                 <div class="player-div" style="border: 3px solid red;">
                     <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
@@ -145,10 +145,16 @@
             <div id="clock">
                 <span>0:00</span>
             </div>
+            <p>There are <span id="message"></span> players</p>
+            <p id='color'>I am no color right now</p>
         </div>
     </main>
 
     <script src="./javascripts/game.js" async defer></script>
     <script src="./javascripts/timer.js" async defer></script>
+    <script>
+
+    </script>
 </body>
+
 </html>

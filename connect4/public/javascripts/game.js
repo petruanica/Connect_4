@@ -1,15 +1,45 @@
 'use strict';
 // @ts-check
 
+const player1 = document.querySelectorAll(".player-div")[0];
+const player2 = document.querySelectorAll(".player-div")[1];
+const socket = new WebSocket("ws://localhost:3000/");
+const message = document.querySelector("#message");
+let game;
+let playerColor;
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log(data);
+    if (data.event == "playersConnected") {
+        message.innerHTML = data.playersGame;
+    } else if (data.event == "makeMove") {
+        console.log("I have to make a move at column", data.column);
+        game.placeColumn(data.column);
+    } else if (data.event == "setColor") {
+        console.log("I am " + data.color);
+        playerColor = data.color;
+        document.querySelector('#color').innerHTML = "I am " + data.color;
+        startGame();
+    }
+
+}
+socket.onopen = () => {
+    const data = {
+        "event": "gameStart",
+        "message": "Hello from a game!"
+    }
+    socket.send(JSON.stringify(data));
+};
 
 
 class Game {
-    constructor() {
+    constructor(turnColor) {
         this.board = new Board();
         this.board.initializeBoard();
         this.gameEnded = false;
         this.addClickEvents();
-        this.playerTurnColor = 'red';
+        this.myTurnColor = turnColor;
+        this.generalTurnColor = 'red';
     }
 
     /**
@@ -31,7 +61,37 @@ class Game {
      */
     handleWonGame() {
         wonMessageText.style.display = 'block';
-        document.querySelector('#win-player').innerHTML = this.playerTurnColor;
+        document.querySelector('#win-player').innerHTML = this.myTurnColor;
+    }
+
+
+
+    clickColumn(column) {
+        // player clicks on the column
+        if (this.gameEnded == true) {
+            return;
+        }
+        if (this.generalTurnColor != this.myTurnColor) {
+            console.log("You can't click because is not your turn!");
+            return;
+        }
+        const row = this.placeColumn(column);
+        if (row == undefined)
+            return; // it did not change the board
+
+        const outcome = this.board.checkWin(column, row, this.myTurnColor);
+        console.log('Game ended is: ', outcome);
+        if (outcome == true) {
+            this.gameEnded = true;
+            this.handleWonGame();
+        }
+
+        const data = {
+            "event": "move",
+            "column": column
+        }
+        console.log("I am sending the move to the other player", data);
+        socket.send(JSON.stringify(data));
     }
 
     /**
@@ -39,34 +99,25 @@ class Game {
      * @param {number} column
      * @return {function} a function that manages the click
      */
-    clickColumn(column) {
-        // this will be the game in this function
-        if (this.gameEnded == true) {
-            return;
-        }
-        const row = this.board.placePiece(column, this.playerTurnColor);
+    placeColumn(column) {
+        const row = this.board.placePiece(column, this.generalTurnColor);
+        this.changeGlobalTurn();
         if (row == undefined) {
-            return;
+            return undefined;
         }
-        const outcome = this.board.checkWin(column, row, this.playerTurnColor);
-        console.log('Game ended is: ', outcome);
-        if (outcome == true) {
-            this.gameEnded = true;
-            this.handleWonGame();
-        }
-        this.changePlayerTurn(); // change the color of the next turn
+        return row;
     }
 
 
-    
+
     /**
      * changes the player's turn
      */
-    changePlayerTurn() {
-        if (this.playerTurnColor == 'red')
-            this.playerTurnColor = 'yellow';
+    changeGlobalTurn() {
+        if (this.generalTurnColor == 'red')
+            this.generalTurnColor = 'yellow';
         else
-            this.playerTurnColor = 'red';
+            this.generalTurnColor = 'red';
     }
 
 
@@ -76,7 +127,7 @@ class Game {
     resetGame() {
         this.gameEnded = false;
         this.board.clearBoard();
-        this.playerTurnColor = 'red';
+        this.myTurnColor = 'red';
         wonMessageText.style.display = 'none';
     }
 }
@@ -266,8 +317,12 @@ class Board {
     }
 }
 
-const game = new Game();
+function startGame() {
+    console.log(playerColor);
 
-const wonMessageText = document.querySelector('#win-message');
-const resetButton = document.querySelector('#reset-board');
-resetButton.addEventListener('click', () => game.resetGame()); // don't lose this https://javascript.info/bind
+    game = new Game(playerColor);
+
+    const wonMessageText = document.querySelector('#win-message');
+    const resetButton = document.querySelector('#reset-board');
+    resetButton.addEventListener('click', () => game.resetGame()); // don't lose this https://javascript.info/bind
+}
