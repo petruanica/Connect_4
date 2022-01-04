@@ -8,19 +8,7 @@
 
     <title>CONNECT 4</title>
     <link rel="stylesheet" href="./stylesheets/game.css">
-    <defs>
-        <style>
-            @font-face {
-                font-family: "Virgil";
-                src: url("https://excalidraw.com/Virgil.woff2");
-            }
-
-            @font-face {
-                font-family: "Cascadia";
-                src: url("https://excalidraw.com/Cascadia.woff2");
-            }
-        </style>
-    </defs>
+    <link rel="stylesheet" href="./stylesheets/styles.css">
 </head>
 
 <body>
@@ -37,6 +25,7 @@
             <p id='win-message' style="display: none"> 
                 Player <span id='win-player'>red</span>  has won the game. <br/>Click the reset button to play again.
             </p>
+
         </div>
 
         <div class="container">
@@ -148,7 +137,7 @@
         </div>
     </main>
 
-    <script src="./javascripts/game.js" async defer></script>
-    <script src="./javascripts/timer.js" async defer></script>
+    <script type="module" src="./javascripts/game.js" async defer></script>
+    <script type="module" src="./javascripts/timer.js" async defer></script>
 </body>
 </html>

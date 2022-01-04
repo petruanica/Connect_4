@@ -1,26 +1,13 @@
-/* make body full screen */
-
-html,
-body {
-    margin: 0;
-    height: 100%;
-}
-
-
 /* center elements */
-
 body {
-    background: repeating-linear-gradient(-45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Virgil, serif;
 }
 
 main {
     display: table;
     height: 100%;
-    padding: 20px;
 }
 
 
@@ -76,16 +63,6 @@ main {
 
 #timer>span {
     margin-top: 25%;
-}
-
-#title {
-    font-size: 40px;
-    font-weight: bold;
-    margin-bottom: 10%;
-    background: repeating-linear-gradient(45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
-    border: 3px solid black;
-    border-radius: 10px;
-    padding: 10px 20px;
 }
 
 #board-big {
@@ -162,23 +139,7 @@ main {
 }
 
 button {
-    font-size: 30px;
-    font-family: Virgil, serif;
+    margin-bottom: 10px;
     width: 100px;
     height: 50px;
-    background: repeating-linear-gradient(45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
-    border: 3px dashed black;
-}
-
-button:hover {
-    background-color: #6ebbd573;
-}
-
-button:active {
-    background-color: #c0e0e98e;
-}
-
-form {
-    margin: 10px;
-    width: fit-content;
 }

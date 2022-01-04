@@ -1,20 +1,25 @@
+'use strict';
+
+import { turnTimePenalty } from "./game.js";
+
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
 const button = document.querySelector('#reset-board');
-button.addEventListener("click",() => {seconds = -1; secondsLeft = 16;});
+button.addEventListener("click",() => {stopTimers(); startTimers();});
 
 let seconds = 0;
 let secondsLeft = 15;
+
+let clockInterval;
+let timerInterval;
+
+startTimers();
 
 function addOneSecond() {
     seconds++;
     displayClock();
 }
 
-function substractOneSecond() {
-    secondsLeft--;
-    displayTimer();
-}
 
 function displayClock() {
     let sec = seconds % 60;
@@ -27,12 +32,33 @@ function displayClock() {
     clock.innerHTML = min + ':' + sec;
 }
 
+function substractOneSecond() {
+    secondsLeft--;
+    displayTimer();
+}
+
 function displayTimer() {
     if (secondsLeft == -1) {
         secondsLeft = 15;
+        console.log("time penalty");
+        turnTimePenalty();
     }
     timer.innerHTML = secondsLeft.toString();
 }
 
-const clockInterval = setInterval(addOneSecond, 1000);
-const timerInterval = setInterval(substractOneSecond, 1000);
+function startTimers() {
+    seconds = -1; 
+    secondsLeft = 16;
+    clockInterval = setInterval(addOneSecond, 1000);;
+    timerInterval = setInterval(substractOneSecond, 1000);
+}
+
+
+export function resetTurnTimer() {
+    secondsLeft = 15;
+}
+
+export function stopTimers() {
+    clearInterval(clockInterval);
+    clearInterval(timerInterval);
+}

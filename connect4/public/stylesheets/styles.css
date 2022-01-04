@@ -1,0 +1,52 @@
+@font-face {
+    font-family: "Virgil";
+    src: url("https://excalidraw.com/Virgil.woff2");
+}
+
+@font-face {
+    font-family: "Cascadia";
+    src: url("https://excalidraw.com/Cascadia.woff2");
+}
+
+:root {
+    --font-size: 30px;
+}
+
+/* make body full screen */
+html, body {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+
+body { 
+    background: repeating-linear-gradient(-45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
+    font-family: Virgil, serif;
+}
+
+#title {
+    font-size: 40px;
+    font-weight: bold;
+    font-family: Virgil, serif;
+    margin-bottom: 10%;
+    background: repeating-linear-gradient(45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+
+button {
+    font-size: 30px;
+    font-family: Virgil, serif;
+    background: repeating-linear-gradient(45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
+    border: 3px dashed black;
+}
+
+button:hover {
+    background-color: #6ebbd573;
+}
+
+button:active {
+    background-color: #c0e0e98e;
+}

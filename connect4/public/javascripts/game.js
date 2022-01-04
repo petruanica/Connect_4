@@ -1,6 +1,6 @@
 'use strict';
 // @ts-check
-
+import {resetTurnTimer, stopTimers} from "./timer.js";
 
 
 class Game {
@@ -10,6 +10,10 @@ class Game {
         this.gameEnded = false;
         this.addClickEvents();
         this.playerTurnColor = 'red';
+        this.timePenalties = {
+            'red': 0, 
+            'yellow': 0
+        };
     }
 
     /**
@@ -32,12 +36,12 @@ class Game {
     handleWonGame() {
         wonMessageText.style.display = 'block';
         document.querySelector('#win-player').innerHTML = this.playerTurnColor;
+        stopTimers();
     }
 
     /**
      * Handles click event on column
      * @param {number} column
-     * @return {function} a function that manages the click
      */
     clickColumn(column) {
         // this will be the game in this function
@@ -57,12 +61,39 @@ class Game {
         this.changePlayerTurn(); // change the color of the next turn
     }
 
+    /**
+     * Places a piece on a random column 
+     */
+    clickRandomColumn() {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * this.board.columns);
+        } while (this.board.lastCellColumn[randomIndex] >= this.board.rows);
+        this.clickColumn(randomIndex);
+    }
 
+    /**
+     * Adds a penalty to current player
+     * If a player has 3 penalties, the game ends and the other player wins
+     */
+    addTimePenalty() {
+        let currentColor = this.playerTurnColor;
+        this.clickRandomColumn();
+        this.timePenalties[currentColor]++;
+        // this.handlePenaltyText();
+        
+        if (this.timePenalties[currentColor] == 3) {
+            this.gameEnded = true;
+            this.handleWonGame();
+            console.log("ended game due to time penalty");
+        }
+    }
     
     /**
      * changes the player's turn
      */
     changePlayerTurn() {
+        resetTurnTimer();
         if (this.playerTurnColor == 'red')
             this.playerTurnColor = 'yellow';
         else
@@ -78,6 +109,10 @@ class Game {
         this.board.clearBoard();
         this.playerTurnColor = 'red';
         wonMessageText.style.display = 'none';
+        this.timePenalties = {
+            'red': 0, 
+            'yellow': 0
+        };
     }
 }
 
@@ -271,3 +306,10 @@ const game = new Game();
 const wonMessageText = document.querySelector('#win-message');
 const resetButton = document.querySelector('#reset-board');
 resetButton.addEventListener('click', () => game.resetGame()); // don't lose this https://javascript.info/bind
+
+/**
+ * Makes a random move if the player runs out of time
+ */
+export function turnTimePenalty() {
+    game.addTimePenalty();
+}
