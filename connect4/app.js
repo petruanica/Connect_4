@@ -52,14 +52,12 @@ function removeClient(webSocket) {
 let gamers = [];
 
 function updateGamers() {
-    let index = 0;           // ce face index? 
     const data = {
         "event": "playersConnected",
         "playersGame": gamers.length
     }
     for (const socket of gamers ) {
         socket.send(JSON.stringify(data));
-        index++;
     }
 }
 
@@ -87,7 +85,6 @@ function removeFromQueue(webSocket) {
 webSocketServer.on("connection", (webSocket) => {
     addClient(webSocket);
 
-    //.
     webSocket.on("message", (message) => {
         // console.log("[LOG] " + message.toString());
         const received = JSON.parse(message.toString());

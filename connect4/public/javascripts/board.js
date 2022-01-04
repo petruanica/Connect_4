@@ -1,5 +1,4 @@
 export class Board {
-    // TREBUIE SA AI THIS. peste tot
     constructor() {
         this.rows = 6;
         this.columns = 7;

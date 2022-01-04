@@ -1,8 +1,8 @@
 'use strict';
 // @ts-check
 
-import {resetTurnTimer, stopTimers} from "./timer.js";
-import {Board} from "./board.js";
+import { resetTurnTimer, stopTimers } from "./timer.js";
+import { Board } from "./board.js";
 
 const wonMessageText = document.querySelector('#win-message');
 
@@ -91,7 +91,7 @@ export class Game {
     /**
      * Places a piece on a random column 
      */
-     clickRandomColumn() {
+    clickRandomColumn() {
         let randomIndex;
         do {
             randomIndex = Math.floor(Math.random() * this.board.columns);
@@ -103,12 +103,12 @@ export class Game {
      * Adds a penalty to current player
      * If a player has 3 penalties, the game ends and the other player wins
      */
-     addTimePenalty() {
+    addTimePenalty() {
         if (this.myTurnColor == this.generalTurnColor) {
             this.clickRandomColumn();
             this.timePenalties[this.myTurnColor]++;
         }
-        
+
         if (this.timePenalties[this.myTurnColor] == 3) {
             this.gameEnded = true;
             this.handleWonGame();
@@ -137,7 +137,7 @@ export class Game {
         this.myTurnColor = 'red';
         wonMessageText.style.display = 'none';
         this.timePenalties = {
-            'red': 0, 
+            'red': 0,
             'yellow': 0
         };
     }

@@ -12,12 +12,34 @@ main {
 
 
 .player-div {
-    display: inline-block;
+    position: relative;
+    /* display: inline-block;  nu cred ca ai nevoie de asta*/
     padding: 10px;
     margin: 10px 35px;
     background-color: white;
     border-radius: 25px;
+    display: flex;
+    align-content: center; /* aliniaza pe linie imaginea si textul */
 }
+
+/* textul din player div */
+.player-div span {
+    margin: 0 3px;
+    /* margin-left si margin-right sunt 3 ca sa distantez un pic de imagine */
+    padding-top: 3px;
+    /* ca sa aliniez textul cu imaginea*/
+}
+
+.player-turn {
+    position: absolute; /* fata de player div care position relative */
+    display: none; /* initial e none dar e setat block in main.js cand se decide culoarea jucatorului */
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    bottom: calc(100% + 5px);  /* fix deasupra la player-div plus inca 5 px*/
+    left: calc(50% - 5px); /* fix la mijloc dar trebuie sa scad 10/2 din width */
+}
+
 
 .container {
     display: table-cell;
@@ -32,7 +54,8 @@ main {
     justify-content: center;
 }
 
-#win-message{
+
+#win-message {
     width: 200px;
     height: 200px;
 }
@@ -51,19 +74,24 @@ main {
 }
 
 #timer {
-    background-color: orange;
+    background-color: #fab005;
     transform: rotate(45deg);
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    margin-bottom: 15px;
-    text-align: center;
+    width: 45px;
+    height: 45px;
     border-radius: 10px;
 }
 
+/*textul din timerul de 15 secunde */
 #timer>span {
-    margin-top: 25%;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+/* BOARD */
 
 #board-big {
     display: flex;
@@ -75,7 +103,7 @@ main {
 #board-container {
     height: 330px;
     display: flex;
-    flex-flow: row,wrap;
+    flex-flow: row, wrap;
 }
 
 .margin {
@@ -85,7 +113,7 @@ main {
     position: relative;
     height: 100%;
     min-width: 10px;
-    background-color: rgba(0,170,212,255);
+    background-color: rgba(0, 170, 212, 255);
 }
 
 .left {
@@ -134,7 +162,7 @@ main {
 .margin-bottom {
     height: 20px;
     width: 100%;
-    background-color: rgba(0,102,128,255);
+    background-color: rgba(0, 102, 128, 255);
 
 }
 
@@ -145,8 +173,13 @@ button {
 }
 
 @keyframes fadebackground-red {
-    from {background-color: red;}
-    to {background-color: #ff00ff;}
+    from {
+        background-color: red;
+    }
+
+    to {
+        background-color: #ff00ff;
+    }
 }
 
 .win-animation-red {
@@ -154,8 +187,13 @@ button {
 }
 
 @keyframes fadebackground-yellow {
-    from {background-color: yellow;}
-    to {background-color: #ff00ff;}
+    from {
+        background-color: yellow;
+    }
+
+    to {
+        background-color: #ff00ff;
+    }
 }
 
 .win-animation-yellow {

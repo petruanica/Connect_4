@@ -9,14 +9,11 @@ if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).inc
 }
 
 
-const player1 = document.querySelectorAll(".player-div")[0];
-const player2 = document.querySelectorAll(".player-div")[1];
 const message = document.querySelector("#message");
 
 const socket = new WebSocket("ws://localhost:3000/");
 
 let game;
-let playerColor;
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
@@ -28,9 +25,14 @@ socket.onmessage = (event) => {
         game.placeColumn(data.column);
     } else if (data.event == "setColor") {
         console.log("I am " + data.color);
-        playerColor = data.color;
-        document.querySelector('#color').innerHTML = "I am " + data.color;
-        startGame();
+        const playerColor = data.color;
+        const circlesAbovePlayer1 = document.querySelectorAll(".player-turn")[0]; // red
+        const circlesAbovePlayer2 = document.querySelectorAll(".player-turn")[1]; // yellow
+        if(playerColor == 'red')
+            circlesAbovePlayer1.style.display = "block";
+        else 
+            circlesAbovePlayer2.style.display = "block";
+        startGame(playerColor);
     } // else if (data.event == "gameEndedByDisconnect") {
     //     game.gameEnded = true;
     //     game.handleWonGame();
@@ -44,12 +46,10 @@ socket.onopen = () => {
         "message": "Hello from a game!"
     }
     socket.send(JSON.stringify(data));
-
-
 };
 
 
-function startGame() {
+function startGame(playerColor) {
     console.log(playerColor);
 
     game = new Game(socket, playerColor);
