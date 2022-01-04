@@ -110,7 +110,8 @@ export class Board {
      * @param {number} row
      */
     changeWinningPieceStyle(column, row) {
-        this.boardPieces[column][row].style.outline = '2px solid black';
+        let winColor = this.boardPieces[column][row].style.backgroundColor;
+        this.boardPieces[column][row].className += ' win-animation-' + winColor;
     }
 
     /**

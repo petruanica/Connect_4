@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Connect 4</title>
+    <title>CONNECT 4</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./stylesheets/splash.css">
@@ -18,17 +18,13 @@
         </div>
         <div class="menu">
             <!-- <form action="/game"> -->
-            <button type="submit" id="play"> Play
+            <button type="submit" id="play"> 
+                <span>Play</span>
                 <div>
-                    online: <span>10</span>
+                    online: <span>0</span>
                 </div>
             </button>
 
-            <button type="submit" id="wait"> Waiting...
-                <div>
-                    queue: <span>10</span>
-                </div>
-            </button>
             <!-- </form> -->
             <form action="/tutorial">
                 <button type='submit' id="tutorial">Tutorial</button>
@@ -45,6 +41,6 @@
     </main>
 
 </body>
-<script src="javascripts/splash.js" async defer></script>
+<script type="module" src="javascripts/splash.js" async defer></script>
 
 </html>

@@ -104,9 +104,10 @@ export class Game {
      * If a player has 3 penalties, the game ends and the other player wins
      */
      addTimePenalty() {
-        this.clickRandomColumn();
-        this.timePenalties[this.myTurnColor]++;
-        // this.handlePenaltyText();
+        if (this.myTurnColor == this.generalTurnColor) {
+            this.clickRandomColumn();
+            this.timePenalties[this.myTurnColor]++;
+        }
         
         if (this.timePenalties[this.myTurnColor] == 3) {
             this.gameEnded = true;

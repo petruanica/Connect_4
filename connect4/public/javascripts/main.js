@@ -3,6 +3,11 @@
 
 import {Game} from "./game.js";
 
+// check if page was reloaded; if yes, redirect to splash screen
+if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).includes('reload')) {
+    window.location.href = "./";
+}
+
 
 const player1 = document.querySelectorAll(".player-div")[0];
 const player2 = document.querySelectorAll(".player-div")[1];
@@ -26,7 +31,11 @@ socket.onmessage = (event) => {
         playerColor = data.color;
         document.querySelector('#color').innerHTML = "I am " + data.color;
         startGame();
-    }
+    } // else if (data.event == "gameEndedByDisconnect") {
+    //     game.gameEnded = true;
+    //     game.handleWonGame();
+    //     console.log("gameEndedByDisconnect");
+    // }
 }
 
 socket.onopen = () => {
@@ -35,6 +44,8 @@ socket.onopen = () => {
         "message": "Hello from a game!"
     }
     socket.send(JSON.stringify(data));
+
+
 };
 
 
@@ -46,6 +57,7 @@ function startGame() {
     const resetButton = document.querySelector('#reset-board');
     resetButton.addEventListener('click', () => game.resetGame()); // don't lose this https://javascript.info/bind
 }
+
 
 export function turnTimePenalty() {
     game.addTimePenalty();

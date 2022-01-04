@@ -70,3 +70,13 @@ button {
     position: absolute;
     right: 10px;
 }
+
+@keyframes fadebackground {
+    from {background-color: #FCE97F;}
+    to {background-color: #2EB07B;}
+}
+
+.waiting-animation {
+    background: #FCE97F;
+    animation: fadebackground 2s infinite alternate;
+}

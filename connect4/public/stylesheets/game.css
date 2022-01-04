@@ -143,3 +143,21 @@ button {
     width: 100px;
     height: 50px;
 }
+
+@keyframes fadebackground-red {
+    from {background-color: red;}
+    to {background-color: #ff00ff;}
+}
+
+.win-animation-red {
+    animation: fadebackground-red 2s infinite alternate;
+}
+
+@keyframes fadebackground-yellow {
+    from {background-color: yellow;}
+    to {background-color: #ff00ff;}
+}
+
+.win-animation-yellow {
+    animation: fadebackground-yellow 2s infinite alternate;
+}
