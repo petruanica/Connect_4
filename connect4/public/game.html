@@ -17,13 +17,13 @@
             <form action="/">
                 <button type="submit"> Menu </button>
             </form>
-                 
+
             <form action="/">
                 <button type="button" id='reset-board'> Reset </button>
             </form>
-                
-            <p id='win-message' style="display: none"> 
-                Player <span id='win-player'>red</span>  has won the game. <br/>Click the reset button to play again.
+
+            <p id='win-message' style="display: none">
+                Player <span id='win-player'>red</span> has won the game. <br />Click the reset button to play again.
             </p>
 
         </div>
@@ -41,78 +41,13 @@
                         <!-- Board created in javascript where
                             each child is a div with class "board-cell"-->
                         <!-- </div> -->
-                        <div id="board">
-                            <!-- E facut din javascript acum-->
-                            <!-- <div class="board-column">
-
-                                <div class="board-cell">1</div>
-                                <div class="board-cell">2</div>
-                                <div class="board-cell">3</div>
-                                <div class="board-cell">4</div>
-                                <div class="board-cell">5</div>
-                                <div class="board-cell">6</div>
-                            </div>
-                            <div class="board-column">
-
-                                <div class="board-cell">1</div>
-                                <div class="board-cell">2</div>
-                                <div class="board-cell">3</div>
-                                <div class="board-cell">4</div>
-                                <div class="board-cell">5</div>
-                                <div class="board-cell">6</div>
-                            </div>
-                            <div class="board-column">
-
-                                <div class="board-cell">1</div>
-                                <div class="board-cell">2</div>
-                                <div class="board-cell">3</div>
-                                <div class="board-cell">4</div>
-                                <div class="board-cell">5</div>
-                                <div class="board-cell">6</div>
-                            </div>
-                            <div class="board-column">
-
-                                <div class="board-cell">1</div>
-                                <div class="board-cell">2</div>
-                                <div class="board-cell">3</div>
-                                <div class="board-cell">4</div>
-                                <div class="board-cell">5</div>
-                                <div class="board-cell">6</div>
-                            </div>
-                            <div class="board-column">
-
-                                <div class="board-cell">1</div>
-                                <div class="board-cell">2</div>
-                                <div class="board-cell">3</div>
-                                <div class="board-cell">4</div>
-                                <div class="board-cell">5</div>
-                                <div class="board-cell">6</div>
-                            </div>
-                            <div class="board-column">
-
-                                <div class="board-cell">1</div>
-                                <div class="board-cell">2</div>
-                                <div class="board-cell">3</div>
-                                <div class="board-cell">4</div>
-                                <div class="board-cell">5</div>
-                                <div class="board-cell">6</div>
-                            </div>
-                            <div class="board-column">
-
-                                <div class="board-cell"></div>
-                                <div class="board-cell"></div>
-                                <div class="board-cell"></div>
-                                <div class="board-cell"></div>
-                                <div class="board-cell"></div>
-                                <div class="board-cell"></div>
-                            </div> -->
-                        </div>
+                        <div id="board"></div>
                         <div class="margin right"></div>
                     </div>
                     <div class="margin-bottom"></div>
                 </div>
             </section>
-    
+
             <section>
                 <div class="player-div" style="border: 3px solid red;">
                     <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
@@ -134,10 +69,13 @@
             <div id="clock">
                 <span>0:00</span>
             </div>
+            <p>There are <span id="message"></span> players</p>
+            <p id='color'>I am no color right now</p>
         </div>
     </main>
 
-    <script type="module" src="./javascripts/game.js" async defer></script>
+    <script type="module" src="./javascripts/main.js" async defer></script>
     <script type="module" src="./javascripts/timer.js" async defer></script>
 </body>
+
 </html>

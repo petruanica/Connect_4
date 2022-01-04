@@ -6,7 +6,6 @@ const http = require("http");
 const websocket = require("ws");
 
 const indexRouter = require('./routes/index');
-const { on } = require("events");
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -23,8 +22,12 @@ const webSocketServer = new websocket.Server({ server });
 let clients = [];
 
 function updateClients() {
+    const data = {
+        "event": "onlinePlayers",
+        "onlinePlayers": clients.length,
+    }
     for (const client of clients) {
-        client.send(clients.length);
+        client.send(JSON.stringify(data));
     }
 }
 
@@ -38,16 +41,21 @@ function removeClient(webSocket) {
     updateClients();
 }
 let gamers = [];
-const names = ["name1","name2","name3","name4","name5"]
 
 function updateGamers() {
+    let index = 0;
+    const data = {
+        "playersGame": gamers.length,
+        "event": "playersConnected",
+    }
     for(const socket of gamers ){
-        socket.send(gamers.length);
+        socket.send(JSON.stringify(data));
+        index++;
     }
 }
 
 function addGamer(webSocket) {
-    gamers.push(websocket);
+    gamers.push(webSocket);
     updateGamers();
 }
 
@@ -56,19 +64,72 @@ function removeGamer(webSocket) {
     updateGamers();
 }
 
+const games = [];
+let currentGame = {};
+const mapSocketToGame = {};
+
 webSocketServer.on("connection", (webSocket) => {
     addClient(webSocket);
-    // console.log("Someone connected", clients.length);
 
+
+    //.
     webSocket.on("message", (message) => {
-        console.log("[LOG] " + message);
-        const mes = message.toString();
-        if (mes.includes("game")) {
-            gamers.push(webSocket);
+        // console.log("[LOG] " + message.toString());
+        const received = JSON.parse(message.toString());
+        //{"event": ceva, "asdadada"}
+        console.log(received);
+        if (received.event == "gameStart") {
+            addGamer(webSocket);
+            console.log("Add gamer");
+            const data = {
+                "event": 'setColor',
+                "color": 'red',
+            }
+            // games
+            if(currentGame.player1 == undefined){
+                currentGame.player1 = webSocket;
+
+                webSocket.send(JSON.stringify(data));
+            }else{
+                currentGame.player2 = webSocket;
+                data.color = 'yellow';
+                webSocket.send(JSON.stringify(data));
+
+                games.push(currentGame);
+                console.log(games.length);
+                const gameCount = games.length - 1;
+                mapSocketToGame[currentGame.player1] = gameCount;
+                mapSocketToGame[currentGame.player2] = gameCount;
+                currentGame = {};
+            }
+        }else if(received.event == "move"){
+            const index = mapSocketToGame[webSocket];
+            const theGame = games[index];
+            if(theGame == undefined){
+                console.log("An odd number of players joined");
+                return;
+            }
+            if(theGame.player1 == undefined || theGame.player2 == undefined){
+                console.log("No matching player!");
+                return;
+            }
+            let otherPlayer = theGame.player1;
+            // only do this if we have more than 2 players
+            if(webSocket == otherPlayer){
+                otherPlayer = theGame.player2;
+            }
+            console.log("Move at col :",received.column);
+            const data = {
+                "event": "makeMove",
+                "column": received.column,
+            }
+            console.log(otherPlayer);
+            otherPlayer.send(JSON.stringify(data));
         }
     });
     webSocket.on("close", () => {
         removeClient(webSocket);
+        removeGamer(webSocket);
         // console.log("Someone disconected!", clients.length);
     })
 });

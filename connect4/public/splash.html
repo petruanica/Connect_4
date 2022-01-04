@@ -17,13 +17,19 @@
             CONNECT 4
         </div>
         <div class="menu">
-            <form action="/game">
-                <button type="submit" id="play"> Play
-                    <div id="online-players">
-                        online: <span>10</span>
-                    </div>
-                </button>
-            </form>
+            <!-- <form action="/game"> -->
+            <button type="submit" id="play"> Play
+                <div>
+                    online: <span>10</span>
+                </div>
+            </button>
+
+            <button type="submit" id="wait"> Waiting...
+                <div>
+                    queue: <span>10</span>
+                </div>
+            </button>
+            <!-- </form> -->
             <form action="/tutorial">
                 <button type='submit' id="tutorial">Tutorial</button>
 
@@ -39,16 +45,6 @@
     </main>
 
 </body>
-<script>
-    const socket = new WebSocket("ws://localhost:3000");
-    const message = document.querySelector("#online-players span");
-    socket.onmessage = (event) => {
-        message.innerHTML = event.data;
-    }
-    socket.onopen = () =>{
-        socket.send("Hello from client !");
-        message.innerHTML = "Message send to server";
-    }
-</script>
+<script src="javascripts/splash.js" async defer></script>
 
 </html>

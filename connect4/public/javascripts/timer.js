@@ -1,6 +1,6 @@
 'use strict';
 
-import { turnTimePenalty } from "./game.js";
+import { turnTimePenalty } from "./main.js";
 
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
