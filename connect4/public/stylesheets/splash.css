@@ -78,5 +78,5 @@ button {
 
 .waiting-animation {
     background: #FCE97F;
-    animation: fadebackground 2s infinite alternate;
+    animation: fadebackground 1s infinite alternate;
 }

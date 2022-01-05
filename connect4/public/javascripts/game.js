@@ -15,10 +15,10 @@ export class Game {
         this.addClickEvents();
         this.myTurnColor = turnColor;
         this.generalTurnColor = 'red';
-        this.timePenalties = {
-            'red': 0,
-            'yellow': 0
-        };
+        this.timePenalties = 0;
+
+        if (turnColor == "red")
+            this.board.makeBoardActive();
     }
 
     /**
@@ -37,7 +37,7 @@ export class Game {
 
 
     /**
-     * Changes the style of the winning pieces by applying a black outline around it
+     * Changes the style of the winning pieces by applying an animation to them
      *
      * @param {number} column
      * @param {number} row
@@ -53,7 +53,7 @@ export class Game {
      * @param {Array} positions an array of the winning piece positions
      * @param {String} winningColor the color that won the game
      */
-    handleWonGame(positions,winningColor) {
+    handleWonGame(positions, winningColor) {
         this.gameEnded = true;
         for (const pos of positions) {
             this.changeWinningPieceStyle(pos.col, pos.row);
@@ -61,6 +61,16 @@ export class Game {
         wonMessageText.style.display = 'block';
         document.querySelector('#win-player').innerHTML = winningColor;
         stopTimers();
+        this.board.makeBoardInactive();
+    }
+
+
+    hangleGameEndByDisconnect(winningColor) {
+        this.gameEnded = true;
+        wonMessageText.style.display = 'block';
+        document.querySelector('#win-player').innerHTML = winningColor;
+        stopTimers();
+        this.board.makeBoardInactive();
     }
 
 
@@ -131,12 +141,16 @@ export class Game {
     addTimePenalty() {
         if (this.myTurnColor == this.generalTurnColor) {
             this.clickRandomColumn();
-            this.timePenalties[this.myTurnColor]++;
+            this.timePenalties++;
         }
 
-        if (this.timePenalties[this.myTurnColor] == 3) {
-            this.gameEnded = true;
-            this.handleWonGame();
+        if (this.timePenalties == 3) {
+            this.hangleGameEndByDisconnect(this.generalTurnColor);
+            const data = {
+                "event": "disconnected",
+                "color": this.generalTurnColor,
+            }
+            this.socket.send(JSON.stringify(data));
             console.log("ended game due to time penalty");
         }
     }
@@ -146,12 +160,19 @@ export class Game {
      */
     changeGlobalTurn() {
         resetTurnTimer();
-        if (this.generalTurnColor == 'red')
+        if (this.generalTurnColor == 'red') {
             this.generalTurnColor = 'yellow';
-        else
+        } else {
             this.generalTurnColor = 'red';
+        }
+        
+        if (this.myTurnColor == this.generalTurnColor) {
+            console.log("changed hover");
+            this.board.makeBoardActive();
+        } else {
+            this.board.makeBoardInactive();
+        }
     }
-
 
     /**
      * resets the game by clearing the board and resting the player's turn
@@ -161,9 +182,6 @@ export class Game {
         this.board.clearBoard();
         this.myTurnColor = 'red';
         wonMessageText.style.display = 'none';
-        this.timePenalties = {
-            'red': 0,
-            'yellow': 0
-        };
+        this.timePenalties = 0;
     }
 }

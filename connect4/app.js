@@ -73,15 +73,15 @@ function getOtherPlayer(webSocket){
     return otherPlayer;
 }
 
+function removeFromQueue(webSocket) {
+    queue = queue.filter(socket => socket !== webSocket);
+}
 
 const games = [];
 let currentGame = {};
 const mapSocketToGame = {};
 let queue = [];
 
-function removeFromQueue(webSocket) {
-    queue = queue.filter(socket => socket !== webSocket);
-}
 
 webSocketServer.on("connection", (webSocket) => {
     addClient(webSocket);
@@ -122,7 +122,7 @@ webSocketServer.on("connection", (webSocket) => {
                 "column": received.column,
             }
             otherPlayer.send(JSON.stringify(data));
-        }else if(received.event == "gameWon"){
+        } else if (received.event == "gameWon") {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Game was won by the other player");
             const data = {
@@ -131,8 +131,7 @@ webSocketServer.on("connection", (webSocket) => {
                 "positions": received.positions
             }
             otherPlayer.send(JSON.stringify(data));
-        }
-        else if (received.event == "enqueued") {
+        } else if (received.event == "enqueued") {
             queue.push(webSocket);
             console.log("players in queue: " + queue.length);
 
@@ -145,36 +144,28 @@ webSocketServer.on("connection", (webSocket) => {
                 queue[1].send(JSON.stringify(data));
                 queue = [];
             }
+        } else if (received.event == "disconnected") {
+            let otherPlayer = getOtherPlayer(webSocket);
+            console.log("Game was won by the other player by abandonment");
+            const data = {
+                "event": "gameWonByDisconnect",
+                "color":  received.color,
+            }
+            otherPlayer.send(JSON.stringify(data));
         }
+        // else if (received.event == "disconnected") {
+        //     let otherPlayer = getOtherPlayer(webSocket);
+        //     console.log("Game was won by the other player due to abandonment");
+        //     const data = {
+        //         "event": "gameWonByDisconnect",
+        //         "message": "opponent disconnected",
+        //     }
+        //     otherPlayer.send(JSON.stringify(data));
+        // }
     });
 
     webSocket.on("close", () => {
         removeClient(webSocket);
         removeFromQueue(webSocket);
-
-        // const index = mapSocketToGame[webSocket];
-        // const theGame = games[index];
-        // if (theGame == undefined) {
-        //     console.log("An odd number of players joined");
-        //     return;
-        // }
-        // if (theGame.player1 == undefined || theGame.player2 == undefined) {
-        //     console.log("No matching player!");
-        //     return;
-        // }
-        // let otherPlayer = theGame.player1;
-        // // only do this if we have more than 2 players
-        // if (webSocket == otherPlayer) {
-        //     otherPlayer = theGame.player2;
-        // }
-
-        // const data = {
-        //     "event": "gameEndedByDisconnect",
-        //     "message": "Opponent disconneced",
-        // }
-        // console.log(otherPlayer);
-        // otherPlayer.send(JSON.stringify(data));
-
-        // console.log("Someone disconected!", clients.length);
     })
 });

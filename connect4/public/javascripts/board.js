@@ -66,6 +66,25 @@ export class Board {
         }
     }
 
+    makeBoardActive() {
+        const boardColumns = document.querySelectorAll(".board-column");
+        if (boardColumns.length == 0)
+            return;
+        for (const boardColumn of boardColumns) {
+            console.log(boardColumn);
+            boardColumn.className = "active-board-column";
+        }
+    }
+
+    makeBoardInactive() {
+        const boardColumns = document.querySelectorAll(".active-board-column");
+        if (boardColumns.length == 0)
+            return;
+        for (const boardColumn of boardColumns) {
+            boardColumn.className = "board-column";
+        }
+    }
+
 
     /**
      * Checks if the piece and the given row and column has the same color as the current player's turn color

@@ -30,25 +30,22 @@ socket.onmessage = (event) => {
         const circlesAbovePlayer2 = document.querySelectorAll(".player-turn")[1]; // yellow
         const playerNames = document.querySelectorAll(".player-div span");
 
-        if(playerColor == 'red'){
+        if (playerColor == 'red') {
             circlesAbovePlayer1.style.display = "block";
             playerNames[0].innerHTML = "You";
-            playerNames[1].innerHTML = "Other";
-        }
-        else {
+            playerNames[1].innerHTML = "Opponent";
+        } else {
             circlesAbovePlayer2.style.display = "block";
-            playerNames[0].innerHTML = "Other";
+            playerNames[0].innerHTML = "Opponent";
             playerNames[1].innerHTML = "You";
         }
         startGame(playerColor);
-    } else if(data.event == "gameWonByOTher"){
-        game.handleWonGame(data.positions,data.color);
-    }
-    // else if (data.event == "gameEndedByDisconnect") {
-    //     game.gameEnded = true;
-    //     game.handleWonGame();
-    //     console.log("gameEndedByDisconnect");
-    // }
+    } else if (data.event == "gameWonByOTher") {
+        game.handleWonGame(data.positions, data.color);
+    } else if (data.event == "gameWonByDisconnect") {
+        console.log(data.message);
+        game.hangleGameEndByDisconnect(data.color);
+    } 
 }
 
 socket.onopen = () => {
@@ -58,6 +55,14 @@ socket.onopen = () => {
     }
     socket.send(JSON.stringify(data));
 };
+
+// socket.onclose = () => {
+//     const data = {
+//         "event": "disconnected",
+//         "message": "player disconnected"
+//     }
+//     socket.send(JSON.stringify(data));
+// }
 
 
 function startGame(playerColor) {

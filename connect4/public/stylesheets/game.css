@@ -138,14 +138,14 @@ main {
     flex-flow: row nowrap;
 }
 
-.board-column {
+.board-column, .active-board-column {
     padding-top: 5px;
 
     display: flex;
     flex-direction: column;
 }
 
-.board-column:hover {
+.active-board-column:hover {
     background-color: rgba(197, 197, 197, 0.555);
 }
 
