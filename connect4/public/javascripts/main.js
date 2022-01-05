@@ -42,10 +42,12 @@ socket.onmessage = (event) => {
         startGame(playerColor);
     } else if (data.event == "gameWonByOTher") {
         game.handleWonGame(data.positions, data.color);
-    } else if (data.event == "gameWonByDisconnect") {
+    } else if (data.event == "gameWonByTimePenalty") {
+        game.handleGameEndByTimePenalty();
+    } else if (data.event == "gameWonByDisconnect" && !game.gameEnded) {
         console.log(data.message);
-        game.hangleGameEndByDisconnect(data.color);
-    } 
+        game.handleGameEndByDisconnect();
+    }
 }
 
 socket.onopen = () => {
@@ -56,13 +58,16 @@ socket.onopen = () => {
     socket.send(JSON.stringify(data));
 };
 
-// socket.onclose = () => {
-//     const data = {
-//         "event": "disconnected",
-//         "message": "player disconnected"
-//     }
-//     socket.send(JSON.stringify(data));
-// }
+
+// close socket nicely
+window.onbeforeunload = () => {
+    const data = {
+        "event": "disconnected",
+        "message": "Goodbye!"
+    }
+    socket.send(JSON.stringify(data));
+    socket.close();
+}
 
 
 function startGame(playerColor) {
@@ -70,7 +75,7 @@ function startGame(playerColor) {
 
     game = new Game(socket, playerColor);
 
-    const resetButton = document.querySelector('#reset-board');
+    const resetButton = document.querySelector('#rematch-button');
     resetButton.addEventListener('click', () => game.resetGame()); // don't lose this https://javascript.info/bind
 }
 

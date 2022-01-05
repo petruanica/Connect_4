@@ -18,13 +18,12 @@
                 <button type="submit"> Menu </button>
             </form>
 
-            <form action="/">
-                <button type="button" id='reset-board'> Reset </button>
-            </form>
-
-            <p id='win-message' style="display: none">
-                Player <span id='win-player'>red</span> has won the game. <br />Click the reset button to play again.
-            </p>
+            <div id='win-message'>
+                Player <span id='win-player'>red</span> has won the game. <br/><br/> Click the reset button to play again.
+                <form action="/">
+                    <button type="button" id='rematch-button'> Rematch </button>
+                </form>
+            </div>
 
         </div>
 

@@ -71,7 +71,6 @@ export class Board {
         if (boardColumns.length == 0)
             return;
         for (const boardColumn of boardColumns) {
-            console.log(boardColumn);
             boardColumn.className = "active-board-column";
         }
     }

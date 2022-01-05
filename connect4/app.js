@@ -144,24 +144,21 @@ webSocketServer.on("connection", (webSocket) => {
                 queue[1].send(JSON.stringify(data));
                 queue = [];
             }
+        } else if (received.event == "timePenalty") {
+            let otherPlayer = getOtherPlayer(webSocket);
+            const data = {
+                "event": "gameWonByTimePenalty",
+                "message": "opponent ran out of time",
+            }
+            otherPlayer.send(JSON.stringify(data));
         } else if (received.event == "disconnected") {
             let otherPlayer = getOtherPlayer(webSocket);
-            console.log("Game was won by the other player by abandonment");
             const data = {
                 "event": "gameWonByDisconnect",
-                "color":  received.color,
+                "message": "opponent disconnected",
             }
             otherPlayer.send(JSON.stringify(data));
         }
-        // else if (received.event == "disconnected") {
-        //     let otherPlayer = getOtherPlayer(webSocket);
-        //     console.log("Game was won by the other player due to abandonment");
-        //     const data = {
-        //         "event": "gameWonByDisconnect",
-        //         "message": "opponent disconnected",
-        //     }
-        //     otherPlayer.send(JSON.stringify(data));
-        // }
     });
 
     webSocket.on("close", () => {

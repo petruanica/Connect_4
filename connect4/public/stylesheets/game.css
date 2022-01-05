@@ -200,3 +200,21 @@ button {
 .win-animation-yellow {
     animation: fadebackground-yellow 2s infinite alternate;
 }
+
+#win-message {
+    border: 3px solid rgba(0, 136, 170, 255);
+    border-radius: 20px;
+    padding: 10px;
+    background-color: white;
+    position: absolute;
+    left: 10%; 
+    bottom: 35%;
+    display: none;
+}
+
+#rematch-button {
+    position: absolute; 
+    bottom: 5%;
+    left: 18%;
+    width: fit-content;
+}

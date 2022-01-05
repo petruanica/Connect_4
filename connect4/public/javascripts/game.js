@@ -65,10 +65,18 @@ export class Game {
     }
 
 
-    hangleGameEndByDisconnect(winningColor) {
+    handleGameEndByTimePenalty() {
         this.gameEnded = true;
         wonMessageText.style.display = 'block';
-        document.querySelector('#win-player').innerHTML = winningColor;
+        document.querySelector('#win-player').innerHTML = this.generalTurnColor;
+        stopTimers();
+        this.board.makeBoardInactive();
+    }
+
+    handleGameEndByDisconnect() {
+        this.gameEnded = true;
+        wonMessageText.style.display = 'block';
+        document.querySelector('#win-player').innerHTML = this.myTurnColor;
         stopTimers();
         this.board.makeBoardInactive();
     }
@@ -145,10 +153,10 @@ export class Game {
         }
 
         if (this.timePenalties == 3) {
-            this.hangleGameEndByDisconnect(this.generalTurnColor);
+            this.handleGameEndByTimePenalty();
             const data = {
-                "event": "disconnected",
-                "color": this.generalTurnColor,
+                "event": "timePenalty",
+                "message": "ran out of time",
             }
             this.socket.send(JSON.stringify(data));
             console.log("ended game due to time penalty");

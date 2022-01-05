@@ -4,7 +4,7 @@ import { turnTimePenalty } from "./main.js";
 
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
-const button = document.querySelector('#reset-board');
+const button = document.querySelector('#rematch-button');
 button.addEventListener("click",() => {stopTimers(); startTimers();});
 
 let seconds = 0;
