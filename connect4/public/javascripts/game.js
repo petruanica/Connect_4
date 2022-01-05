@@ -16,7 +16,7 @@ export class Game {
         this.myTurnColor = turnColor;
         this.generalTurnColor = 'red';
         this.timePenalties = {
-            'red': 0, 
+            'red': 0,
             'yellow': 0
         };
     }
@@ -34,13 +34,32 @@ export class Game {
         }
     }
 
+
+
+    /**
+     * Changes the style of the winning pieces by applying a black outline around it
+     *
+     * @param {number} column
+     * @param {number} row
+     */
+    changeWinningPieceStyle(column, row) {
+        let winColor = this.board.boardPieces[column][row].style.backgroundColor;
+        this.board.boardPieces[column][row].className += ' win-animation-' + winColor;
+    }
+
     /**
      * fuction triggered when the game was won
-     * it displays the win message and the player who won
+     * it displays the win message and the player who won and highlights the won positions
+     * @param {Array} positions an array of the winning piece positions
+     * @param {String} winningColor the color that won the game
      */
-    handleWonGame() {
+    handleWonGame(positions,winningColor) {
+        this.gameEnded = true;
+        for (const pos of positions) {
+            this.changeWinningPieceStyle(pos.col, pos.row);
+        }
         wonMessageText.style.display = 'block';
-        document.querySelector('#win-player').innerHTML = this.myTurnColor;
+        document.querySelector('#win-player').innerHTML = winningColor;
         stopTimers();
     }
 
@@ -59,19 +78,25 @@ export class Game {
         if (row == undefined)
             return; // it did not change the board
 
-        const outcome = this.board.checkWin(column, row, this.myTurnColor);
-        console.log('Game ended is: ', outcome);
-        if (outcome == true) {
-            this.gameEnded = true;
-            this.handleWonGame();
-        }
-
-        const data = {
+        let data = {
             "event": "move",
             "column": column
         }
         console.log("I am sending the move to the other player", data);
         this.socket.send(JSON.stringify(data));
+
+        const [outcome, positions] = this.board.checkWin(column, row, this.myTurnColor);
+        console.log('Game ended is: ', outcome);
+        if (outcome == true) {
+            this.handleWonGame(positions,this.myTurnColor);
+            data = {
+                "event": "gameWon",
+                "positions": positions,
+                "color": this.myTurnColor,
+            }
+            this.socket.send(JSON.stringify(data));
+        }
+
     }
 
     /**

@@ -38,6 +38,7 @@ export class Board {
     clearBoard() {
         for (let column = 0; column < this.columns; column++) {
             for (let row = 0; row < this.rows; row++) {
+                this.boardPieces[column][row].className = "board-cell";
                 this.boardPieces[column][row].style.backgroundColor = 'white';
                 this.boardPieces[column][row].style.outline = '';
             }
@@ -101,18 +102,6 @@ export class Board {
         return (this.isOnBoard(column, row) && this.sameColor(column, row, color));
     }
 
-
-    /**
-     * Changes the style of the winning pieces by applying a black outline around it
-     *
-     * @param {number} column
-     * @param {number} row
-     */
-    changeWinningPieceStyle(column, row) {
-        let winColor = this.boardPieces[column][row].style.backgroundColor;
-        this.boardPieces[column][row].className += ' win-animation-' + winColor;
-    }
-
     /**
      *
      * @param {number} column column where the last piece was placed
@@ -120,7 +109,7 @@ export class Board {
      * @param {string} color the color of the last move
      * @param {number} dcol how does the column change when we go a direction(column/row/diagional)
      * @param {number} drow how does the column change when we go a direction(column/row/diagional)
-     * @return {boolean} true/false weather the move is a winning one
+     * @return {Array} [true/false,positions of the winning move] weather the move is a winning one
      */
     checkWinLines(column, row, color, dcol, drow) {
         let left = 0;
@@ -156,15 +145,12 @@ export class Board {
                 });
             }
             if (win == true) {
-                for (const pos of positions) {
-                    this.changeWinningPieceStyle(pos.col, pos.row);
-                }
-                return true;
+                return [true, positions];
             }
             left++;
             right--;
         }
-        return false;
+        return [false,[]];
     }
 
     /**
@@ -175,10 +161,19 @@ export class Board {
      * @return {boolean} true/false if the last move was a winning one
      */
     checkWin(column, row, color) {
-        if (this.checkWinLines(column, row, color, 1, 0) || this.checkWinLines(column, row, color, 0, 1) ||
-            this.checkWinLines(column, row, color, -1, -1) || this.checkWinLines(column, row, color, 1, -1)) {
-            return true;
+        const directions = [
+            [1, 0],
+            [0, 1],
+            [-1, -1],
+            [1, -1]
+        ];
+        for (const direction of directions) {
+            const [dx, dy] = direction;
+            const [outcome, positions] = this.checkWinLines(column, row, color,dx, dy);
+            if (outcome == true) {
+                return [outcome, positions];
+            }
         }
-        return false;
+        return [false,[]];
     }
 }

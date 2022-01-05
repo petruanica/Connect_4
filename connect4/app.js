@@ -48,29 +48,30 @@ function removeClient(webSocket) {
 }
 
 
-// gamer part 
-let gamers = [];
 
-function updateGamers() {
-    const data = {
-        "event": "playersConnected",
-        "playersGame": gamers.length
+/**
+ * returns the websocket of the other player 
+ * @return {WebSocket} the socket that belongs to the other player
+ */
+function getOtherPlayer(webSocket){
+    const index = mapSocketToGame[webSocket];
+    const theGame = games[index];
+    if (theGame == undefined) {
+        console.log("An odd number of players joined");
+        return;
     }
-    for (const socket of gamers ) {
-        socket.send(JSON.stringify(data));
+    if (theGame.player1 == undefined || theGame.player2 == undefined) {
+        console.log("No matching player!");
+        return;
     }
+    console.log("The two players are in the game win index", index);
+    let otherPlayer = theGame.player1;
+    // only do this if we have more than 2 players
+    if (webSocket == otherPlayer) {
+        otherPlayer = theGame.player2;
+    }
+    return otherPlayer;
 }
-
-function addGamer(webSocket) {
-    gamers.push(webSocket);
-    updateGamers();
-}
-
-function removeGamer(webSocket) {
-    gamers = gamers.filter(socket => socket !== webSocket);
-    updateGamers();
-}
-
 
 
 const games = [];
@@ -91,18 +92,16 @@ webSocketServer.on("connection", (webSocket) => {
         //{"event": ceva, "asdadada"}
         console.log(received);
         if (received.event == "gameStart") {
-            addGamer(webSocket);
             console.log("Add gamer");
             const data = {
                 "event": 'setColor',
                 "color": 'red',
             }
-            // games
             if (currentGame.player1 == undefined) {
                 currentGame.player1 = webSocket;
-
                 webSocket.send(JSON.stringify(data));
             } else {
+                console.log("Here!");
                 currentGame.player2 = webSocket;
                 data.color = 'yellow';
                 webSocket.send(JSON.stringify(data));
@@ -113,31 +112,27 @@ webSocketServer.on("connection", (webSocket) => {
                 mapSocketToGame[currentGame.player1] = gameCount;
                 mapSocketToGame[currentGame.player2] = gameCount;
                 currentGame = {};
+                console.log("Two players connected to game", gameCount);
             }
-        } else if(received.event == "move"){
-            const index = mapSocketToGame[webSocket];
-            const theGame = games[index];
-            if(theGame == undefined){
-                console.log("An odd number of players joined");
-                return;
-            }
-            if(theGame.player1 == undefined || theGame.player2 == undefined){
-                console.log("No matching player!");
-                return;
-            }
-            let otherPlayer = theGame.player1;
-            // only do this if we have more than 2 players
-            if(webSocket == otherPlayer){
-                otherPlayer = theGame.player2;
-            }
-            console.log("Move at col :",received.column);
+        } else if (received.event == "move") {
+            let otherPlayer = getOtherPlayer(webSocket);
+            console.log("Move at col :", received.column);
             const data = {
                 "event": "makeMove",
                 "column": received.column,
             }
-            console.log(otherPlayer);
             otherPlayer.send(JSON.stringify(data));
-        } else if (received.event == "enqueued") {
+        }else if(received.event == "gameWon"){
+            let otherPlayer = getOtherPlayer(webSocket);
+            console.log("Game was won by the other player");
+            const data = {
+                "event": "gameWonByOTher",
+                "color":  received.color,
+                "positions": received.positions
+            }
+            otherPlayer.send(JSON.stringify(data));
+        }
+        else if (received.event == "enqueued") {
             queue.push(webSocket);
             console.log("players in queue: " + queue.length);
 
@@ -150,12 +145,11 @@ webSocketServer.on("connection", (webSocket) => {
                 queue[1].send(JSON.stringify(data));
                 queue = [];
             }
-        } 
+        }
     });
 
     webSocket.on("close", () => {
         removeClient(webSocket);
-        removeGamer(webSocket);
         removeFromQueue(webSocket);
 
         // const index = mapSocketToGame[webSocket];

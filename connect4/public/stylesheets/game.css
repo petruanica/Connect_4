@@ -25,6 +25,7 @@ main {
 /* textul din player div */
 .player-div span {
     margin: 0 3px;
+    min-width: 60px;
     /* margin-left si margin-right sunt 3 ca sa distantez un pic de imagine */
     padding-top: 3px;
     /* ca sa aliniez textul cu imaginea*/

@@ -28,12 +28,23 @@ socket.onmessage = (event) => {
         const playerColor = data.color;
         const circlesAbovePlayer1 = document.querySelectorAll(".player-turn")[0]; // red
         const circlesAbovePlayer2 = document.querySelectorAll(".player-turn")[1]; // yellow
-        if(playerColor == 'red')
+        const playerNames = document.querySelectorAll(".player-div span");
+
+        if(playerColor == 'red'){
             circlesAbovePlayer1.style.display = "block";
-        else 
+            playerNames[0].innerHTML = "You";
+            playerNames[1].innerHTML = "Other";
+        }
+        else {
             circlesAbovePlayer2.style.display = "block";
+            playerNames[0].innerHTML = "Other";
+            playerNames[1].innerHTML = "You";
+        }
         startGame(playerColor);
-    } // else if (data.event == "gameEndedByDisconnect") {
+    } else if(data.event == "gameWonByOTher"){
+        game.handleWonGame(data.positions,data.color);
+    }
+    // else if (data.event == "gameEndedByDisconnect") {
     //     game.gameEnded = true;
     //     game.handleWonGame();
     //     console.log("gameEndedByDisconnect");
