@@ -85,6 +85,8 @@ function removeFromQueue(webSocket) {
 
 webSocketServer.on("connection", (webSocket) => {
     addClient(webSocket);
+    // const proWebsocket = new (webSocket);
+    // proWebsocket.send('gameStart', {})
 
     webSocket.on("message", (message) => {
         // console.log("[LOG] " + message.toString());

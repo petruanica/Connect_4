@@ -1,7 +1,8 @@
 'use strict';
 // @ts-check
 
-import {Game} from "./game.js";
+import { Game } from "./game.js";
+import { config } from "./config.js";
 
 // check if page was reloaded; if yes, redirect to splash screen
 if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).includes('reload')) {
@@ -11,7 +12,7 @@ if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).inc
 
 const message = document.querySelector("#message");
 
-const socket = new WebSocket("ws://localhost:3000/");
+const socket = new WebSocket(config.WEB_SOCKET_URL);
 
 let game;
 
@@ -26,23 +27,18 @@ socket.onmessage = (event) => {
     } else if (data.event == "setColor") {
         console.log("I am " + data.color);
         const playerColor = data.color;
-        const circlesAbovePlayer1 = document.querySelectorAll(".player-turn")[0]; // red
-        const circlesAbovePlayer2 = document.querySelectorAll(".player-turn")[1]; // yellow
         const playerNames = document.querySelectorAll(".player-div span");
 
-        if(playerColor == 'red'){
-            circlesAbovePlayer1.style.display = "block";
+        if (playerColor == 'red') {
             playerNames[0].innerHTML = "You";
             playerNames[1].innerHTML = "Other";
-        }
-        else {
-            circlesAbovePlayer2.style.display = "block";
+        } else {
             playerNames[0].innerHTML = "Other";
             playerNames[1].innerHTML = "You";
         }
         startGame(playerColor);
-    } else if(data.event == "gameWonByOTher"){
-        game.handleWonGame(data.positions,data.color);
+    } else if (data.event == "gameWonByOTher") {
+        game.handleWonGame(data.positions, data.color);
     }
     // else if (data.event == "gameEndedByDisconnect") {
     //     game.gameEnded = true;

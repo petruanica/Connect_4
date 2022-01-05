@@ -5,6 +5,12 @@ import { resetTurnTimer, stopTimers } from "./timer.js";
 import { Board } from "./board.js";
 
 const wonMessageText = document.querySelector('#win-message');
+const circlesAboveRed = document.querySelectorAll(".player-turn")[0]; // red
+const circlesAboveOrange = document.querySelectorAll(".player-turn")[1]; // orange
+
+
+
+
 
 export class Game {
     constructor(socket, turnColor) {
@@ -19,7 +25,25 @@ export class Game {
             'red': 0,
             'yellow': 0
         };
+        this.updateCirclesBasedOnColor('red'); // red is the first player
     }
+
+
+    /**
+     * Moves the circle display based on the current game color turn
+     * @param {string} newColor 
+     */
+    updateCirclesBasedOnColor(newColor) {
+        circlesAboveRed.style.display = "none";
+        circlesAboveOrange.style.display = "none";
+        console.log("new color", newColor);
+        if (newColor == 'red')
+            circlesAboveRed.style.display = "block";
+        else
+            circlesAboveOrange.style.display = "block";
+    }
+
+
 
     /**
      * add click events to the board columns
@@ -107,6 +131,7 @@ export class Game {
     placeColumn(column) {
         const row = this.board.placePiece(column, this.generalTurnColor);
         this.changeGlobalTurn();
+        this.updateCirclesBasedOnColor(this.generalTurnColor);
         if (row == undefined) {
             return undefined;
         }
