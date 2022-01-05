@@ -24,7 +24,8 @@ export class Board {
     placePiece(col, playerTurnColor) {
         const rowIndex = this.lastCellColumn[col] + 1;
         if (rowIndex < this.rows) {
-            this.boardPieces[col][rowIndex].style.backgroundColor = playerTurnColor;
+            this.boardPieces[col][rowIndex].className = `board-cell ${playerTurnColor}`;
+            this.boardPieces[col][rowIndex].currentColor = playerTurnColor; // atribut manual ca sa verificam mai usor
             this.lastCellColumn[col] += 1;
             return rowIndex;
         } else {
@@ -39,7 +40,7 @@ export class Board {
         for (let column = 0; column < this.columns; column++) {
             for (let row = 0; row < this.rows; row++) {
                 this.boardPieces[column][row].className = "board-cell";
-                this.boardPieces[column][row].style.backgroundColor = 'white';
+                this.boardPieces[column][row].currentColor = 'white'; // 
                 this.boardPieces[column][row].style.outline = '';
             }
             this.lastCellColumn[column] = -1;
@@ -94,7 +95,7 @@ export class Board {
      * @return {boolean} if the piece at the that position has the background color of the player's turn color
      */
     sameColor(column, row, color) {
-        return (this.boardPieces[column][row].style.backgroundColor == color);
+        return (this.boardPieces[column][row].currentColor == color);
     }
 
     /**

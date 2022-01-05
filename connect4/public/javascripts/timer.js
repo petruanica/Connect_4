@@ -1,6 +1,7 @@
 'use strict';
 
 import { turnTimePenalty } from "./main.js";
+import { config } from "./config.js"
 
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
@@ -8,7 +9,7 @@ const button = document.querySelector('#rematch-button');
 button.addEventListener("click",() => {stopTimers(); startTimers();});
 
 let seconds = 0;
-let secondsLeft = 15;
+let secondsLeft = config.TIMER_SECONDS;
 
 let clockInterval;
 let timerInterval;
@@ -39,7 +40,7 @@ function substractOneSecond() {
 
 function displayTimer() {
     if (secondsLeft == -1) {
-        secondsLeft = 15;
+        secondsLeft = config.TIMER_SECONDS + 1;
         console.log("time penalty");
         turnTimePenalty();
     }
@@ -48,14 +49,14 @@ function displayTimer() {
 
 function startTimers() {
     seconds = -1; 
-    secondsLeft = 16;
+    secondsLeft = config.TIMER_SECONDS + 1;
     clockInterval = setInterval(addOneSecond, 1000);;
     timerInterval = setInterval(substractOneSecond, 1000);
 }
 
 
 export function resetTurnTimer() {
-    secondsLeft = 15;
+    secondsLeft = config.TIMER_SECONDS;
 }
 
 export function stopTimers() {

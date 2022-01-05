@@ -6,7 +6,7 @@ import { config } from "./config.js";
 
 // check if page was reloaded; if yes, redirect to splash screen
 if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).includes('reload')) {
-    window.location.href = "./";
+    // window.location.href = "./";
 }
 
 
@@ -27,14 +27,14 @@ socket.onmessage = (event) => {
     } else if (data.event == "setColor") {
         console.log("I am " + data.color);
         const playerColor = data.color;
-        const playerNames = document.querySelectorAll(".player-div span");
+        const playerDivs = document.querySelectorAll(".player-div");
 
         if (playerColor == 'red') {
-            playerNames[0].innerHTML = "You";
-            playerNames[1].innerHTML = "Other";
+            playerDivs[0].style.borderColor = 'red';
+            playerDivs[1].style.borderColor = 'orange';
         } else {
-            playerNames[0].innerHTML = "Other";
-            playerNames[1].innerHTML = "You";
+            playerDivs[0].style.borderColor = 'orange';
+            playerDivs[1].style.borderColor = 'red';
         }
         startGame(playerColor);
     } else if (data.event == "gameWonByOTher") {

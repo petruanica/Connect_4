@@ -27,7 +27,7 @@ body {
 #title {
     font-size: 40px;
     font-weight: bold;
-    font-family: Virgil, serif;
+    /* font-family: Virgil, serif; E mostenit de la body */
     margin-bottom: 10%;
     background: repeating-linear-gradient(45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
     border: 3px solid black;

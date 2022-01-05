@@ -13,13 +13,15 @@ main {
 
 .player-div {
     position: relative;
-    /* display: inline-block;  nu cred ca ai nevoie de asta*/
+    border: 3px solid black;
     padding: 10px;
+    padding-right: 10px;
     margin: 10px 35px;
     background-color: white;
     border-radius: 25px;
     display: flex;
-    align-content: center; /* aliniaza pe linie imaginea si textul */
+    align-content: center;
+    /* aliniaza pe linie imaginea si textul */
 }
 
 /* textul din player div */
@@ -31,16 +33,75 @@ main {
     /* ca sa aliniez textul cu imaginea*/
 }
 
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0.2;
+        display: block;
+    }
+
+    40% {
+        opacity: 1;
+        display: block;
+    }
+
+    100% {
+        opacity: 0;
+        display: block;
+    }
+}
+
+/* il adaug la player-info*/
+.fadeInOut {
+    animation: fadeInOut 7s;
+}
+
+/* face un triunghi mic */
+/* https://stackoverflow.com/questions/7073484/how-do-css-triangles-work */
+.player-info::before {
+    position: absolute;
+    content: "";
+    top: 100%;
+    left: 20%;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgb(0, 118, 139);
+}
+
+.player-info {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    /* aliniat la stanga */
+    width: 100%;
+    height: 90%;
+    background-color: rgb(0, 118, 139);
+}
+
+.player-info::after {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    content: "1st warning";
+    font-size: 15px;
+}
+
 .player-turn {
-    position: absolute; /* fata de player div care position relative */
-    display: none; /* initial e none dar e setat block in main.js cand se decide culoarea jucatorului */
+    position: absolute;
+    /* fata de player div care position relative */
+    display: none;
+    /* initial e none dar e setat block in main.js cand se decide culoarea jucatorului */
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    bottom: calc(100% + 5px);  /* fix deasupra la player-div plus inca 5 px*/
-    left: calc(50% - 5px); /* fix la mijloc dar trebuie sa scad 10/2 din width */
+    top: calc(100% + 5px);
+    /* fix deasupra la player-div plus inca 5 px*/
+    left: calc(50% - 5px);
+    /* fix la mijloc dar trebuie sa scad 10/2 din width */
 }
-
 
 .container {
     display: table-cell;
@@ -107,7 +168,7 @@ main {
     flex-flow: row, wrap;
 }
 
-.margin {
+.board-margin {
     flex-grow: 1;
     padding-left: 5px;
     padding-right: 5px;
@@ -140,7 +201,6 @@ main {
 
 .board-column, .active-board-column {
     padding-top: 5px;
-
     display: flex;
     flex-direction: column;
 }
@@ -152,15 +212,31 @@ main {
 .board-cell {
     width: 40px;
     height: 40px;
-    background-color: white;
     margin: 5px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: white;
 }
 
-.margin-bottom {
+.board-cell.red {
+    background-size: 60%;
+    background-color: red;
+    background-image: url("../images/delft_flame.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.board-cell.orange {
+    background-size: 60%;
+    background-color: orange;
+    background-image: url("../images/delft_flame.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.board-margin-bottom {
     height: 20px;
     width: 100%;
     background-color: rgba(0, 102, 128, 255);
@@ -187,9 +263,9 @@ button {
     animation: fadebackground-red 2s infinite alternate;
 }
 
-@keyframes fadebackground-yellow {
+@keyframes fadebackground-orange {
     from {
-        background-color: yellow;
+        background-color: orange;
     }
 
     to {
@@ -198,7 +274,7 @@ button {
 }
 
 .win-animation-yellow {
-    animation: fadebackground-yellow 2s infinite alternate;
+    animation: fadebackground-orange 2s infinite alternate;
 }
 
 #win-message {

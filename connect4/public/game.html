@@ -35,32 +35,33 @@
             <section>
                 <div id="board-big">
                     <div id="board-container">
-                        <div class="margin left"></div>
-                        <!-- <div id="board"> -->
+                        <div class="board-margin left"></div>
                         <!-- Board created in javascript where
                             each child is a div with class "board-cell"-->
-                        <!-- </div> -->
                         <div id="board"></div>
-                        <div class="margin right"></div>
+                        <div class="board-margin right"></div>
                     </div>
-                    <div class="margin-bottom"></div>
+                    <div class="board-margin-bottom"></div>
                 </div>
             </section>
 
             <section>
-                <div class="player-div" style="border: 3px solid red;">
+                <div class="player-div">
+                    <div class="player-info"></div>
                     <div class="player-turn" style="background-color: red;"></div>
+
                     <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
-                    <span>Player 1</span>
+                    <span>You</span>
                 </div>
 
                 <div id="timer">
-                    <span> 15 </span>
+                    <span> 5 </span>
                 </div>
 
-                <div class="player-div" style="border: 3px solid orange;">
+                <div class="player-div">
+                    <div class="player-info fadeInOut"></div>
                     <div class="player-turn" style="background-color: orange;"></div>
-                    <span>Player 2</span>
+                    <span>Opponent</span>
                     <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
                 </div>
             </section>
