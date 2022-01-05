@@ -1,4 +1,7 @@
-const socket = new WebSocket("ws://localhost:3000/");
+import { config } from "./config.js";
+
+
+const socket = new WebSocket(config.WEB_SOCKET_URL);
 const onlinePlayers = document.querySelector("#play>div>span");
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
