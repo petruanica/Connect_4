@@ -5,7 +5,6 @@ import {config} from "./config.js"
 
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
-const button = document.querySelector('#reset-board');
 
 let secondsClock;
 let secondsTimer;
@@ -38,9 +37,8 @@ function substractOneSecond() {
 }
 
 function displayTimer() {
-    console.log(secondsTimer);
     if (secondsTimer == -1) {
-        secondsTimer = 15;
+        secondsTimer = config.TIMER_SECONDS;
         turnTimePenalty();
     }
     timer.innerHTML = secondsTimer.toString();

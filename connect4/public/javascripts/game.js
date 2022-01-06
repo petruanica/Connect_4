@@ -258,8 +258,8 @@ export class Game {
      */
     addTimePenalty() {
         if (this.myTurnColor == this.generalTurnColor) {
-            this.displayWarningForMe();
             this.clickRandomColumn();
+            this.displayWarningForMe();
         }
 
 

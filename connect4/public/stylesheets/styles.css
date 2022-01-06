@@ -63,11 +63,11 @@ button:active {
       left: 0;
       width: 100vw;
       height: 100vh;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: Virgil, serif;
       font-size: 20px;
       color: greenyellow;
       padding: 20px;
-      content: "Your window is too small (at least 800x800px is expected) to play this game. Enlarge the browser window or zoom out to play or disable the CSS @media query.";
+      content: "Your window is too small (at least 1400x700px is expected) to play this game. Enlarge the browser window or zoom out to play or disable the CSS @media query.";
       background-color: black;
       z-index: 100;
     }
