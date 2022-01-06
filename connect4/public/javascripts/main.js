@@ -51,6 +51,10 @@ socket.onmessage = (event) => {
     } else if (data.event == "gameWonByDisconnect" && !game.gameEnded) {
         console.log(data.message);
         game.handleGameEndByDisconnect();
+    }else if(data.event == "requestRematch"){
+        game.handleRematchRequest();
+    }else if(data.event == "rematchAccepted"){
+        game.handleRematchAccepted();
     }
 }
 
@@ -79,9 +83,7 @@ function startGame(playerColor) {
 
     game = new Game(socket, playerColor);
 
-    const resetButton = document.querySelector('#rematch-button');
-    resetButton.addEventListener('click', () => game.resetGame()); // don't lose this https://javascript.info/bind
-}
+  }
 
 
 export function turnTimePenalty() {

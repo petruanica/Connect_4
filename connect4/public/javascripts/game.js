@@ -1,14 +1,18 @@
 'use strict';
 // @ts-check
 
-import { resetTurnTimer, stopTimers } from "./timer.js";
+import { resetTurnTimer, stopTimers, startTimers } from "./timer.js";
 import { Board } from "./board.js";
 
-const resetButton = document.querySelector('#rematch-button');
+
+const rematchButton = document.querySelector('#rematch-button');
+
 const wonMessageText = document.querySelector('#win-message');
 const winMethodText = document.querySelector("#win-method");
+
 const circleYou = document.querySelectorAll(".player-turn")[0]; // you
 const circleOpponent = document.querySelectorAll(".player-turn")[1]; // other
+
 const warningYou = document.querySelectorAll(".player-info")[0]; // you
 const warningOpponent = document.querySelectorAll(".player-info")[1]; // other
 
@@ -43,6 +47,11 @@ export class Game {
             "orange": 0
         };
         this.updateCirclesBasedOnColor('red'); // red is the first player
+        this.opponentRequestedRematch = false;
+
+        // bind the rematch event
+        const rematchFunction = this.rematchClick.bind(this);
+        rematchButton.addEventListener('click',rematchFunction);
     }
 
 
@@ -111,7 +120,7 @@ export class Game {
     handleGameEndByTimePenalty() {
         this.gameEnded = true;
         wonMessageText.style.display = 'block';
-        resetButton.style.display = "none";
+        rematchButton.style.display = "none";
         if (this.generalTurnColor == this.myTurnColor) {
             winMethodText.innerHTML = "Your opponent ran out of time and was kicked out of the game. ";
         } else {
@@ -125,7 +134,7 @@ export class Game {
     handleGameEndByDisconnect() {
         this.gameEnded = true;
         wonMessageText.style.display = 'block';
-        resetButton.style.display = "none";
+        rematchButton.style.display = "none";
         winMethodText.innerHTML = "Your opponent abandoned the match. ";
         document.querySelector('#win-player').innerHTML = this.myTurnColor;
         stopTimers();
@@ -305,6 +314,40 @@ export class Game {
         resetTurnTimer();
     }
 
+    handleRematchRequest(){
+        winMethodText.innerHTML = "Other player wants to play with you";
+        this.opponentRequestedRematch = true;
+    }
+
+    handleRematchAccepted(){
+        this.resetGame();
+    }
+
+    /**
+     * function called when a player click on the rematch button
+     */
+    rematchClick(){
+        if(this.opponentRequestedRematch == false){
+            // I am the first to click the rematch button
+            winMethodText.innerHTML = "Waiting for opponent to accept...";
+    
+            const data = {
+                "event": "rematch",
+                "message": "waiting for opponent to accept rematch"
+            }
+            this.socket.send(JSON.stringify(data));
+        }else{
+            // I am accepting the rematch 
+            winMethodText.innerHTML = "Accepting the rematch offer!";
+            const data = {
+                "event": "rematchAccepted",
+                "message": "I accepeted the rematch offer",
+            }
+            this.socket.send(JSON.stringify(data));
+            this.resetGame(); // reseting the game for me
+        }
+    }
+
     /**
      * resets the game by clearing the board and resting the player's turn
      */
@@ -312,6 +355,8 @@ export class Game {
         this.board.clearBoard();
 
         this.gameEnded = false;
+        this.opponentRequestedRematch = false;
+
         this.generalTurnColor = 'red';
         if (this.myTurnColor == "red")
             this.board.makeBoardActive();
@@ -322,5 +367,6 @@ export class Game {
         this.updateCirclesBasedOnColor('red'); // red is the first player
 
         wonMessageText.style.display = 'none';
+        startTimers();
     }
 }

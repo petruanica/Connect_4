@@ -44,7 +44,7 @@ function displayTimer() {
     timer.innerHTML = secondsTimer.toString();
 }
 
-function startTimers() {
+export function startTimers() {
     secondsClock = -1;
     secondsTimer = config.TIMER_SECONDS + 1;
     clockInterval = setInterval(addOneSecond, 1000);;

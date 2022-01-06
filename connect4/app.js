@@ -165,6 +165,15 @@ webSocketServer.on("connection", (webSocket) => {
                 "message": "opponent disconnected",
             }
             otherPlayer.send(JSON.stringify(data));
+        }else if(received.event == "rematch"){
+            let otherPlayer = getOtherPlayer(webSocket);
+            const data = {
+                "event": "requestRematch",
+            }
+            otherPlayer.send(JSON.stringify(data));
+        }else if(received.event == "rematchAccepted"){
+            let otherPlayer = getOtherPlayer(webSocket);
+            otherPlayer.send(JSON.stringify(received)); // send the same event to the client
         }
     });
 
