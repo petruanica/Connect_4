@@ -4,7 +4,9 @@
 import { resetTurnTimer, stopTimers } from "./timer.js";
 import { Board } from "./board.js";
 
+const resetButton = document.querySelector('#rematch-button');
 const wonMessageText = document.querySelector('#win-message');
+const winMethodText = document.querySelector("#win-method");
 const circlesAboveRed = document.querySelectorAll(".player-turn")[0]; // red
 const circlesAboveOrange = document.querySelectorAll(".player-turn")[1]; // orange
 
@@ -83,6 +85,7 @@ export class Game {
             this.changeWinningPieceStyle(pos.col, pos.row);
         }
         wonMessageText.style.display = 'block';
+        winMethodText.innerHTML = "Click the rematch button to play again. ";
         document.querySelector('#win-player').innerHTML = winningColor;
         stopTimers();
         this.board.makeBoardInactive();
@@ -92,6 +95,12 @@ export class Game {
     handleGameEndByTimePenalty() {
         this.gameEnded = true;
         wonMessageText.style.display = 'block';
+        resetButton.style.display = "none";
+        if (this.generalTurnColor == this.myTurnColor) {
+            winMethodText.innerHTML = "Your opponent ran out of time and was kicked out of the game. ";
+        } else {
+            winMethodText.innerHTML = "You ran out of time and were kicked out of the game. ";
+        }
         document.querySelector('#win-player').innerHTML = this.generalTurnColor;
         stopTimers();
         this.board.makeBoardInactive();
@@ -100,6 +109,8 @@ export class Game {
     handleGameEndByDisconnect() {
         this.gameEnded = true;
         wonMessageText.style.display = 'block';
+        resetButton.style.display = "none";
+        winMethodText.innerHTML = "Your opponent abandoned the match. ";
         document.querySelector('#win-player').innerHTML = this.myTurnColor;
         stopTimers();
         this.board.makeBoardInactive();
