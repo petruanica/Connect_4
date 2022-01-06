@@ -20,6 +20,7 @@ playButton.addEventListener("click", () => {
     const playButtonDiv = document.querySelector("#play>div");
     playButtonDiv.style.display = "none";
     playButton.className = "waiting-animation";
+    playButton.disabled = true;
 
     const data = {
         "event": "enqueued",

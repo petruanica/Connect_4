@@ -12,7 +12,7 @@ export class Board {
         // lastCellColumn[col] = last row where a piece has been put by a player
         // lastCellColumn[col] + 1 should indicate the next free row position to put on that column
         // lastCellColumn[col] = -1 means that nothing is on that column
-        // lastCellColumn[col] = rows means that the column is full
+        // lastCellColumn[col] = rows-1 means that the column is full
     }
 
     /**
@@ -120,6 +120,16 @@ export class Board {
     okColor(column, row, color) {
         return (this.isOnBoard(column, row) && this.sameColor(column, row, color));
     }
+    
+    /**
+     * Changes the style of the winning pieces by applying an animation to them
+     *
+     * @param {number} column
+     * @param {number} row
+     */
+     changeWinningPieceStyle(column, row) {
+        this.boardPieces[column][row].className += ' blink-me';
+    }
 
     /**
      *
@@ -188,11 +198,19 @@ export class Board {
         ];
         for (const direction of directions) {
             const [dx, dy] = direction;
-            const [outcome, positions] = this.checkWinLines(column, row, color,dx, dy);
+            const [outcome, positions] = this.checkWinLines(column, row, color, dx, dy);
             if (outcome == true) {
                 return [outcome, positions];
             }
         }
         return [false,[]];
+    }
+
+    checkBoardFull() {
+        for (const lastCell of this.lastCellColumn) {
+            if (lastCell < this.rows - 1)
+                return false;
+        }
+        return true;
     }
 }

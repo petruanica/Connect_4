@@ -138,6 +138,10 @@ webSocketServer.on("connection", (webSocket) => {
                 "positions": received.positions
             }
             otherPlayer.send(JSON.stringify(data));
+        } else if (received.event == "gameDraw") {
+            let otherPlayer = getOtherPlayer(webSocket);
+            console.log("Game ended in a draw!");
+            otherPlayer.send(JSON.stringify(received));
         } else if (received.event == "enqueued") {
             queue.push(webSocket);
             console.log("players in queue: " + queue.length);

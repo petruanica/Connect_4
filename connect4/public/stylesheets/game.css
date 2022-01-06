@@ -277,33 +277,16 @@ button {
     height: 50px;
 }
 
-@keyframes fadebackground-red {
-    from {
-        background-color: red;
-    }
-
-    to {
-        background-color: #ff00ff;
+@keyframes blinker {
+    50% {
+      opacity: 0;
     }
 }
 
-.win-animation-red {
-    animation: fadebackground-red 2s infinite alternate;
+.blink-me {
+    animation: blinker 2s linear infinite;
 }
-
-@keyframes fadebackground-orange {
-    from {
-        background-color: orange;
-    }
-
-    to {
-        background-color: #ff00ff;
-    }
-}
-
-.win-animation-orange {
-    animation: fadebackground-orange 2s infinite alternate;
-}
+  
 
 #win-message {
     border: 3px solid rgba(0, 136, 170, 255);

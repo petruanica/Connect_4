@@ -6,6 +6,7 @@ import { config } from "./config.js";
 
 // check if page was reloaded; if yes, redirect to splash screen
 if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).includes('reload')) {
+    // window.dispatchEvent(new Event('beforeunload'));
     window.location.href = "./";
 }
 
@@ -51,10 +52,13 @@ socket.onmessage = (event) => {
     } else if (data.event == "gameWonByDisconnect" && !game.gameEnded) {
         console.log(data.message);
         game.handleGameEndByDisconnect();
-    }else if(data.event == "requestRematch"){
+    } else if (data.event == "requestRematch") {
         game.handleRematchRequest();
-    }else if(data.event == "rematchAccepted"){
+    } else if (data.event == "rematchAccepted") {
         game.handleRematchAccepted();
+    } else if (data.event == "gameDraw") {
+        console.log(data.message);
+        game.handleGameDraw();
     }
 }
 

@@ -96,19 +96,6 @@ export class Game {
         }
     }
 
-
-
-    /**
-     * Changes the style of the winning pieces by applying an animation to them
-     *
-     * @param {number} column
-     * @param {number} row
-     */
-    changeWinningPieceStyle(column, row) {
-        let winColor = this.board.boardPieces[column][row].currentColor;
-        this.board.boardPieces[column][row].className += ' win-animation-' + winColor;
-    }
-
     /**
      * increment the score of my color
      */
@@ -120,7 +107,7 @@ export class Game {
      * increment the score of the opponent
      */
     incremenetOpponentScore() {
-        scoreOpponent.innerHTML = Number.parseInt(scoreYou.innerHTML) + 1;
+        scoreOpponent.innerHTML = Number.parseInt(scoreOpponent.innerHTML) + 1;
     }   
 
     /**
@@ -128,6 +115,9 @@ export class Game {
      * @param {String} winningColor winning color
      */
     showWinnerIcon(winningColor){
+        if (winningColor == "none")
+            return;
+
         if(winningColor == this.myTurnColor){
             winIconYou.style.display = "block";
         }else{
@@ -140,6 +130,9 @@ export class Game {
      * @param {String} winningColor the color that won the game
      */
     handleGameScore(winningColor) {
+        if (winningColor == "none")
+            return;
+
         if (winningColor == this.myTurnColor) {
             this.incrementMyScore();
         } else {
@@ -157,10 +150,9 @@ export class Game {
         resetTurnTimer();
         stopTimers();
         this.board.makeBoardInactive();
+        wonMessageText.style.display = 'block';
         this.handleGameScore(winningColor);
         this.showWinnerIcon(winningColor);
-        document.querySelector('#win-player').innerHTML = winningColor;
-
     }
 
     /**
@@ -172,29 +164,35 @@ export class Game {
     handleWonGame(positions, winningColor) {
         this.handleGeneralWin(winningColor);
         for (const pos of positions) {
-            this.changeWinningPieceStyle(pos.col, pos.row);
+            this.board.changeWinningPieceStyle(pos.col, pos.row);
         }
-        wonMessageText.style.display = 'block';
         winMethodText.innerHTML = "Click the rematch button to play again. ";
+        document.querySelector('#win-player').innerHTML = `Player ${winningColor} has won the game!`;
     }
 
 
     handleGameEndByTimePenalty() {
-        wonMessageText.style.display = 'block';
+        this.handleGeneralWin(this.generalTurnColor);
         rematchButton.style.display = "none";
         if (this.generalTurnColor == this.myTurnColor) {
             winMethodText.innerHTML = "Your opponent ran out of time and was kicked out of the game. ";
         } else {
             winMethodText.innerHTML = "You ran out of time and were kicked out of the game. ";
         }
-        this.handleGeneralWin(this.generalTurnColor);
+        document.querySelector('#win-player').innerHTML = `Player ${this.generalTurnColor} has won the game!`;
     }
 
     handleGameEndByDisconnect() {
         this.handleGameScore(this.myTurnColor);
-        wonMessageText.style.display = 'block';
         rematchButton.style.display = "none";
         winMethodText.innerHTML = "Your opponent abandoned the match. ";
+        document.querySelector('#win-player').innerHTML = `Player ${this.myTurnColor} has won the game!`;
+    }
+
+    handleGameDraw() {
+        this.handleGameScore("none");
+        winMethodText.innerHTML = "Click the rematch button to play again. ";
+        document.querySelector('#win-player').innerHTML = "Game ended in a draw!";
     }
 
 
@@ -235,6 +233,14 @@ export class Game {
                 "color": this.myTurnColor,
             }
             this.socket.send(JSON.stringify(data));
+        } else if (this.board.checkBoardFull() == true) {
+            console.log('Game ended in a draw');
+            this.handleGameDraw();
+            data = {
+                "event": "gameDraw",
+                "message": "game ended in a draw"
+            }
+            this.socket.send(JSON.stringify(data));
         }
     }
 
@@ -246,16 +252,15 @@ export class Game {
      */
     placeColumn(column, randomClicked) {
         const row = this.board.placePiece(column, this.generalTurnColor);
-        console.log("Placing on column!", randomClicked);
-        if (randomClicked == true) {
-            // https://stackoverflow.com/questions/7505623/colors-in-javascript-console
-            console.log('%c Display warning for other', 'color: #bada55'); // colors in console.log()
-            this.displayWarningForOther(); // display warning for other player in that case
-        }
-        this.changeGlobalTurn();
         if (row == undefined) {
             return undefined;
         }
+        console.log("Placing on column!",randomClicked);
+        if(randomClicked == true){
+            console.log('%c Display warning for other', 'color: #bada55');
+            this.displayWarningForOther(); // display warning for other player
+        }
+        this.changeGlobalTurn();
         return row;
     }
 
