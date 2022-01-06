@@ -21,9 +21,9 @@ socket.onmessage = (event) => {
     console.log(data);
     if (data.event == "playersConnected") {
         message.innerHTML = data.playersGame;
-    } else if (data.event == "makeMove") {
+    } else if (data.event == "move") {
         console.log("I have to make a move at column", data);
-        game.placeColumn(data.column,data.randomClicked);
+        game.placeColumn(data.column, data.randomClicked);
     } else if (data.event == "setColor") {
         console.log("I am " + data.color);
         const playerColor = data.color;

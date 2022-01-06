@@ -30,12 +30,13 @@ export class Game {
         this.socket = socket;
         this.board = new Board();
         this.board.initializeBoard();
-        this.gameEnded = false;
         this.addClickEvents();
         this.myTurnColor = turnColor;
+
+        this.gameEnded = false;
         this.generalTurnColor = 'red';
 
-        if (turnColor == "red")
+        if (this.myTurnColor == "red")
             this.board.makeBoardActive();
         this.timePenalties = {
             "red": 0,
@@ -53,10 +54,9 @@ export class Game {
         circleYou.style.display = "none";
         circleOpponent.style.display = "none";
         console.log("Current color is:", newColor);
-        if (newColor == this.myTurnColor){
+        if (newColor == this.myTurnColor) {
             circleYou.style.display = "block";
-        }
-        else{
+        } else {
             circleOpponent.style.display = "block";
         }
     }
@@ -176,14 +176,16 @@ export class Game {
     /**
      * Handles click event on column made by the opponent that either clicked or the time passed
      * @param {number} column
+     * @param {boolean} randomClicked if the oponnent timer's was out this boolean is true
      * @return {function} a function that manages the click
      */
-    placeColumn(column,randomClicked) {
+    placeColumn(column, randomClicked) {
         const row = this.board.placePiece(column, this.generalTurnColor);
-        console.log("Placing on column!",randomClicked);
-        if(randomClicked == true){
-            console.log('%c Display warning for other', 'color: #bada55');
-            this.displayWarningForOther(); // display warning for other player
+        console.log("Placing on column!", randomClicked);
+        if (randomClicked == true) {
+            // https://stackoverflow.com/questions/7505623/colors-in-javascript-console
+            console.log('%c Display warning for other', 'color: #bada55'); // colors in console.log()
+            this.displayWarningForOther(); // display warning for other player in that case
         }
         this.changeGlobalTurn();
         if (row == undefined) {
@@ -192,11 +194,16 @@ export class Game {
         return row;
     }
 
-    opponentColor(){
-        if(this.myTurnColor == 'red')
+    /**
+     * Gets the opponent color
+     * @returns the opponent color
+     */
+    opponentColor() {
+        if (this.myTurnColor == 'red')
             return 'orange';
         return 'red';
     }
+
     /**
      * Places a piece on a random column on my board 
      */
@@ -205,10 +212,13 @@ export class Game {
         do {
             randomIndex = Math.floor(Math.random() * this.board.columns);
         } while (this.board.lastCellColumn[randomIndex] >= this.board.rows);
-        this.clickColumn(randomIndex,true);
+        this.clickColumn(randomIndex, true);
     }
 
-    displayWarningForMe(){
+    /**
+     * Displays warning popup for me
+     */
+    displayWarningForMe() {
         this.timePenalties[this.myTurnColor]++;
         const count = this.timePenalties[this.myTurnColor];
         console.log(this.timePenalties);
@@ -216,10 +226,12 @@ export class Game {
         warningYou.className += ' fadeInOut';
         warningYou.style.display = 'block';
         this.checkGameEndedByPenalties(count);
-
     }
 
-    displayWarningForOther(){
+    /**
+     * Displays warning popup for the other player
+     */
+    displayWarningForOther() {
         this.timePenalties[this.opponentColor()]++;
         const count = this.timePenalties[this.opponentColor()];
         console.log(this.timePenalties);
@@ -229,18 +241,27 @@ export class Game {
         this.checkGameEndedByPenalties(count);
     }
 
-    getStringFromCount(count){
+    /**
+     * 
+     * @param {number} count the number of penalties
+     * @returns {string} the message to be displayed
+     */
+    getStringFromCount(count) {
         const warning = "warning";
-        if(count == 1)
+        if (count == 1)
             return "1st warning";
-        else if(count == 2)
+        else if (count == 2)
             return "2nd warning";
-        else if(count == 3){
+        else if (count == 3) {
             return "Game ended!";
         }
     }
 
-    checkGameEndedByPenalties(count){
+    /**
+     * cheks if the game was ended and sends a message to the server
+     * @param {number} count number of penalties
+     */
+    checkGameEndedByPenalties(count) {
         if (count == 3) {
             this.handleGameEndByTimePenalty();
             const data = {
@@ -253,7 +274,8 @@ export class Game {
     }
 
     /**
-     * Adds a penalty to me
+     * Penalties are added only on your turn and the penalty of the other player is handled using displayWarningForOther
+     * Adds a penalty to me based on the timer
      * If a player has 3 penalties, the game ends and the other player wins
      */
     addTimePenalty() {
@@ -261,8 +283,6 @@ export class Game {
             this.clickRandomColumn();
             this.displayWarningForMe();
         }
-
-
     }
 
     /**
@@ -275,7 +295,7 @@ export class Game {
         else
             this.generalTurnColor = 'red';
         this.updateCirclesBasedOnColor(this.generalTurnColor);
-        
+
         if (this.myTurnColor == this.generalTurnColor) {
             console.log("changed hover");
             this.board.makeBoardActive();
@@ -289,14 +309,18 @@ export class Game {
      * resets the game by clearing the board and resting the player's turn
      */
     resetGame() {
-        this.gameEnded = false;
         this.board.clearBoard();
-        this.myTurnColor = 'red';
-        wonMessageText.style.display = 'none';
-        this.timePenalties = 0;
+
+        this.gameEnded = false;
+        this.generalTurnColor = 'red';
+        if (this.myTurnColor == "red")
+            this.board.makeBoardActive();
         this.timePenalties = {
-            'red': 0,
-            'orange': 0
+            "red": 0,
+            "orange": 0
         };
+        this.updateCirclesBasedOnColor('red'); // red is the first player
+
+        wonMessageText.style.display = 'none';
     }
 }

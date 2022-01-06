@@ -86,7 +86,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* content: "1st warning"; */
     font-size: 15px;
 }
 
@@ -275,7 +274,7 @@ button {
     }
 }
 
-.win-animation-yellow {
+.win-animation-orange {
     animation: fadebackground-orange 2s infinite alternate;
 }
 
