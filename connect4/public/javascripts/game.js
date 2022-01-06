@@ -118,10 +118,12 @@ export class Game {
         if (winningColor == "none")
             return;
 
-        if(winningColor == this.myTurnColor){
+        if (winningColor == this.myTurnColor){
             winIconYou.style.display = "block";
-        }else{
+            console.log("eu am castigat");
+        } else {
             winIconOpponent.style.display = "block";
+            console.log("eu am pierdut");
         }
     }
 
@@ -135,8 +137,10 @@ export class Game {
 
         if (winningColor == this.myTurnColor) {
             this.incrementMyScore();
+            console.log("--eu am castigat");
         } else {
             this.incremenetOpponentScore();
+            console.log("--eu am pierdut");
         }
     }
 
@@ -153,6 +157,7 @@ export class Game {
         wonMessageText.style.display = 'block';
         this.handleGameScore(winningColor);
         this.showWinnerIcon(winningColor);
+        console.log(winningColor);
     }
 
     /**
@@ -183,14 +188,14 @@ export class Game {
     }
 
     handleGameEndByDisconnect() {
-        this.handleGameScore(this.myTurnColor);
+        this.handleGeneralWin(this.myTurnColor);
         rematchButton.style.display = "none";
         winMethodText.innerHTML = "Your opponent abandoned the match. ";
         document.querySelector('#win-player').innerHTML = `Player ${this.myTurnColor} has won the game!`;
     }
 
     handleGameDraw() {
-        this.handleGameScore("none");
+        this.handleGeneralWin("none");
         winMethodText.innerHTML = "Click the rematch button to play again. ";
         document.querySelector('#win-player').innerHTML = "Game ended in a draw!";
     }
@@ -308,7 +313,6 @@ export class Game {
         warningOpponent.firstElementChild.innerText = this.getStringFromCount(count);
         warningOpponent.className += ' fadeInOut';
         warningOpponent.style.display = 'block';
-        this.checkGameEndedByPenalties(count);
     }
 
     /**

@@ -3,11 +3,13 @@ import { config } from "./config.js";
 
 const socket = new WebSocket(config.WEB_SOCKET_URL);
 const onlinePlayers = document.querySelector("#play>div>span");
+const gamesPlayed = document.querySelector("#games-total");
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log(data.event);
     if(data.event == "onlinePlayers"){
         onlinePlayers.innerHTML = data.onlinePlayers;
+        gamesPlayed.innerHTML = data.gamesPlayed;
     } else if (data.event == "playersReady") {
         window.location.href = "./game";
     }

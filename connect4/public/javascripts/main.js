@@ -45,7 +45,7 @@ socket.onmessage = (event) => {
             circleOpponent.style.backgroundColor = 'red';
         }
         startGame(playerColor);
-    } else if (data.event == "gameWonByOTher") {
+    } else if (data.event == "gameWonByOther") {
         game.handleWonGame(data.positions, data.color);
     } else if (data.event == "gameWonByTimePenalty") {
         game.handleGameEndByTimePenalty();

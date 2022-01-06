@@ -6,6 +6,7 @@ const http = require("http");
 const websocket = require("ws");
 
 const indexRouter = require('./routes/index');
+const { Socket } = require("dgram");
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +27,7 @@ function updateClients() {
     const data = {
         "event": "onlinePlayers",
         "onlinePlayers": clients.length,
+        "gamesPlayed": gameCount,
     }
     for (const client of clients) {
         client.send(JSON.stringify(data));
@@ -64,8 +66,7 @@ class ImprovedSocket{
  * @return {WebSocket} the socket that belongs to the other player
  */
 function getOtherPlayer(webSocket){
-    const index = mapSocketToGame[webSocket];
-    const theGame = games[index];
+    const theGame = findGame(webSocket);
     if (theGame == undefined) {
         console.error("An odd number of players joined");
         return;
@@ -74,7 +75,7 @@ function getOtherPlayer(webSocket){
         console.error("No matching player!");
         return;
     }
-    console.log("The two players are in the game win index", index);
+    // console.log("The two players are in the game win index", index);
     let otherPlayer = theGame.player1;
     // only do this if we have more than 2 players
     if (webSocket == otherPlayer) {
@@ -87,10 +88,18 @@ function removeFromQueue(webSocket) {
     queue = queue.filter(socket => socket !== webSocket);
 }
 
-const games = [];
+function findGame(webSocket) {
+    return games.find(game => game.player1 == webSocket || game.player2 == webSocket);
+}
+
+function removeGame(webSocket) {
+    games = games.filter(game => clients.includes(game.player1) || clients.includes(game.player2));
+}
+
+let games = [];
 let currentGame = {};
-const mapSocketToGame = {};
 let queue = [];
+let gameCount = 0;
 
 
 webSocketServer.on("connection", (webSocket) => {
@@ -117,11 +126,9 @@ webSocketServer.on("connection", (webSocket) => {
 
                 games.push(currentGame);
                 console.log(games.length);
-                const gameCount = games.length - 1;
-                mapSocketToGame[currentGame.player1] = gameCount;
-                mapSocketToGame[currentGame.player2] = gameCount;
                 currentGame = {};
                 console.log("Two players connected to game", gameCount);
+                gameCount++;
             }
         } else if (received.event == "move") {
             let otherPlayer = getOtherPlayer(webSocket);
@@ -133,7 +140,7 @@ webSocketServer.on("connection", (webSocket) => {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Game was won by the other player");
             const data = {
-                "event": "gameWonByOTher",
+                "event": "gameWonByOther",
                 "color":  received.color,
                 "positions": received.positions
             }
@@ -184,5 +191,6 @@ webSocketServer.on("connection", (webSocket) => {
     webSocket.on("close", () => {
         removeClient(webSocket);
         removeFromQueue(webSocket);
+        removeGame();
     })
 });
