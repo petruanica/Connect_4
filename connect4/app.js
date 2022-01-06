@@ -17,11 +17,6 @@ app.use(express.static(__dirname + "/public"));
 
 const server = http.createServer(app);
 server.listen(3000);
-
-
-
-
-
 const webSocketServer = new websocket.Server({ server });
 
 // client part 
@@ -49,6 +44,21 @@ function removeClient(webSocket) {
 
 
 
+class ImprovedSocket{
+
+
+    /**
+     * sends and event through the websocket
+     * @param {String} eventType name of the event 
+     * @param {Object} data the information sent on the socket
+     */
+    send(eventType,data){
+        data['event'] = eventType;
+        // super.send(JSON.stringify(data));
+    }
+
+}
+
 /**
  * returns the websocket of the other player 
  * @return {WebSocket} the socket that belongs to the other player
@@ -57,11 +67,11 @@ function getOtherPlayer(webSocket){
     const index = mapSocketToGame[webSocket];
     const theGame = games[index];
     if (theGame == undefined) {
-        console.log("An odd number of players joined");
+        console.error("An odd number of players joined");
         return;
     }
     if (theGame.player1 == undefined || theGame.player2 == undefined) {
-        console.log("No matching player!");
+        console.error("No matching player!");
         return;
     }
     console.log("The two players are in the game win index", index);
@@ -85,8 +95,6 @@ let queue = [];
 
 webSocketServer.on("connection", (webSocket) => {
     addClient(webSocket);
-    // const proWebsocket = new (webSocket);
-    // proWebsocket.send('gameStart', {})
 
     webSocket.on("message", (message) => {
         // console.log("[LOG] " + message.toString());
@@ -103,9 +111,8 @@ webSocketServer.on("connection", (webSocket) => {
                 currentGame.player1 = webSocket;
                 webSocket.send(JSON.stringify(data));
             } else {
-                console.log("Here!");
                 currentGame.player2 = webSocket;
-                data.color = 'yellow';
+                data.color = 'orange';
                 webSocket.send(JSON.stringify(data));
 
                 games.push(currentGame);
@@ -119,10 +126,8 @@ webSocketServer.on("connection", (webSocket) => {
         } else if (received.event == "move") {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Move at col :", received.column);
-            const data = {
-                "event": "makeMove",
-                "column": received.column,
-            }
+            const data = received;
+            data["event"] = "makeMove";
             otherPlayer.send(JSON.stringify(data));
         } else if (received.event == "gameWon") {
             let otherPlayer = getOtherPlayer(webSocket);

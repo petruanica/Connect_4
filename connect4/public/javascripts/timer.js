@@ -1,14 +1,14 @@
 'use strict';
 
 import { turnTimePenalty } from "./main.js";
+import {config} from "./config.js"
 
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
-const button = document.querySelector('#rematch-button');
-button.addEventListener("click",() => {stopTimers(); startTimers();});
+const button = document.querySelector('#reset-board');
 
-let seconds = 0;
-let secondsLeft = 15;
+let secondsClock;
+let secondsTimer;
 
 let clockInterval;
 let timerInterval;
@@ -16,46 +16,46 @@ let timerInterval;
 startTimers();
 
 function addOneSecond() {
-    seconds++;
+    secondsClock++;
     displayClock();
 }
 
 
 function displayClock() {
-    let sec = seconds % 60;
+    let sec = secondsClock % 60;
     if (sec < 10) {
         sec = '0' + sec.toString();
     } else {
         sec = sec.toString();
     }
-    const min = Math.floor(seconds / 60).toString();
+    const min = Math.floor(secondsClock / 60).toString();
     clock.innerHTML = min + ':' + sec;
 }
 
 function substractOneSecond() {
-    secondsLeft--;
+    secondsTimer--;
     displayTimer();
 }
 
 function displayTimer() {
-    if (secondsLeft == -1) {
-        secondsLeft = 15;
-        console.log("time penalty");
+    console.log(secondsTimer);
+    if (secondsTimer == -1) {
+        secondsTimer = 15;
         turnTimePenalty();
     }
-    timer.innerHTML = secondsLeft.toString();
+    timer.innerHTML = secondsTimer.toString();
 }
 
 function startTimers() {
-    seconds = -1; 
-    secondsLeft = 16;
+    secondsClock = -1;
+    secondsTimer = config.TIMER_SECONDS + 1;
     clockInterval = setInterval(addOneSecond, 1000);;
     timerInterval = setInterval(substractOneSecond, 1000);
 }
 
 
 export function resetTurnTimer() {
-    secondsLeft = 15;
+    secondsTimer = config.TIMER_SECONDS;
 }
 
 export function stopTimers() {

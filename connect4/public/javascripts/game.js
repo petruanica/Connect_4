@@ -7,12 +7,23 @@ import { Board } from "./board.js";
 const resetButton = document.querySelector('#rematch-button');
 const wonMessageText = document.querySelector('#win-message');
 const winMethodText = document.querySelector("#win-method");
-const circlesAboveRed = document.querySelectorAll(".player-turn")[0]; // red
-const circlesAboveOrange = document.querySelectorAll(".player-turn")[1]; // orange
+const circleYou = document.querySelectorAll(".player-turn")[0]; // you
+const circleOpponent = document.querySelectorAll(".player-turn")[1]; // other
+const warningYou = document.querySelectorAll(".player-info")[0]; // you
+const warningOpponent = document.querySelectorAll(".player-info")[1]; // other
+
+warningOpponent.style.display = "none";
+warningYou.style.display = 'none';
 
 
+function endAnimation(element) {
+    element.style.display = "none";
+    element.className = "player-info";
+    console.log("animation ended!");
+}
 
-
+warningYou.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningYou), false); // sa termin animatia
+warningOpponent.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningOpponent), false); // sa termin animatia
 
 export class Game {
     constructor(socket, turnColor) {
@@ -23,10 +34,13 @@ export class Game {
         this.addClickEvents();
         this.myTurnColor = turnColor;
         this.generalTurnColor = 'red';
-        this.timePenalties = 0;
 
         if (turnColor == "red")
             this.board.makeBoardActive();
+        this.timePenalties = {
+            "red": 0,
+            "orange": 0
+        };
         this.updateCirclesBasedOnColor('red'); // red is the first player
     }
 
@@ -36,13 +50,15 @@ export class Game {
      * @param {string} newColor 
      */
     updateCirclesBasedOnColor(newColor) {
-        circlesAboveRed.style.display = "none";
-        circlesAboveOrange.style.display = "none";
-        console.log("new color", newColor);
-        if (newColor == 'red')
-            circlesAboveRed.style.display = "block";
-        else
-            circlesAboveOrange.style.display = "block";
+        circleYou.style.display = "none";
+        circleOpponent.style.display = "none";
+        console.log("Current color is:", newColor);
+        if (newColor == this.myTurnColor){
+            circleYou.style.display = "block";
+        }
+        else{
+            circleOpponent.style.display = "block";
+        }
     }
 
 
@@ -69,7 +85,7 @@ export class Game {
      * @param {number} row
      */
     changeWinningPieceStyle(column, row) {
-        let winColor = this.board.boardPieces[column][row].style.backgroundColor;
+        let winColor = this.board.boardPieces[column][row].currentColor;
         this.board.boardPieces[column][row].className += ' win-animation-' + winColor;
     }
 
@@ -117,14 +133,19 @@ export class Game {
     }
 
 
-
-    clickColumn(column) {
+    /**
+     * Click made by me or by a random move because my turn has passed
+     * @param {number} column 
+     * @param {boolean} randomClicked boolean that says if the click was random or not
+     */
+    clickColumn(column, randomClicked = false) {
         // player clicks on the column
+
         if (this.gameEnded == true) {
             return;
         }
         if (this.generalTurnColor != this.myTurnColor) {
-            console.log("You can't click because is not your turn!");
+            console.log(`You can't click because is not your turn!. General turn color is ${this.generalTurnColor} and your color is ${this.myTurnColor}`);
             return;
         }
         const row = this.placeColumn(column);
@@ -133,7 +154,8 @@ export class Game {
 
         let data = {
             "event": "move",
-            "column": column
+            "column": column,
+            "randomClicked": randomClicked
         }
         console.log("I am sending the move to the other player", data);
         this.socket.send(JSON.stringify(data));
@@ -141,7 +163,7 @@ export class Game {
         const [outcome, positions] = this.board.checkWin(column, row, this.myTurnColor);
         console.log('Game ended is: ', outcome);
         if (outcome == true) {
-            this.handleWonGame(positions,this.myTurnColor);
+            this.handleWonGame(positions, this.myTurnColor);
             data = {
                 "event": "gameWon",
                 "positions": positions,
@@ -149,46 +171,77 @@ export class Game {
             }
             this.socket.send(JSON.stringify(data));
         }
-
     }
 
     /**
-     * Handles click event on column
+     * Handles click event on column made by the opponent that either clicked or the time passed
      * @param {number} column
      * @return {function} a function that manages the click
      */
-    placeColumn(column) {
+    placeColumn(column,randomClicked) {
         const row = this.board.placePiece(column, this.generalTurnColor);
+        console.log("Placing on column!",randomClicked);
+        if(randomClicked == true){
+            console.log('%c Display warning for other', 'color: #bada55');
+            this.displayWarningForOther(); // display warning for other player
+        }
         this.changeGlobalTurn();
-        this.updateCirclesBasedOnColor(this.generalTurnColor);
         if (row == undefined) {
             return undefined;
         }
         return row;
     }
 
+    opponentColor(){
+        if(this.myTurnColor == 'red')
+            return 'orange';
+        return 'red';
+    }
     /**
-     * Places a piece on a random column 
+     * Places a piece on a random column on my board 
      */
     clickRandomColumn() {
         let randomIndex;
         do {
             randomIndex = Math.floor(Math.random() * this.board.columns);
         } while (this.board.lastCellColumn[randomIndex] >= this.board.rows);
-        this.clickColumn(randomIndex);
+        this.clickColumn(randomIndex,true);
     }
 
-    /**
-     * Adds a penalty to current player
-     * If a player has 3 penalties, the game ends and the other player wins
-     */
-    addTimePenalty() {
-        if (this.myTurnColor == this.generalTurnColor) {
-            this.clickRandomColumn();
-            this.timePenalties++;
-        }
+    displayWarningForMe(){
+        this.timePenalties[this.myTurnColor]++;
+        const count = this.timePenalties[this.myTurnColor];
+        console.log(this.timePenalties);
+        warningYou.firstElementChild.innerText = this.getStringFromCount(count);
+        warningYou.className += ' fadeInOut';
+        warningYou.style.display = 'block';
+        this.checkGameEndedByPenalties(count);
 
-        if (this.timePenalties == 3) {
+    }
+
+    displayWarningForOther(){
+        this.timePenalties[this.opponentColor()]++;
+        const count = this.timePenalties[this.opponentColor()];
+        console.log(this.timePenalties);
+        warningOpponent.firstElementChild.innerText = this.getStringFromCount(count);
+        warningOpponent.className += ' fadeInOut';
+        warningOpponent.style.display = 'block';
+        this.checkGameEndedByPenalties(count);
+    }
+
+    getStringFromCount(count){
+        const warning = "warning";
+        if(count == 1)
+            return "1st warning";
+        else if(count == 2)
+            return "2nd warning";
+        else if(count == 3){
+            return "Game ended!";
+        }
+    }
+
+    checkGameEndedByPenalties(count){
+        if (count == 3) {
             this.handleGameEndByTimePenalty();
             const data = {
                 "event": "timePenalty",
@@ -200,15 +253,28 @@ export class Game {
     }
 
     /**
+     * Adds a penalty to me
+     * If a player has 3 penalties, the game ends and the other player wins
+     */
+    addTimePenalty() {
+        if (this.myTurnColor == this.generalTurnColor) {
+            this.displayWarningForMe();
+            this.clickRandomColumn();
+        }
+
+
+    }
+
+    /**
      * changes the player's turn
      */
     changeGlobalTurn() {
-        resetTurnTimer();
-        if (this.generalTurnColor == 'red') {
-            this.generalTurnColor = 'yellow';
-        } else {
+        console.log("Change global turn");
+        if (this.generalTurnColor == 'red')
+            this.generalTurnColor = 'orange';
+        else
             this.generalTurnColor = 'red';
-        }
+        this.updateCirclesBasedOnColor(this.generalTurnColor);
         
         if (this.myTurnColor == this.generalTurnColor) {
             console.log("changed hover");
@@ -216,6 +282,7 @@ export class Game {
         } else {
             this.board.makeBoardInactive();
         }
+        resetTurnTimer();
     }
 
     /**
@@ -227,5 +294,9 @@ export class Game {
         this.myTurnColor = 'red';
         wonMessageText.style.display = 'none';
         this.timePenalties = 0;
+        this.timePenalties = {
+            'red': 0,
+            'orange': 0
+        };
     }
 }
