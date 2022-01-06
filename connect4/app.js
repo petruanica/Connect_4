@@ -126,10 +126,8 @@ webSocketServer.on("connection", (webSocket) => {
         } else if (received.event == "move") {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Move at col :", received.column);
-            const data = {
-                "event": "makeMove",
-                "column": received.column,
-            }
+            const data = received;
+            data["event"] = "makeMove";
             otherPlayer.send(JSON.stringify(data));
         } else if (received.event == "gameWon") {
             let otherPlayer = getOtherPlayer(webSocket);
