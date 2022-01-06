@@ -19,7 +19,7 @@
             </form>
 
             <div id='win-message'>
-                Player <span id='win-player'>red</span> has won the game. <br/><br/> 
+                Player <span id='win-player'>red</span> has won the game. <br /><br />
                 <form action="/">
                     <span id="win-method">Click the rematch button to play again. </span>
                     <button type="button" id='rematch-button'> Rematch </button>
@@ -48,11 +48,14 @@
 
             <section>
                 <div class="player-div">
+                    <div class="player-win-icon"></div>
                     <div class="player-info"><span></span></div>
                     <div class="player-turn"></div>
 
                     <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
                     <span>You</span>
+                    <div class="player-score">0</div>
+
                 </div>
 
                 <div id="timer">
@@ -60,10 +63,12 @@
                 </div>
 
                 <div class="player-div">
+                    <div class="player-win-icon"></div>
                     <div class="player-info"><span></span></div>
                     <div class="player-turn"></div>
                     <span>Opponent</span>
                     <img src="images/tudelft_logo.png" alt="logo" width="25" height="25">
+                    <div class="player-score">0</div>
                 </div>
             </section>
         </div>

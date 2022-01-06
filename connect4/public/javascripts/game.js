@@ -16,18 +16,29 @@ const circleOpponent = document.querySelectorAll(".player-turn")[1]; // other
 const warningYou = document.querySelectorAll(".player-info")[0]; // you
 const warningOpponent = document.querySelectorAll(".player-info")[1]; // other
 
-warningOpponent.style.display = "none";
-warningYou.style.display = 'none';
-
-
 function endAnimation(element) {
     element.style.display = "none";
     element.className = "player-info";
     console.log("animation ended!");
 }
 
+
+warningOpponent.style.display = "none";
+warningYou.style.display = 'none';
+
 warningYou.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningYou), false); // sa termin animatia
 warningOpponent.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningOpponent), false); // sa termin animatia
+
+
+const scoreYou = document.querySelectorAll(".player-score")[0];
+const scoreOpponent = document.querySelectorAll(".player-score")[1];
+
+const winIconYou = document.querySelectorAll(".player-win-icon")[0];
+const winIconOpponent = document.querySelectorAll(".player-win-icon")[1];
+
+winIconYou.style.display = "none";
+winIconOpponent.style.display = "none";
+
 
 export class Game {
     constructor(socket, turnColor) {
@@ -51,7 +62,7 @@ export class Game {
 
         // bind the rematch event
         const rematchFunction = this.rematchClick.bind(this);
-        rematchButton.addEventListener('click',rematchFunction);
+        rematchButton.addEventListener('click', rematchFunction);
     }
 
 
@@ -99,26 +110,76 @@ export class Game {
     }
 
     /**
+     * increment the score of my color
+     */
+    incrementMyScore() {
+        scoreYou.innerHTML = Number.parseInt(scoreYou.innerHTML) + 1;
+    }
+
+    /**
+     * increment the score of the opponent
+     */
+    incremenetOpponentScore() {
+        scoreOpponent.innerHTML = Number.parseInt(scoreYou.innerHTML) + 1;
+    }   
+
+    /**
+     * Display a crown icon above the player who won
+     * @param {String} winningColor winning color
+     */
+    showWinnerIcon(winningColor){
+        if(winningColor == this.myTurnColor){
+            winIconYou.style.display = "block";
+        }else{
+            winIconOpponent.style.display = "block";
+        }
+    }
+
+    /**
+     * handle the score displayed
+     * @param {String} winningColor the color that won the game
+     */
+    handleGameScore(winningColor) {
+        if (winningColor == this.myTurnColor) {
+            this.incrementMyScore();
+        } else {
+            this.incremenetOpponentScore();
+        }
+    }
+
+    /**
+     * is called in all possible win cases and manages the timer, board, score and gameEnded
+     * also manages the win player text
+     * @param {String} winningColor the color that won the game
+     */
+    handleGeneralWin(winningColor) {
+        this.gameEnded = true;
+        resetTurnTimer();
+        stopTimers();
+        this.board.makeBoardInactive();
+        this.handleGameScore(winningColor);
+        this.showWinnerIcon(winningColor);
+        document.querySelector('#win-player').innerHTML = winningColor;
+
+    }
+
+    /**
      * fuction triggered when the game was won
      * it displays the win message and the player who won and highlights the won positions
      * @param {Array} positions an array of the winning piece positions
      * @param {String} winningColor the color that won the game
      */
     handleWonGame(positions, winningColor) {
-        this.gameEnded = true;
+        this.handleGeneralWin(winningColor);
         for (const pos of positions) {
             this.changeWinningPieceStyle(pos.col, pos.row);
         }
         wonMessageText.style.display = 'block';
         winMethodText.innerHTML = "Click the rematch button to play again. ";
-        document.querySelector('#win-player').innerHTML = winningColor;
-        stopTimers();
-        this.board.makeBoardInactive();
     }
 
 
     handleGameEndByTimePenalty() {
-        this.gameEnded = true;
         wonMessageText.style.display = 'block';
         rematchButton.style.display = "none";
         if (this.generalTurnColor == this.myTurnColor) {
@@ -126,19 +187,14 @@ export class Game {
         } else {
             winMethodText.innerHTML = "You ran out of time and were kicked out of the game. ";
         }
-        document.querySelector('#win-player').innerHTML = this.generalTurnColor;
-        stopTimers();
-        this.board.makeBoardInactive();
+        this.handleGeneralWin(this.generalTurnColor);
     }
 
     handleGameEndByDisconnect() {
-        this.gameEnded = true;
+        this.handleGameScore(this.myTurnColor);
         wonMessageText.style.display = 'block';
         rematchButton.style.display = "none";
         winMethodText.innerHTML = "Your opponent abandoned the match. ";
-        document.querySelector('#win-player').innerHTML = this.myTurnColor;
-        stopTimers();
-        this.board.makeBoardInactive();
     }
 
 
@@ -314,29 +370,29 @@ export class Game {
         resetTurnTimer();
     }
 
-    handleRematchRequest(){
-        winMethodText.innerHTML = "Other player wants to play with you";
+    handleRematchRequest() {
+        winMethodText.innerHTML = "The other player wants to play with you again";
         this.opponentRequestedRematch = true;
     }
 
-    handleRematchAccepted(){
+    handleRematchAccepted() {
         this.resetGame();
     }
 
     /**
      * function called when a player click on the rematch button
      */
-    rematchClick(){
-        if(this.opponentRequestedRematch == false){
+    rematchClick() {
+        if (this.opponentRequestedRematch == false) {
             // I am the first to click the rematch button
             winMethodText.innerHTML = "Waiting for opponent to accept...";
-    
+
             const data = {
                 "event": "rematch",
                 "message": "waiting for opponent to accept rematch"
             }
             this.socket.send(JSON.stringify(data));
-        }else{
+        } else {
             // I am accepting the rematch 
             winMethodText.innerHTML = "Accepting the rematch offer!";
             const data = {
@@ -353,6 +409,9 @@ export class Game {
      */
     resetGame() {
         this.board.clearBoard();
+
+        winIconYou.style.display = "none"; // no one won
+        winIconOpponent.style.display = "none"; // no one won
 
         this.gameEnded = false;
         this.opponentRequestedRematch = false;

@@ -10,7 +10,9 @@ main {
     height: 100%;
 }
 
-
+/* PLAYER DIV 
+=================
+*/
 .player-div {
     position: relative;
     border: 3px solid red;
@@ -34,6 +36,19 @@ main {
     /* ca sa aliniez textul cu imaginea*/
 }
 
+.player-score{
+    position: absolute;
+    /* border: 1px solid black; */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    left: calc(50% - 15px);
+    top: calc(100% + 30px);
+    background-color: rgba(0, 170, 212, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 @keyframes fadeInOut {
     0% {
@@ -101,6 +116,18 @@ main {
     /* fix deasupra la player-div plus inca 5 px*/
     left: calc(50% - 5px);
     /* fix la mijloc dar trebuie sa scad 10/2 din width */
+}
+.player-win-icon{
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: calc(50% - 15px);
+    width: 30px;
+    height: 30px;
+    background-size: 140%;
+    background-image: url("../images/win_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 
