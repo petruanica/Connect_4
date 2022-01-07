@@ -38,22 +38,27 @@ function substractOneSecond() {
 
 function displayTimer() {
     if (secondsTimer == -1) {
-        secondsTimer = config.TIMER_SECONDS;
+        resetTurnTimer();
         turnTimePenalty();
     }
     timer.innerHTML = secondsTimer.toString();
 }
 
-export function startTimers() {
-    secondsClock = -1;
+export function resetTurnTimer() {
+    clearInterval(timerInterval);
     secondsTimer = config.TIMER_SECONDS + 1;
-    clockInterval = setInterval(addOneSecond, 1000);;
     timerInterval = setInterval(substractOneSecond, 1000);
 }
 
+export function resetClock() {
+    clearInterval(clockInterval);
+    secondsClock = -1;
+    clockInterval = setInterval(addOneSecond, 1000);;
+}
 
-export function resetTurnTimer() {
-    secondsTimer = config.TIMER_SECONDS;
+export function startTimers() {
+    resetTurnTimer();
+    resetClock()
 }
 
 export function stopTimers() {

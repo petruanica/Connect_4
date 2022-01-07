@@ -8,6 +8,7 @@ const websocket = require("ws");
 const indexRouter = require('./routes/index');
 const { Socket } = require("dgram");
 const app = express();
+const port = process.argv[2];
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -17,7 +18,7 @@ app.use('/', indexRouter);
 app.use(express.static(__dirname + "/public"));
 
 const server = http.createServer(app);
-server.listen(3000);
+server.listen(port);
 const webSocketServer = new websocket.Server({ server });
 
 // client part 
@@ -118,8 +119,9 @@ webSocketServer.on("connection", (webSocket) => {
             }
             if (currentGame.player1 == undefined) {
                 currentGame.player1 = webSocket;
-                webSocket.send(JSON.stringify(data));
             } else {
+                currentGame.player1.send(JSON.stringify(data));
+                
                 currentGame.player2 = webSocket;
                 data.color = 'orange';
                 webSocket.send(JSON.stringify(data));
@@ -176,13 +178,13 @@ webSocketServer.on("connection", (webSocket) => {
                 "message": "opponent disconnected",
             }
             otherPlayer.send(JSON.stringify(data));
-        }else if(received.event == "rematch"){
+        } else if (received.event == "rematch") {
             let otherPlayer = getOtherPlayer(webSocket);
             const data = {
                 "event": "requestRematch",
             }
             otherPlayer.send(JSON.stringify(data));
-        }else if(received.event == "rematchAccepted"){
+        } else if (received.event == "rematchAccepted") {
             let otherPlayer = getOtherPlayer(webSocket);
             otherPlayer.send(JSON.stringify(received)); // send the same event to the client
         }
