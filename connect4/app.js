@@ -95,8 +95,8 @@ let queue = [];
 let gameCount = 0;
 
 
-webSocketServer.on("connection", (socker) => {
-    const webSocket = new improvedws.ImprovedSocket(socker);
+webSocketServer.on("connection", (socket) => {
+    const webSocket = new improvedws.ImprovedSocket(socket);
     addClient(webSocket);
 
     webSocket.on("message", (message) => {
