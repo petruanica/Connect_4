@@ -7,7 +7,7 @@ import { config } from "./config.js";
 // check if page was reloaded; if yes, redirect to splash screen
 if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).includes('reload')) {
     // window.dispatchEvent(new Event('beforeunload'));
-    // window.location.href = "./";
+    window.location.href = "./";
 }
 
 
@@ -87,7 +87,7 @@ function startGame(playerColor) {
 
     game = new Game(socket, playerColor);
 
-  }
+}
 
 
 export function turnTimePenalty() {

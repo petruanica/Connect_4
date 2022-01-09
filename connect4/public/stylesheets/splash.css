@@ -1,6 +1,6 @@
 #title {
-    position: absolute;
-    top: 20px;
+    margin-top:5%;
+    margin-bottom: 5%;
     width: 400px;
     height: 100px;
     display: flex;
@@ -15,7 +15,6 @@
 
 main {
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 100%;
@@ -24,7 +23,6 @@ main {
 
 .menu {
     display: grid;
-    margin: -10px 0;
 }
 
 button div {
@@ -41,7 +39,7 @@ button div span {
 button {
     position: relative;
     padding: 0px;
-    margin: 30px 0;
+    margin-bottom: 15%;
     width: 300px;
     height: 100px;
     align-self: center;
