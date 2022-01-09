@@ -260,12 +260,14 @@ export class Game {
         if (row == undefined) {
             return undefined;
         }
-        console.log("Placing on column!",randomClicked);
-        if(randomClicked == true){
-            console.log('%c Display warning for other', 'color: #bada55');
-            this.displayWarningForOther(); // display warning for other player
+        console.log("Placing on column!", randomClicked);
+        if (randomClicked == true) {
+            // https://stackoverflow.com/questions/7505623/colors-in-javascript-console
+            console.log('%c Display warning for other', 'color: #bada55'); // colors in console.log()
+            this.displayWarningForOther(); // display warning for other player in that case
         }
         this.changeGlobalTurn();
+
         return row;
     }
 
