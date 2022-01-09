@@ -7,10 +7,10 @@ const gamesPlayed = document.querySelector("#games-total");
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log(data.event);
-    if(data.event == "onlinePlayers"){
+    if(data.event == Messages.GAME_STATS){
         onlinePlayers.innerHTML = data.onlinePlayers;
         gamesPlayed.innerHTML = data.gamesPlayed;
-    } else if (data.event == "playersReady") {
+    } else if (data.event == Messages.PLAYERS_READY) {
         window.location.href = "./game";
     }
 }
@@ -25,7 +25,7 @@ playButton.addEventListener("click", () => {
     playButton.disabled = true;
 
     const data = {
-        "event": "enqueued",
+        "event": Messages.GAME_QUEUE,
         "message": "waiting for opponent"
     }
     socket.send(JSON.stringify(data));

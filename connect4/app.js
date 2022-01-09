@@ -1,5 +1,6 @@
 //@ts-check
 
+const messages = require("./public/javascripts/messages.js");
 const path = require("path");
 const express = require('express');
 const http = require("http");
@@ -7,6 +8,8 @@ const websocket = require("ws");
 
 const indexRouter = require('./routes/index');
 const { Socket } = require("dgram");
+
+
 const app = express();
 const port = process.argv[2];
 
@@ -26,7 +29,7 @@ let clients = [];
 
 function updateClients() {
     const data = {
-        "event": "onlinePlayers",
+        "event": messages.GAME_STATS,
         "onlinePlayers": clients.length,
         "gamesPlayed": gameCount,
     }
@@ -49,22 +52,47 @@ function removeClient(webSocket) {
 
 class ImprovedSocket{
 
-
+    /**
+     * 
+     * @param {websocket} webSocket 
+     */
+    constructor(webSocket){
+        this.webSocket = webSocket;
+    }
     /**
      * sends and event through the websocket
      * @param {String} eventType name of the event 
      * @param {Object} data the information sent on the socket
      */
-    send(eventType,data){
+    sendEvent(eventType,data){
         data['event'] = eventType;
-        // super.send(JSON.stringify(data));
+        this.webSocket.send(JSON.stringify(data));
+    }
+    /**
+     * Sends an object on the socket by calling JSON.stringify()
+     * @param {Object} data object to send to through the websocket
+     */
+    send(data){
+        if(typeof(data) == 'string'){
+            this.webSocket.send(data);
+        }else{
+            this.webSocket.send(JSON.stringify(data));
+        }
     }
 
+    /**
+     * Wrapper around webSocket.on(event,callback)
+     * @param {String} event event name
+     * @param {Object} callback callback  
+     */
+    on(event, callback){
+        this.webSocket.on(event,callback);
+    }
 }
 
 /**
  * returns the websocket of the other player 
- * @return {WebSocket} the socket that belongs to the other player
+ * @return {ImprovedSocket} the socket that belongs to the other player
  */
 function getOtherPlayer(webSocket){
     const theGame = findGame(webSocket);
@@ -103,28 +131,27 @@ let queue = [];
 let gameCount = 0;
 
 
-webSocketServer.on("connection", (webSocket) => {
+webSocketServer.on("connection", (socker) => {
+    const webSocket = new ImprovedSocket(socker);
     addClient(webSocket);
 
     webSocket.on("message", (message) => {
         // console.log("[LOG] " + message.toString());
         const received = JSON.parse(message.toString());
-        //{"event": ceva, "asdadada"}
-        console.log(received);
-        if (received.event == "gameStart") {
+        if (received.event == messages.GAME_STARTED) {
             console.log("Add gamer");
             const data = {
-                "event": 'setColor',
+                "event": messages.GAME_SET_COLOR,
                 "color": 'red',
             }
             if (currentGame.player1 == undefined) {
                 currentGame.player1 = webSocket;
             } else {
-                currentGame.player1.send(JSON.stringify(data));
+                currentGame.player1.send(data);
                 
                 currentGame.player2 = webSocket;
                 data.color = 'orange';
-                webSocket.send(JSON.stringify(data));
+                webSocket.send(data);
 
                 games.push(currentGame);
                 console.log(games.length);
@@ -132,13 +159,11 @@ webSocketServer.on("connection", (webSocket) => {
                 console.log("Two players connected to game", gameCount);
                 gameCount++;
             }
-        } else if (received.event == "move") {
+        } else if (received.event == messages.GAME_MOVE) {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Move at col :", received.column);
-            const data = received;
-            data["event"] = "move";
-            otherPlayer.send(JSON.stringify(data));
-        } else if (received.event == "gameWon") {
+            otherPlayer.send(received);
+        } else if (received.event == messages.GAME_WON) {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Game was won by the other player");
             const data = {
@@ -146,47 +171,43 @@ webSocketServer.on("connection", (webSocket) => {
                 "color":  received.color,
                 "positions": received.positions
             }
-            otherPlayer.send(JSON.stringify(data));
-        } else if (received.event == "gameDraw") {
+            otherPlayer.send(data);
+        } else if (received.event == messages.GAME_DRAW) {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Game ended in a draw!");
-            otherPlayer.send(JSON.stringify(received));
-        } else if (received.event == "enqueued") {
+            otherPlayer.send(received);
+        } else if (received.event == messages.GAME_QUEUE) {
             queue.push(webSocket);
             console.log("players in queue: " + queue.length);
-
             if (queue.length == 2) {
                 const data = {
-                    "event": "playersReady",
+                    "event": messages.PLAYERS_READY,
                     "message": "ready to start game"
                 }
-                queue[0].send(JSON.stringify(data));
-                queue[1].send(JSON.stringify(data));
+                queue[0].send(data);
+                queue[1].send(data);
                 queue = [];
             }
-        } else if (received.event == "timePenalty") {
+        } else if (received.event == messages.GAME_LOST_PENALTY) {
             let otherPlayer = getOtherPlayer(webSocket);
             const data = {
                 "event": "gameWonByTimePenalty",
                 "message": "opponent ran out of time",
             }
-            otherPlayer.send(JSON.stringify(data));
-        } else if (received.event == "disconnected") {
+            otherPlayer.send(data);
+        } else if (received.event == messages.PLAYER_DISCONNECTED) {
             let otherPlayer = getOtherPlayer(webSocket);
             const data = {
                 "event": "gameWonByDisconnect",
                 "message": "opponent disconnected",
             }
-            otherPlayer.send(JSON.stringify(data));
-        } else if (received.event == "rematch") {
+            otherPlayer.send(data);
+        } else if (received.event == messages.GAME_REMATCH_REQUEST) {
             let otherPlayer = getOtherPlayer(webSocket);
-            const data = {
-                "event": "requestRematch",
-            }
-            otherPlayer.send(JSON.stringify(data));
-        } else if (received.event == "rematchAccepted") {
+            otherPlayer.send(received);
+        } else if (received.event == messages.GAME_REMATCH_ACCEPTED) {
             let otherPlayer = getOtherPlayer(webSocket);
-            otherPlayer.send(JSON.stringify(received)); // send the same event to the client
+            otherPlayer.send(received); // send the same event to the client
         }
     });
 

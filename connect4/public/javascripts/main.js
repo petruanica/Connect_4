@@ -25,7 +25,7 @@ socket.onmessage = (event) => {
     } else if (data.event == "move") {
         console.log("I have to make a move at column", data);
         game.placeColumn(data.column, data.randomClicked);
-    } else if (data.event == "setColor") {
+    } else if (data.event == Messages.GAME_SET_COLOR) {
         console.log("I am " + data.color);
         const playerColor = data.color;
         const playerDivs = document.querySelectorAll(".player-div");
@@ -52,11 +52,11 @@ socket.onmessage = (event) => {
     } else if (data.event == "gameWonByDisconnect" && !game.gameEnded) {
         console.log(data.message);
         game.handleGameEndByDisconnect();
-    } else if (data.event == "requestRematch") {
+    } else if (data.event == Messages.GAME_REMATCH_REQUEST) {
         game.handleRematchRequest();
-    } else if (data.event == "rematchAccepted") {
+    } else if (data.event == Messages.GAME_REMATCH_ACCEPTED) {
         game.handleRematchAccepted();
-    } else if (data.event == "gameDraw") {
+    } else if (data.event == Messages.GAME_DRAW) {
         console.log(data.message);
         game.handleGameDraw();
     }
@@ -64,7 +64,7 @@ socket.onmessage = (event) => {
 
 socket.onopen = () => {
     const data = {
-        "event": "gameStart",
+        "event": Messages.GAME_STARTED,
         "message": "Hello from a game!"
     }
     socket.send(JSON.stringify(data));
@@ -74,7 +74,7 @@ socket.onopen = () => {
 // close socket nicely
 window.onbeforeunload = () => {
     const data = {
-        "event": "disconnected",
+        "event": Messages.PLAYER_DISCONNECTED,
         "message": "Goodbye!"
     }
     socket.send(JSON.stringify(data));

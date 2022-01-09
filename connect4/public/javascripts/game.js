@@ -221,7 +221,7 @@ export class Game {
             return; // it did not change the board
 
         let data = {
-            "event": "move",
+            "event": Messages.GAME_MOVE,
             "column": column,
             "randomClicked": randomClicked
         }
@@ -233,7 +233,7 @@ export class Game {
         if (outcome == true) {
             this.handleWonGame(positions, this.myTurnColor);
             data = {
-                "event": "gameWon",
+                "event": Messages.GAME_WON,
                 "positions": positions,
                 "color": this.myTurnColor,
             }
@@ -242,7 +242,7 @@ export class Game {
             console.log('Game ended in a draw');
             this.handleGameDraw();
             data = {
-                "event": "gameDraw",
+                "event": Messages.GAME_DRAW,
                 "message": "game ended in a draw"
             }
             this.socket.send(JSON.stringify(data));
@@ -341,7 +341,7 @@ export class Game {
         if (count == 3) {
             this.handleGameEndByTimePenalty();
             const data = {
-                "event": "timePenalty",
+                "event": Messages.GAME_LOST_PENALTY,
                 "message": "ran out of time",
             }
             this.socket.send(JSON.stringify(data));
@@ -399,7 +399,7 @@ export class Game {
             winMethodText.innerHTML = "Waiting for opponent to accept...";
 
             const data = {
-                "event": "rematch",
+                "event": Messages.GAME_REMATCH_REQUEST,
                 "message": "waiting for opponent to accept rematch"
             }
             this.socket.send(JSON.stringify(data));
@@ -407,7 +407,7 @@ export class Game {
             // I am accepting the rematch 
             winMethodText.innerHTML = "Accepting the rematch offer!";
             const data = {
-                "event": "rematchAccepted",
+                "event": Messages.GAME_REMATCH_ACCEPTED,
                 "message": "I accepeted the rematch offer",
             }
             this.socket.send(JSON.stringify(data));
