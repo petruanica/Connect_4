@@ -1,3 +1,16 @@
+
+#title {
+    align-self: stretch;
+    width: 425.5px;
+    border-radius: 10px;
+}
+
+
+#title img{
+    width: 100%;
+    margin-top: 0.5em;
+}
+
 /* center elements */
 body {
     display: flex;
@@ -9,6 +22,8 @@ main {
     display: table;
     height: 100%;
 }
+
+
 
 /* PLAYER DIV 
 =================
@@ -191,7 +206,6 @@ main {
 }
 
 #board-container {
-    height: 330px;
     display: flex;
     flex-flow: row, wrap;
 }

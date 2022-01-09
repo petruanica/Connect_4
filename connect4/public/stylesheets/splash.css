@@ -8,6 +8,11 @@
     align-items: center;
 }
 
+#title img{
+    width: 100%;
+    margin-top: 0.5em;
+}
+
 main {
     display: flex;
     justify-content: center;

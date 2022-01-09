@@ -4,10 +4,14 @@ const messages = require("./public/javascripts/messages.js");
 const path = require("path");
 const express = require('express');
 const http = require("http");
-const websocket = require("ws");
+const ws = require("ws");
+const improvedws = require("./improvedSocket.js");
+
+
 
 const indexRouter = require('./routes/index');
 const { Socket } = require("dgram");
+const add = require("./improvedSocket.js");
 
 
 const app = express();
@@ -22,7 +26,7 @@ app.use(express.static(__dirname + "/public"));
 
 const server = http.createServer(app);
 server.listen(port);
-const webSocketServer = new websocket.Server({ server });
+const webSocketServer = new ws.Server({ server });
 
 // client part 
 let clients = [];
@@ -50,49 +54,9 @@ function removeClient(webSocket) {
 
 
 
-class ImprovedSocket{
-
-    /**
-     * 
-     * @param {websocket} webSocket 
-     */
-    constructor(webSocket){
-        this.webSocket = webSocket;
-    }
-    /**
-     * sends and event through the websocket
-     * @param {String} eventType name of the event 
-     * @param {Object} data the information sent on the socket
-     */
-    sendEvent(eventType,data){
-        data['event'] = eventType;
-        this.webSocket.send(JSON.stringify(data));
-    }
-    /**
-     * Sends an object on the socket by calling JSON.stringify()
-     * @param {Object} data object to send to through the websocket
-     */
-    send(data){
-        if(typeof(data) == 'string'){
-            this.webSocket.send(data);
-        }else{
-            this.webSocket.send(JSON.stringify(data));
-        }
-    }
-
-    /**
-     * Wrapper around webSocket.on(event,callback)
-     * @param {String} event event name
-     * @param {Object} callback callback  
-     */
-    on(event, callback){
-        this.webSocket.on(event,callback);
-    }
-}
-
 /**
  * returns the websocket of the other player 
- * @return {ImprovedSocket} the socket that belongs to the other player
+ * @return {improvedws.ImprovedSocket} the socket that belongs to the other player
  */
 function getOtherPlayer(webSocket){
     const theGame = findGame(webSocket);
@@ -132,7 +96,7 @@ let gameCount = 0;
 
 
 webSocketServer.on("connection", (socker) => {
-    const webSocket = new ImprovedSocket(socker);
+    const webSocket = new improvedws.ImprovedSocket(socker);
     addClient(webSocket);
 
     webSocket.on("message", (message) => {
