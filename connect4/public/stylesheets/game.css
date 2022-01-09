@@ -6,7 +6,9 @@ body {
 }
 
 main {
-    display: table;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
     height: 100%;
 }
 
@@ -128,12 +130,6 @@ main {
     background-repeat: no-repeat;
     background-position: center;
 
-}
-
-
-.container {
-    display: table-cell;
-    vertical-align: middle;
 }
 
 .container>section {

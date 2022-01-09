@@ -18,8 +18,7 @@ main {
 }
 
 .menu {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     margin: -10px 0;
 }
 
