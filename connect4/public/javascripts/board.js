@@ -25,8 +25,10 @@ export class Board {
         const rowIndex = this.lastCellColumn[col] + 1;
         if (rowIndex < this.rows) {
             this.boardPieces[col][rowIndex].className = `board-cell ${playerTurnColor}`;
+            this.boardPieces[col][rowIndex].className += " floatBubble";
             this.boardPieces[col][rowIndex].currentColor = playerTurnColor; // atribut manual ca sa verificam mai usor
             this.lastCellColumn[col] += 1;
+            
             return rowIndex;
         } else {
             return undefined;

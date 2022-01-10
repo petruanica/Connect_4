@@ -1,4 +1,3 @@
-
 #title {
     align-self: stretch;
     width: 425.5px;
@@ -6,7 +5,7 @@
 }
 
 
-#title img{
+#title img {
     width: 100%;
     margin-top: 0.5em;
 }
@@ -33,7 +32,7 @@ main {
 .player-div {
     position: relative;
     border: 3px solid red;
-    
+
     padding: 10px;
     padding-right: 10px;
     margin: 10px 35px;
@@ -53,7 +52,7 @@ main {
     /* ca sa aliniez textul cu imaginea*/
 }
 
-.player-score{
+.player-score {
     position: absolute;
     /* border: 1px solid black; */
     border-radius: 50%;
@@ -134,7 +133,8 @@ main {
     left: calc(50% - 5px);
     /* fix la mijloc dar trebuie sa scad 10/2 din width */
 }
-.player-win-icon{
+
+.player-win-icon {
     position: absolute;
     bottom: calc(100% + 4px);
     left: calc(50% - 15px);
@@ -236,7 +236,8 @@ main {
     flex-flow: row nowrap;
 }
 
-.board-column, .active-board-column {
+.board-column,
+.active-board-column {
     padding-top: 5px;
     display: flex;
     flex-direction: column;
@@ -288,14 +289,14 @@ button {
 
 @keyframes blinker {
     50% {
-      opacity: 0.5;
+        opacity: 0.5;
     }
 }
 
 .blink-me {
     animation: blinker 2s linear infinite;
 }
-  
+
 
 #win-message {
     border: 3px solid rgba(0, 136, 170, 255);
@@ -303,14 +304,37 @@ button {
     padding: 10px;
     background-color: white;
     position: absolute;
-    left: 10%; 
+    left: 10%;
     bottom: 35%;
     display: none;
 }
 
 #rematch-button {
-    position: absolute; 
+    position: absolute;
     bottom: 5%;
     left: 18%;
     width: fit-content;
+}
+
+
+.floatBubble {
+    position: relative;
+    -webkit-animation: floatBubble 2s normal ease-in-out;
+    animation: floatBubble 2s normal ease-in-out;
+}
+
+@keyframes floatBubble {
+    0% {
+        outline: 1px solid rgb(201, 201, 201);
+    }
+
+    50% {
+        transform: translateY(-2.5px);
+        outline: 1px solid rgb(201, 201, 201);
+    }
+
+    100% {
+        transform: translateY(0);
+        outline: 1px solid rgb(201, 201, 201);
+    }
 }
