@@ -4,11 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CONNECT 4</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <title>CONNECT 4</title>
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="./stylesheets/splash.css">
     <link rel="stylesheet" href="./stylesheets/styles.css">
 </head>
@@ -20,10 +18,12 @@
         </div>
         <div class="menu">
             <!-- <form action="/game"> -->
-            <button type="submit" id="play"> 
+            <button type="submit" id="play">
                 <span>Play</span>
                 <div>
-                    online: <span>0</span>
+                    online: <span>
+                        <%- onlinePlayers %>
+                    </span>
                 </div>
             </button>
 
@@ -34,16 +34,18 @@
             </form>
             <div id="stats">
                 <div>
-                    games total: <span  id="games-total">10</span>
+                    games total: <span id="games-total">
+                        <%- gamesPlayed %>
+                    </span>
                 </div>
                 <div id="games-today">
-                    total today: <span>10</span>
+                    total today: <span> 1</span>
                 </div>
             </div>
     </main>
 
 </body>
-<script type="module" src="javascripts/splash.js" async defer></script>
-<script src="/javascripts/messages.js" async defer></script>
+<script type='module' src="./javascripts/splash.js" async defer></script>
+<script src="./javascripts/messages.js" async defer></script>
 
 </html>

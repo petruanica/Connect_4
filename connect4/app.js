@@ -20,7 +20,6 @@ const port = process.argv[2];
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
 app.use('/', indexRouter);
 app.use(express.static(__dirname + "/public"));
 
@@ -58,7 +57,7 @@ function removeClient(webSocket) {
  * returns the websocket of the other player 
  * @return {improvedws.ImprovedSocket} the socket that belongs to the other player
  */
-function getOtherPlayer(webSocket){
+function getOtherPlayer(webSocket) {
     const theGame = findGame(webSocket);
     if (theGame == undefined) {
         console.error("An odd number of players joined");
@@ -95,8 +94,8 @@ let queue = [];
 let gameCount = 0;
 
 
-webSocketServer.on("connection", (socker) => {
-    const webSocket = new improvedws.ImprovedSocket(socker);
+webSocketServer.on("connection", (socket) => {
+    const webSocket = new improvedws.ImprovedSocket(socket);
     addClient(webSocket);
 
     webSocket.on("message", (message) => {
@@ -112,7 +111,7 @@ webSocketServer.on("connection", (socker) => {
                 currentGame.player1 = webSocket;
             } else {
                 currentGame.player1.send(data);
-                
+
                 currentGame.player2 = webSocket;
                 data.color = 'orange';
                 webSocket.send(data);
@@ -132,7 +131,7 @@ webSocketServer.on("connection", (socker) => {
             console.log("Game was won by the other player");
             const data = {
                 "event": "gameWonByOther",
-                "color":  received.color,
+                "color": received.color,
                 "positions": received.positions
             }
             otherPlayer.send(data);

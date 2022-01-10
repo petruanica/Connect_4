@@ -29,6 +29,7 @@ warningYou.style.display = 'none';
 warningYou.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningYou), false); // sa termin animatia
 warningOpponent.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningOpponent), false); // sa termin animatia
 
+const playerDivs = document.querySelectorAll(".player-div");
 
 const scoreYou = document.querySelectorAll(".player-score")[0];
 const scoreOpponent = document.querySelectorAll(".player-score")[1];
@@ -57,6 +58,7 @@ export class Game {
             "red": 0,
             "orange": 0
         };
+        this.setPlayerColors();
         this.updateCirclesBasedOnColor('red'); // red is the first player
         this.opponentRequestedRematch = false;
 
@@ -390,10 +392,25 @@ export class Game {
         this.resetGame();
     }
 
+    setPlayerColors() {
+        if (this.myTurnColor == 'red') {
+            playerDivs[0].style.borderColor = 'red';
+            playerDivs[1].style.borderColor = 'orange';
+            circleYou.style.backgroundColor = 'red';
+            circleOpponent.style.backgroundColor = 'orange';
+        } else {
+            playerDivs[0].style.borderColor = 'orange';
+            playerDivs[1].style.borderColor = 'red';
+            circleYou.style.backgroundColor = 'orange';
+            circleOpponent.style.backgroundColor = 'red';
+        }
+    }
+
     /**
      * function called when a player click on the rematch button
      */
     rematchClick() {
+        this.myTurnColor = this.opponentColor();
         if (this.opponentRequestedRematch == false) {
             // I am the first to click the rematch button
             winMethodText.innerHTML = "Waiting for opponent to accept...";
@@ -420,6 +437,7 @@ export class Game {
      */
     resetGame() {
         this.board.clearBoard();
+        this.setPlayerColors();
 
         winIconYou.style.display = "none"; // no one won
         winIconOpponent.style.display = "none"; // no one won
