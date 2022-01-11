@@ -46,7 +46,7 @@ function displayTimer() {
 
 export function resetTurnTimer() {
     clearInterval(timerInterval);
-    secondsTimer = config.TIMER_SECONDS + 1;
+    secondsTimer = config.TIMER_SECONDS;
     timerInterval = setInterval(substractOneSecond, 1000);
 }
 

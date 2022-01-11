@@ -319,22 +319,12 @@ button {
 
 .floatBubble {
     position: relative;
-    -webkit-animation: floatBubble 2s normal ease-in-out;
-    animation: floatBubble 2s normal ease-in-out;
+    -webkit-animation: floatBubble 0.5s normal ease-in-out;
+    animation: floatBubble 0.5s normal ease-in-out;
 }
 
 @keyframes floatBubble {
-    0% {
-        outline: 1px solid rgb(201, 201, 201);
-    }
-
     50% {
-        transform: translateY(-2.5px);
-        outline: 1px solid rgb(201, 201, 201);
-    }
-
-    100% {
-        transform: translateY(0);
-        outline: 1px solid rgb(201, 201, 201);
+        transform: scale(1.2,1.2);
     }
 }
