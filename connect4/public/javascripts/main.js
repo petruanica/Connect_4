@@ -62,12 +62,6 @@ socket.onopen = () => {
 
 // close socket nicely
 window.onbeforeunload = () => {
-
-    let data = {
-        "event": Messages.DISCONNECT,
-        "message": "Goodbye!"
-    };
-    socket.send(JSON.stringify(data)); // event for general disconnect
     if (game.gameEnded == false) {
         data = {
             "event": Messages.PLAYER_DISCONNECTED,

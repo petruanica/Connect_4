@@ -32,12 +32,3 @@ playButton.addEventListener("click", () => {
     socket.send(JSON.stringify(data));
 });
 
-// close socket nicely
-window.onbeforeunload = () => {
-    const data = {
-        "event": Messages.DISCONNECT,
-        "message": "Disconect from splash!"
-    }
-    socket.send(JSON.stringify(data));
-    socket.close();
-}

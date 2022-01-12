@@ -68,7 +68,6 @@ function updateClients() {
     const data = {
         "event": messages.GAME_STATS,
         "onlinePlayers": clients.length,
-        "gamesPlayed": gameCount,
     }
     for (const client of clients) {
         client.send(JSON.stringify(data));
@@ -211,9 +210,6 @@ webSocketServer.on("connection", (socket) => {
         } else if (received.event == messages.GAME_REMATCH_ACCEPTED) {
             let otherPlayer = getOtherPlayer(webSocket);
             otherPlayer.send(received); // send the same event to the client
-        }else if(received.event == messages.DISCONNECT){
-            console.log("Someone disconnected");
-            gameStats.onlinePlayers--;
         }
     });
 
