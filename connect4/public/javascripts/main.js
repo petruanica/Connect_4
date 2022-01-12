@@ -16,29 +16,25 @@ if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).inc
 }
 
 
-const message = document.querySelector("#message");
 const socket = new WebSocket(config.WEB_SOCKET_URL);
-
 let game;
 
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log(data);
-    if (data.event == "playersConnected") {
-        message.innerHTML = data.playersGame;
-    } else if (data.event == "move") {
+    if (data.event == "move") {
         console.log("I have to make a move at column", data);
         game.placeColumn(data.column, data.randomClicked);
     } else if (data.event == Messages.GAME_SET_COLOR) {
         console.log("I am " + data.color);
         const playerColor = data.color;
         startGame(playerColor);
-    } else if (data.event == "gameWonByOther") {
+    } else if (data.event == Messages.GAME_WON_BY_OTHER) {
         game.handleWonGame(data.positions, data.color);
-    } else if (data.event == "gameWonByTimePenalty") {
+    } else if (data.event == Messages.GAME_WON_BY_TIMEPENALTY) {
         game.handleGameEndByTimePenalty();
-    } else if (data.event == "gameWonByDisconnect" && !game.gameEnded) {
+    } else if (data.event == Messages.GAME_WON_BY_DISCONNECT && !game.gameEnded) {
         console.log(data.message);
         game.handleGameEndByDisconnect();
     } else if (data.event == Messages.GAME_REMATCH_REQUEST) {
