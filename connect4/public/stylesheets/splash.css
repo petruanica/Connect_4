@@ -1,5 +1,5 @@
 #title {
-    margin-top:5%;
+    margin-top: 5%;
     margin-bottom: 5%;
     width: 400px;
     height: 100px;
@@ -8,7 +8,7 @@
     align-items: center;
 }
 
-#title img{
+#title img {
     width: 100%;
     margin-top: 0.5em;
 }
@@ -43,6 +43,7 @@ button {
     width: 300px;
     height: 100px;
     align-self: center;
+   
 }
 
 #stats {
@@ -68,21 +69,68 @@ button {
     align-items: center;
 }
 
-#stats div >span {
+#stats div>span {
     margin-left: auto;
     color: red;
 }
 
+
+
 @keyframes fadebackground {
-    from {background-color: #FCE97F;}
-    to {background-color: #2EB07B;}
+    from {
+        background-color: #FCE97F;
+    }
+
+    to {
+        background-color: #2EB07B;
+    }
+}
+
+@keyframes fadeBorders {
+    from {
+        border-top-color: #2EB07B;
+    }
+
+    to {
+        border-top-color: #FCE97F;
+    }
 }
 
 .waiting-animation {
     background: #FCE97F;
-    animation: fadebackground 1s infinite alternate;
+    animation: fadebackground 1s infinite alternate ease-in-out;
 }
 
-#games-total, #avg-length {
+.waiting-animation::before {
+    position: absolute;
+    content: "";
+    top: calc(50% - 7.5px);
+    left: 0%;
+    width: 0;
+    height: 0;
+    transform: rotate(-90deg);
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid rgb(0, 118, 139);
+    animation: fadeBorders 1s infinite alternate;
+}
+
+
+.waiting-animation::after {
+    position: absolute;
+    content: "";
+    top: calc(50% - 7.5px);
+    right: 0%;
+    width: 0;
+    height: 0;
+    transform: rotate(90deg);
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid rgb(0, 118, 139);
+    animation: fadeBorders 1s infinite alternate;
+}
+
+#games-total,
+#avg-length {
     padding-left: 20px;
 }

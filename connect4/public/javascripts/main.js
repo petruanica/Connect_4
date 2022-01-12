@@ -23,7 +23,7 @@ let game;
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log(data);
-    if (data.event == "move") {
+    if (data.event == Messages.GAME_MOVE) {
         console.log("I have to make a move at column", data);
         game.placeColumn(data.column, data.randomClicked);
     } else if (data.event == Messages.GAME_SET_COLOR) {

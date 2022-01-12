@@ -387,7 +387,9 @@ export class Game {
     }
 
     handleRematchRequest() {
+        winMethodText.style.color = "#0da700";
         winMethodText.innerHTML = "The other player wants to play with you again";
+        rematchButton.className += " rematch-animation";
         this.opponentRequestedRematch = true;
     }
 
@@ -417,7 +419,8 @@ export class Game {
         if (this.opponentRequestedRematch == false) {
             // I am the first to click the rematch button
             winMethodText.innerHTML = "Waiting for opponent to accept...";
-
+            winMethodText.style.color = "#0da700";
+            rematchButton.className += " rematch-animation";
             const data = {
                 "event": Messages.GAME_REMATCH_REQUEST,
                 "message": "waiting for opponent to accept rematch"
@@ -445,6 +448,8 @@ export class Game {
         winIconYou.style.display = "none"; // no one won
         winIconOpponent.style.display = "none"; // no one won
 
+        rematchButton.className = "";
+
         this.gameEnded = false;
         this.opponentRequestedRematch = false;
 
@@ -458,6 +463,8 @@ export class Game {
         this.updateCirclesBasedOnColor('red'); // red is the first player
 
         wonMessageText.style.display = 'none';
+        winMethodText.style.color = "black";
+
         startTimers();
     }
 }
