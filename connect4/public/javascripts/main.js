@@ -5,7 +5,7 @@ import { Game } from "./game.js";
 import { config } from "./config.js";
 
 console.log("I came in from :", document.referrer); // 
-if (document.referrer == "") {
+if(document.referrer == ""){
     window.location.href = "./";
 }
 
@@ -62,12 +62,12 @@ socket.onopen = () => {
 
 // close socket nicely
 window.onbeforeunload = () => {
-    if (game.gameEnded == false) {
-        data = {
+    if(game.gameEnded == false){
+        const data = {
             "event": Messages.PLAYER_DISCONNECTED,
             "message": "Goodbye!"
-        };
-        socket.send(JSON.stringify(data)); // event to trigger win
+        }
+        socket.send(JSON.stringify(data));
     }
     socket.close();
 }
@@ -84,3 +84,5 @@ function startGame(playerColor) {
 export function turnTimePenalty() {
     game.addTimePenalty();
 }
+
+  
