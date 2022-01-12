@@ -43,8 +43,8 @@ button:active {
     background-color: #c0e0e98e;
 }
 
-/* 
- * Minimum width/height for this game is 1400px x 700px
+
+ /* Minimum width/height for this game is 1400px x 700px */
  
 @media (max-width: 1399px), (max-height: 699px) {
     body::before {
@@ -61,4 +61,4 @@ button:active {
       background-color: black;
       z-index: 100;
     }
-} */
+}
