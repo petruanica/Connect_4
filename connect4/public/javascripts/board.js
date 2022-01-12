@@ -130,7 +130,7 @@ export class Board {
      * @param {number} row
      */
      changeWinningPieceStyle(column, row) {
-        this.boardPieces[column][row].className += ' blink-me';
+        this.boardPieces[column][row].className = `board-cell ${this.boardPieces[column][row].currentColor} blink-me`;
     }
 
     /**

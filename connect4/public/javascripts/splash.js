@@ -8,8 +8,8 @@ socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log(data.event);
     if(data.event == Messages.GAME_STATS){
+        onlinePlayers.innerHTML = data.onlinePlayers;
         // it is updated through ejs
-        // onlinePlayers.innerHTML = data.onlinePlayers;
         // gamesPlayed.innerHTML = data.gamesPlayed;
     } else if (data.event == Messages.PLAYERS_READY) {
         window.location.href = "./game";

@@ -59,6 +59,7 @@ button {
     padding-left: 20px;
     padding-right: 20px;
     border: 2px solid black;
+    width: fit-content;
 }
 
 #stats div {
@@ -80,4 +81,8 @@ button {
 .waiting-animation {
     background: #FCE97F;
     animation: fadebackground 1s infinite alternate;
+}
+
+#games-total, #avg-length {
+    padding-left: 20px;
 }

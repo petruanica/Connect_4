@@ -212,7 +212,7 @@ webSocketServer.on("connection", (socket) => {
             let otherPlayer = getOtherPlayer(webSocket);
             otherPlayer.send(received); // send the same event to the client
         }else if(received.event == messages.DISCONNECT){
-            console.log("Some one disconnected");
+            console.log("Someone disconnected");
             gameStats.onlinePlayers--;
         }
     });
