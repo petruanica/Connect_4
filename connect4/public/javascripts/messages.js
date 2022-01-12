@@ -11,6 +11,5 @@
     exports.GAME_REMATCH_ACCEPTED = "rematchAccepted";
     exports.PLAYERS_READY = "playersReady";
     exports.PLAYER_DISCONNECTED = "playerDisconnected";
-
-
+    exports.DISCONNECT = "disconnect"; // called whenever a player disconect from any page
 }(typeof exports === 'undefined' ? this.Messages = {} : exports));

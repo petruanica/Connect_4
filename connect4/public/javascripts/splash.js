@@ -8,8 +8,9 @@ socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log(data.event);
     if(data.event == Messages.GAME_STATS){
-        onlinePlayers.innerHTML = data.onlinePlayers;
-        gamesPlayed.innerHTML = data.gamesPlayed;
+        // it is updated through ejs
+        // onlinePlayers.innerHTML = data.onlinePlayers;
+        // gamesPlayed.innerHTML = data.gamesPlayed;
     } else if (data.event == Messages.PLAYERS_READY) {
         window.location.href = "./game";
     }
@@ -30,3 +31,13 @@ playButton.addEventListener("click", () => {
     }
     socket.send(JSON.stringify(data));
 });
+
+// close socket nicely
+window.onbeforeunload = () => {
+    const data = {
+        "event": Messages.DISCONNECT,
+        "message": "Disconect from splash!"
+    }
+    socket.send(JSON.stringify(data));
+    socket.close();
+}

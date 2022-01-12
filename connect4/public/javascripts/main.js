@@ -5,7 +5,7 @@ import { Game } from "./game.js";
 import { config } from "./config.js";
 
 console.log("I came in from :", document.referrer); // 
-if(document.referrer == ""){
+if (document.referrer == "") {
     window.location.href = "./";
 }
 
@@ -62,11 +62,19 @@ socket.onopen = () => {
 
 // close socket nicely
 window.onbeforeunload = () => {
-    const data = {
-        "event": Messages.PLAYER_DISCONNECTED,
+
+    let data = {
+        "event": Messages.DISCONNECT,
         "message": "Goodbye!"
+    };
+    socket.send(JSON.stringify(data)); // event for general disconnect
+    if (game.gameEnded == false) {
+        data = {
+            "event": Messages.PLAYER_DISCONNECTED,
+            "message": "Goodbye!"
+        };
+        socket.send(JSON.stringify(data)); // event to trigger win
     }
-    socket.send(JSON.stringify(data));
     socket.close();
 }
 

@@ -1,6 +1,6 @@
 const gameStats = {
-    onlinePlayers: 1, // quick fix
+    onlinePlayers: 0,
     gamesPlayed: 0,
-  };
-  
-  module.exports = gameStats;
+};
+
+module.exports = gameStats;

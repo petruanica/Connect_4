@@ -1,17 +1,17 @@
 //@ts-check
 
-const messages = require("./public/javascripts/messages.js");
+const messages = require("./public/javascripts/messages");
 const path = require("path");
 const express = require('express');
 const http = require("http");
 const ws = require("ws");
-const improvedws = require("./improvedSocket.js");
+const fs = require("fs");
+const improvedws = require("./improvedSocket");
+const gameStats = require("./gamestats")
 
 
 
 const indexRouter = require('./routes/index');
-const { Socket } = require("dgram");
-const add = require("./improvedSocket.js");
 
 
 const app = express();
@@ -23,9 +23,29 @@ app.set('view engine', 'ejs');
 app.use('/', indexRouter);
 app.use(express.static(__dirname + "/public"));
 
+
+
+
 const server = http.createServer(app);
+server.on("connection", updateGameStats);
+
 server.listen(port);
 const webSocketServer = new ws.Server({ server });
+
+function updateGameStats(){
+    const data = fs.readFileSync("general_stats.json");
+    const stats = JSON.parse(data.toString());
+    gameStats.gamesPlayed = stats.gamesPlayed;
+}
+
+function addGameToStats(){
+    const data = fs.readFileSync("general_stats.json");
+    const stats = JSON.parse(data.toString());
+    stats.gamesPlayed = stats.gamesPlayed + 1;
+    gameStats.gamesPlayed = stats.gamesPlayed;
+    fs.writeFileSync('general_stats.json',JSON.stringify(stats));
+    updateClients();
+}
 
 // client part 
 let clients = [];
@@ -135,10 +155,12 @@ webSocketServer.on("connection", (socket) => {
                 "positions": received.positions
             }
             otherPlayer.send(data);
+            addGameToStats();
         } else if (received.event == messages.GAME_DRAW) {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Game ended in a draw!");
             otherPlayer.send(received);
+            addGameToStats();
         } else if (received.event == messages.GAME_QUEUE) {
             queue.push(webSocket);
             console.log("players in queue: " + queue.length);
@@ -158,19 +180,25 @@ webSocketServer.on("connection", (socket) => {
                 "message": "opponent ran out of time",
             }
             otherPlayer.send(data);
+            addGameToStats();
         } else if (received.event == messages.PLAYER_DISCONNECTED) {
             let otherPlayer = getOtherPlayer(webSocket);
             const data = {
                 "event": "gameWonByDisconnect",
                 "message": "opponent disconnected",
             }
+            console.log("some one disconnected");
             otherPlayer.send(data);
+            addGameToStats();
         } else if (received.event == messages.GAME_REMATCH_REQUEST) {
             let otherPlayer = getOtherPlayer(webSocket);
             otherPlayer.send(received);
         } else if (received.event == messages.GAME_REMATCH_ACCEPTED) {
             let otherPlayer = getOtherPlayer(webSocket);
             otherPlayer.send(received); // send the same event to the client
+        }else if(received.event == messages.DISCONNECT){
+            console.log("Some one disconnected");
+            gameStats.onlinePlayers--;
         }
     });
 
