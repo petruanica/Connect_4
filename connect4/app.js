@@ -36,13 +36,27 @@ function updateGameStats(){
     const data = fs.readFileSync("general_stats.json");
     const stats = JSON.parse(data.toString());
     gameStats.gamesPlayed = stats.gamesPlayed;
+    if(stats.gamesPlayed == 0)
+        gameStats.averageGameLength = 0;
+    else
+        gameStats.averageGameLength = Math.round(stats.gamesLengthSum / stats.gamesPlayed * 10) / 10;
+    // 2 decimal round
+
 }
 
-function addGameToStats(){
+function addGameToStats(gameLength){
     const data = fs.readFileSync("general_stats.json");
     const stats = JSON.parse(data.toString());
     stats.gamesPlayed = stats.gamesPlayed + 1;
+    if(gameLength != undefined){
+        stats.gamesLengthSum += gameLength;
+    }
     gameStats.gamesPlayed = stats.gamesPlayed;
+    if(stats.gamesPlayed == 0)
+        gameStats.averageGameLength = 0;
+    else
+        gameStats.averageGameLength = Math.round(stats.gamesLengthSum / stats.gamesPlayed * 10) / 10;
+    // 2 decimal round
     fs.writeFileSync('general_stats.json',JSON.stringify(stats));
     updateClients();
 }
@@ -149,13 +163,14 @@ webSocketServer.on("connection", (socket) => {
         } else if (received.event == messages.GAME_WON) {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Game was won by the other player");
+            console.log("Length : ",received.gameLength);
             const data = {
                 "event": "gameWonByOther",
                 "color": received.color,
                 "positions": received.positions
             }
             otherPlayer.send(data);
-            addGameToStats();
+            addGameToStats(received.gameLength);
         } else if (received.event == messages.GAME_DRAW) {
             let otherPlayer = getOtherPlayer(webSocket);
             console.log("Game ended in a draw!");

@@ -68,9 +68,8 @@ button {
 }
 
 #stats div >span {
+    margin-left: auto;
     color: red;
-    position: absolute;
-    right: 10px;
 }
 
 @keyframes fadebackground {

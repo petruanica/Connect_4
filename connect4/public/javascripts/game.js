@@ -1,7 +1,7 @@
 'use strict';
 // @ts-check
 
-import { resetTurnTimer, stopTimers, startTimers } from "./timer.js";
+import { resetTurnTimer, stopTimers, startTimers,getClockValue } from "./timer.js";
 import { Board } from "./board.js";
 
 
@@ -237,14 +237,17 @@ export class Game {
             data = {
                 "event": Messages.GAME_WON,
                 "positions": positions,
+                "gameLength": getClockValue(),
                 "color": this.myTurnColor,
             }
             this.socket.send(JSON.stringify(data));
         } else if (this.board.checkBoardFull() == true) {
             console.log('Game ended in a draw');
             this.handleGameDraw();
+            console.log(getClockValue());
             data = {
                 "event": Messages.GAME_DRAW,
+                "gameLength": getClockValue(),
                 "message": "game ended in a draw"
             }
             this.socket.send(JSON.stringify(data));

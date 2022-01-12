@@ -44,6 +44,10 @@ function displayTimer() {
     timer.innerHTML = secondsTimer.toString();
 }
 
+export function getClockValue(){
+    return secondsClock;
+}
+
 export function resetTurnTimer() {
     clearInterval(timerInterval);
     secondsTimer = config.TIMER_SECONDS;
