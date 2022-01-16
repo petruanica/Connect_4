@@ -221,7 +221,7 @@ export class Game {
 
         const [outcome, positions] = this.board.checkWin(column, row, this.myTurnColor);
         console.log('Game ended is: ', outcome);
-        if (outcome == true) {
+        if (outcome == true && randomClicked == false) {
             this.handleWonGame(positions, this.myTurnColor);
             data = {
                 event: Messages.GAME_WON,
@@ -281,7 +281,7 @@ export class Game {
         let randomIndex;
         do {
             randomIndex = Math.floor(Math.random() * this.board.columns);
-        } while (this.board.lastCellColumn[randomIndex] >= this.board.rows);
+        } while (this.board.lastCellColumn[randomIndex] >= this.board.rows - 1);
         this.clickColumn(randomIndex, true);
     }
 

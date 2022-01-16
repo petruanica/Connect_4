@@ -188,7 +188,7 @@ webSocketServer.on('connection', (socket) => {
                 event: messages.GAME_WON_BY_DISCONNECT,
                 message: 'opponent disconnected'
             }
-            console.log("someone disconnected");
+            console.log('someone disconnected');
             otherPlayer.send(data);
             addGameToStats(false);
         } else if (received.event == messages.GAME_REMATCH_REQUEST) {
