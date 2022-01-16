@@ -1,7 +1,7 @@
 'use strict';
 
-import { turnTimePenalty } from "./main.js";
-import {config} from "./config.js"
+import { turnTimePenalty } from './main.js';
+import { config } from './config.js'
 
 const clock = document.querySelector('#clock>span');
 const timer = document.querySelector('#timer>span');
@@ -14,13 +14,12 @@ let timerInterval;
 
 startTimers();
 
-function addOneSecond() {
+function addOneSecond () {
     secondsClock++;
     displayClock();
 }
 
-
-function displayClock() {
+function displayClock () {
     let sec = secondsClock % 60;
     if (sec < 10) {
         sec = '0' + sec.toString();
@@ -31,12 +30,12 @@ function displayClock() {
     clock.innerHTML = min + ':' + sec;
 }
 
-function substractOneSecond() {
+function substractOneSecond () {
     secondsTimer--;
     displayTimer();
 }
 
-function displayTimer() {
+function displayTimer () {
     if (secondsTimer == -1) {
         resetTurnTimer();
         turnTimePenalty();
@@ -44,28 +43,28 @@ function displayTimer() {
     timer.innerHTML = secondsTimer.toString();
 }
 
-export function getClockValue(){
+export function getClockValue () {
     return secondsClock;
 }
 
-export function resetTurnTimer() {
+export function resetTurnTimer () {
     clearInterval(timerInterval);
     secondsTimer = config.TIMER_SECONDS;
     timerInterval = setInterval(substractOneSecond, 1000);
 }
 
-export function resetClock() {
+export function resetClock () {
     clearInterval(clockInterval);
     secondsClock = -1;
-    clockInterval = setInterval(addOneSecond, 1000);;
+    clockInterval = setInterval(addOneSecond, 1000); ;
 }
 
-export function startTimers() {
+export function startTimers () {
     resetTurnTimer();
     resetClock()
 }
 
-export function stopTimers() {
+export function stopTimers () {
     clearInterval(clockInterval);
     clearInterval(timerInterval);
 }

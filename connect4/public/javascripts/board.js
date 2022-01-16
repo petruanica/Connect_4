@@ -1,5 +1,6 @@
+/* eslint-disable eqeqeq */
 export class Board {
-    constructor() {
+    constructor () {
         this.rows = 6;
         this.columns = 7;
 
@@ -21,14 +22,13 @@ export class Board {
      * @param {string} playerTurnColor
      * @return {number} the row where the piece was placed or undefined if it can't be placed anymore
      */
-    placePiece(col, playerTurnColor) {
+    placePiece (col, playerTurnColor) {
         const rowIndex = this.lastCellColumn[col] + 1;
         if (rowIndex < this.rows) {
             this.boardPieces[col][rowIndex].className = `board-cell ${playerTurnColor}`;
-            this.boardPieces[col][rowIndex].className += " floatBubble";
+            this.boardPieces[col][rowIndex].className += ' floatBubble';
             this.boardPieces[col][rowIndex].currentColor = playerTurnColor; // atribut manual ca sa verificam mai usor
             this.lastCellColumn[col] += 1;
-            
             return rowIndex;
         } else {
             return undefined;
@@ -38,11 +38,11 @@ export class Board {
     /**
      * creates the board using the 'board-column' and 'board-cell' class names
      */
-    clearBoard() {
+    clearBoard () {
         for (let column = 0; column < this.columns; column++) {
             for (let row = 0; row < this.rows; row++) {
-                this.boardPieces[column][row].className = "board-cell";
-                this.boardPieces[column][row].currentColor = 'white'; // 
+                this.boardPieces[column][row].className = 'board-cell';
+                this.boardPieces[column][row].currentColor = 'white';
                 this.boardPieces[column][row].style.outline = '';
             }
             this.lastCellColumn[column] = -1;
@@ -52,7 +52,7 @@ export class Board {
     /**
      * creates the board using the 'board-column' and 'board-cell' class names
      */
-    initializeBoard() {
+    initializeBoard () {
         const board = document.querySelector('#board');
         for (let column = 0; column < this.columns; column++) {
             const boardColumn = document.createElement('div');
@@ -69,24 +69,21 @@ export class Board {
         }
     }
 
-    makeBoardActive() {
-        const boardColumns = document.querySelectorAll(".board-column");
-        if (boardColumns.length == 0)
-            return;
+    makeBoardActive () {
+        const boardColumns = document.querySelectorAll('.board-column');
+        if (boardColumns.length == 0) { return; }
         for (const boardColumn of boardColumns) {
-            boardColumn.className = "active-board-column";
+            boardColumn.className = 'active-board-column';
         }
     }
 
-    makeBoardInactive() {
-        const boardColumns = document.querySelectorAll(".active-board-column");
-        if (boardColumns.length == 0)
-            return;
+    makeBoardInactive () {
+        const boardColumns = document.querySelectorAll('.active-board-column');
+        if (boardColumns.length == 0) { return; }
         for (const boardColumn of boardColumns) {
-            boardColumn.className = "board-column";
+            boardColumn.className = 'board-column';
         }
     }
-
 
     /**
      * Checks if the piece and the given row and column has the same color as the current player's turn color
@@ -96,7 +93,7 @@ export class Board {
      * @param {string} color
      * @return {boolean} if the piece at the that position has the background color of the player's turn color
      */
-    sameColor(column, row, color) {
+    sameColor (column, row, color) {
         return (this.boardPieces[column][row].currentColor == color);
     }
 
@@ -108,8 +105,8 @@ export class Board {
      * @param {number} row
      * @return {boolean} true/false if the given position is on the board
      */
-    isOnBoard(column, row) {
-        return (0 <= column && column < this.columns && 0 <= row && row < this.rows);
+    isOnBoard (column, row) {
+        return (column >= 0 && column < this.columns && row >= 0 && row < this.rows);
     }
 
     /**
@@ -119,17 +116,17 @@ export class Board {
      * @param {string} color
      * @return {boolean}
      */
-    okColor(column, row, color) {
+    okColor (column, row, color) {
         return (this.isOnBoard(column, row) && this.sameColor(column, row, color));
     }
-    
+
     /**
      * Changes the style of the winning pieces by applying an animation to them
      *
      * @param {number} column
      * @param {number} row
      */
-     changeWinningPieceStyle(column, row) {
+    changeWinningPieceStyle (column, row) {
         this.boardPieces[column][row].className = `board-cell ${this.boardPieces[column][row].currentColor} blink-me`;
     }
 
@@ -142,14 +139,14 @@ export class Board {
      * @param {number} drow how does the column change when we go a direction(column/row/diagional)
      * @return {Array} [true/false,positions of the winning move] weather the move is a winning one
      */
-    checkWinLines(column, row, color, dcol, drow) {
+    checkWinLines (column, row, color, dcol, drow) {
         let left = 0;
         let right = 3;
         for (let position = 1; position <= 4; position++) {
             let col = column;
             let r = row;
             let win = true;
-            const positions = [{ 'col': col, 'row': row }];
+            const positions = [{ col: col, row: row }];
             for (let x = 1; x <= left; x++) {
                 col -= dcol;
                 r += drow;
@@ -157,8 +154,8 @@ export class Board {
                     win = false;
                 }
                 positions.push({
-                    'col': col,
-                    'row': r,
+                    col: col,
+                    row: r
                 });
             }
 
@@ -171,8 +168,8 @@ export class Board {
                     win = false;
                 }
                 positions.push({
-                    'col': col,
-                    'row': r,
+                    col: col,
+                    row: r
                 });
             }
             if (win == true) {
@@ -181,7 +178,7 @@ export class Board {
             left++;
             right--;
         }
-        return [false,[]];
+        return [false, []];
     }
 
     /**
@@ -191,7 +188,7 @@ export class Board {
      * @param {string} color the color of the last move
      * @return {boolean} true/false if the last move was a winning one
      */
-    checkWin(column, row, color) {
+    checkWin (column, row, color) {
         const directions = [
             [1, 0],
             [0, 1],
@@ -205,13 +202,12 @@ export class Board {
                 return [outcome, positions];
             }
         }
-        return [false,[]];
+        return [false, []];
     }
 
-    checkBoardFull() {
+    checkBoardFull () {
         for (const lastCell of this.lastCellColumn) {
-            if (lastCell < this.rows - 1)
-                return false;
+            if (lastCell < this.rows - 1) { return false; }
         }
         return true;
     }

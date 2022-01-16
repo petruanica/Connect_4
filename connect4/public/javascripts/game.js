@@ -1,48 +1,46 @@
+/* eslint-disable no-undef */
 'use strict';
 // @ts-check
 
-import { resetTurnTimer, stopTimers, startTimers,getClockValue } from "./timer.js";
-import { Board } from "./board.js";
-
+import { resetTurnTimer, stopTimers, startTimers, getClockValue } from './timer.js';
+import { Board } from './board.js';
 
 const rematchButton = document.querySelector('#rematch-button');
 
 const wonMessageText = document.querySelector('#win-message');
-const winMethodText = document.querySelector("#win-method");
+const winMethodText = document.querySelector('#win-method');
 
-const circleYou = document.querySelectorAll(".player-turn")[0]; // you
-const circleOpponent = document.querySelectorAll(".player-turn")[1]; // other
+const circleYou = document.querySelectorAll('.player-turn')[0]; // you
+const circleOpponent = document.querySelectorAll('.player-turn')[1]; // other
 
-const warningYou = document.querySelectorAll(".player-info")[0]; // you
-const warningOpponent = document.querySelectorAll(".player-info")[1]; // other
+const warningYou = document.querySelectorAll('.player-info')[0]; // you
+const warningOpponent = document.querySelectorAll('.player-info')[1]; // other
 
-function endAnimation(element) {
-    element.style.display = "none";
-    element.className = "player-info";
-    console.log("animation ended!");
+function endAnimation (element) {
+    element.style.display = 'none';
+    element.className = 'player-info';
+    console.log('animation ended!');
 }
 
-
-warningOpponent.style.display = "none";
+warningOpponent.style.display = 'none';
 warningYou.style.display = 'none';
 
 warningYou.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningYou), false); // sa termin animatia
 warningOpponent.addEventListener('webkitAnimationEnd', (e) => endAnimation(warningOpponent), false); // sa termin animatia
 
-const playerDivs = document.querySelectorAll(".player-div");
+const playerDivs = document.querySelectorAll('.player-div');
 
-const scoreYou = document.querySelectorAll(".player-score")[0];
-const scoreOpponent = document.querySelectorAll(".player-score")[1];
+const scoreYou = document.querySelectorAll('.player-score')[0];
+const scoreOpponent = document.querySelectorAll('.player-score')[1];
 
-const winIconYou = document.querySelectorAll(".player-win-icon")[0];
-const winIconOpponent = document.querySelectorAll(".player-win-icon")[1];
+const winIconYou = document.querySelectorAll('.player-win-icon')[0];
+const winIconOpponent = document.querySelectorAll('.player-win-icon')[1];
 
-winIconYou.style.display = "none";
-winIconOpponent.style.display = "none";
-
+winIconYou.style.display = 'none';
+winIconOpponent.style.display = 'none';
 
 export class Game {
-    constructor(socket, turnColor) {
+    constructor (socket, turnColor) {
         this.socket = socket;
         this.board = new Board();
         this.board.initializeBoard();
@@ -52,11 +50,10 @@ export class Game {
         this.gameEnded = false;
         this.generalTurnColor = 'red';
 
-        if (this.myTurnColor == "red")
-            this.board.makeBoardActive();
+        if (this.myTurnColor == 'red') { this.board.makeBoardActive(); }
         this.timePenalties = {
-            "red": 0,
-            "orange": 0
+            red: 0,
+            orange: 0
         };
         this.setPlayerColors();
         this.updateCirclesBasedOnColor('red'); // red is the first player
@@ -67,28 +64,25 @@ export class Game {
         rematchButton.addEventListener('click', rematchFunction);
     }
 
-
     /**
      * Moves the circle display based on the current game color turn
-     * @param {string} newColor 
+     * @param {string} newColor
      */
-    updateCirclesBasedOnColor(newColor) {
-        circleYou.style.display = "none";
-        circleOpponent.style.display = "none";
-        console.log("Current color is:", newColor);
+    updateCirclesBasedOnColor (newColor) {
+        circleYou.style.display = 'none';
+        circleOpponent.style.display = 'none';
+        console.log('Current color is:', newColor);
         if (newColor == this.myTurnColor) {
-            circleYou.style.display = "block";
+            circleYou.style.display = 'block';
         } else {
-            circleOpponent.style.display = "block";
+            circleOpponent.style.display = 'block';
         }
     }
-
-
 
     /**
      * add click events to the board columns
      */
-    addClickEvents() {
+    addClickEvents () {
         const columns = document.querySelectorAll('.board-column');
         let columnIndex = 0;
         for (const column of columns) {
@@ -101,31 +95,30 @@ export class Game {
     /**
      * increment the score of my color
      */
-    incrementMyScore() {
+    incrementMyScore () {
         scoreYou.innerHTML = Number.parseInt(scoreYou.innerHTML) + 1;
     }
 
     /**
      * increment the score of the opponent
      */
-    incremenetOpponentScore() {
+    incremenetOpponentScore () {
         scoreOpponent.innerHTML = Number.parseInt(scoreOpponent.innerHTML) + 1;
-    }   
+    }
 
     /**
      * Display a crown icon above the player who won
      * @param {String} winningColor winning color
      */
-    showWinnerIcon(winningColor){
-        if (winningColor == "none")
-            return;
+    showWinnerIcon (winningColor) {
+        if (winningColor == 'none') { return; }
 
-        if (winningColor == this.myTurnColor){
-            winIconYou.style.display = "block";
-            console.log("eu am castigat");
+        if (winningColor == this.myTurnColor) {
+            winIconYou.style.display = 'block';
+            console.log('eu am castigat');
         } else {
-            winIconOpponent.style.display = "block";
-            console.log("eu am pierdut");
+            winIconOpponent.style.display = 'block';
+            console.log('eu am pierdut');
         }
     }
 
@@ -133,16 +126,15 @@ export class Game {
      * handle the score displayed
      * @param {String} winningColor the color that won the game
      */
-    handleGameScore(winningColor) {
-        if (winningColor == "none")
-            return;
+    handleGameScore (winningColor) {
+        if (winningColor == 'none') { return; }
 
         if (winningColor == this.myTurnColor) {
             this.incrementMyScore();
-            console.log("--eu am castigat");
+            console.log('--eu am castigat');
         } else {
             this.incremenetOpponentScore();
-            console.log("--eu am pierdut");
+            console.log('--eu am pierdut');
         }
     }
 
@@ -151,7 +143,7 @@ export class Game {
      * also manages the win player text
      * @param {String} winningColor the color that won the game
      */
-    handleGeneralWin(winningColor) {
+    handleGeneralWin (winningColor) {
         this.gameEnded = true;
         resetTurnTimer();
         stopTimers();
@@ -168,47 +160,45 @@ export class Game {
      * @param {Array} positions an array of the winning piece positions
      * @param {String} winningColor the color that won the game
      */
-    handleWonGame(positions, winningColor) {
+    handleWonGame (positions, winningColor) {
         this.handleGeneralWin(winningColor);
         for (const pos of positions) {
             this.board.changeWinningPieceStyle(pos.col, pos.row);
         }
-        winMethodText.innerHTML = "Click the rematch button to play again. ";
+        winMethodText.innerHTML = 'Click the rematch button to play again. ';
         document.querySelector('#win-player').innerHTML = `Player ${winningColor} has won the game!`;
     }
 
-
-    handleGameEndByTimePenalty() {
+    handleGameEndByTimePenalty () {
         this.handleGeneralWin(this.generalTurnColor);
-        rematchButton.style.display = "none";
+        rematchButton.style.display = 'none';
         if (this.generalTurnColor == this.myTurnColor) {
-            winMethodText.innerHTML = "Your opponent ran out of time and was kicked out of the game. ";
+            winMethodText.innerHTML = 'Your opponent ran out of time and was kicked out of the game. ';
         } else {
-            winMethodText.innerHTML = "You ran out of time and were kicked out of the game. ";
+            winMethodText.innerHTML = 'You ran out of time and were kicked out of the game. ';
         }
         document.querySelector('#win-player').innerHTML = `Player ${this.generalTurnColor} has won the game!`;
     }
 
-    handleGameEndByDisconnect() {
+    handleGameEndByDisconnect () {
         this.handleGeneralWin(this.myTurnColor);
-        rematchButton.style.display = "none";
-        winMethodText.innerHTML = "Your opponent abandoned the match. ";
+        rematchButton.style.display = 'none';
+        winMethodText.innerHTML = 'Your opponent abandoned the match. ';
         document.querySelector('#win-player').innerHTML = `Player ${this.myTurnColor} has won the game!`;
     }
 
-    handleGameDraw() {
-        this.handleGeneralWin("none");
-        winMethodText.innerHTML = "Click the rematch button to play again. ";
-        document.querySelector('#win-player').innerHTML = "Game ended in a draw!";
+    handleGameDraw () {
+        this.handleGeneralWin('none');
+        winMethodText.innerHTML = 'Click the rematch button to play again. ';
+        document.querySelector('#win-player').innerHTML = 'Game ended in a draw!';
     }
-
 
     /**
      * Click made by me or by a random move because my turn has passed
-     * @param {number} column 
+     * @param {number} column
      * @param {boolean} randomClicked boolean that says if the click was random or not
      */
-    clickColumn(column, randomClicked = false) {
+    clickColumn (column, randomClicked = false) {
         // player clicks on the column
 
         if (this.gameEnded == true) {
@@ -219,15 +209,14 @@ export class Game {
             return;
         }
         const row = this.placeColumn(column);
-        if (row == undefined)
-            return; // it did not change the board
+        if (row == undefined) { return; } // it did not change the board
 
         let data = {
-            "event": Messages.GAME_MOVE,
-            "column": column,
-            "randomClicked": randomClicked
+            event: Messages.GAME_MOVE,
+            column: column,
+            randomClicked: randomClicked
         }
-        console.log("I am sending the move to the other player", data);
+        console.log('I am sending the move to the other player', data);
         this.socket.send(JSON.stringify(data));
 
         const [outcome, positions] = this.board.checkWin(column, row, this.myTurnColor);
@@ -235,10 +224,10 @@ export class Game {
         if (outcome == true) {
             this.handleWonGame(positions, this.myTurnColor);
             data = {
-                "event": Messages.GAME_WON,
-                "positions": positions,
-                "gameLength": getClockValue(),
-                "color": this.myTurnColor,
+                event: Messages.GAME_WON,
+                positions: positions,
+                gameLength: getClockValue(),
+                color: this.myTurnColor
             }
             this.socket.send(JSON.stringify(data));
         } else if (this.board.checkBoardFull() == true) {
@@ -246,9 +235,9 @@ export class Game {
             this.handleGameDraw();
             console.log(getClockValue());
             data = {
-                "event": Messages.GAME_DRAW,
-                "gameLength": getClockValue(),
-                "message": "game ended in a draw"
+                event: Messages.GAME_DRAW,
+                gameLength: getClockValue(),
+                message: 'game ended in a draw'
             }
             this.socket.send(JSON.stringify(data));
         }
@@ -260,12 +249,12 @@ export class Game {
      * @param {boolean} randomClicked if the oponnent timer's was out this boolean is true
      * @return {function} a function that manages the click
      */
-    placeColumn(column, randomClicked) {
+    placeColumn (column, randomClicked) {
         const row = this.board.placePiece(column, this.generalTurnColor);
         if (row == undefined) {
             return undefined;
         }
-        console.log("Placing on column!", randomClicked);
+        console.log('Placing on column!', randomClicked);
         if (randomClicked == true) {
             // https://stackoverflow.com/questions/7505623/colors-in-javascript-console
             console.log('%c Display warning for other', 'color: #bada55'); // colors in console.log()
@@ -280,16 +269,15 @@ export class Game {
      * Gets the opponent color
      * @returns the opponent color
      */
-    opponentColor() {
-        if (this.myTurnColor == 'red')
-            return 'orange';
+    opponentColor () {
+        if (this.myTurnColor == 'red') { return 'orange'; }
         return 'red';
     }
 
     /**
-     * Places a piece on a random column on my board 
+     * Places a piece on a random column on my board
      */
-    clickRandomColumn() {
+    clickRandomColumn () {
         let randomIndex;
         do {
             randomIndex = Math.floor(Math.random() * this.board.columns);
@@ -300,7 +288,7 @@ export class Game {
     /**
      * Displays warning popup for me
      */
-    displayWarningForMe() {
+    displayWarningForMe () {
         this.timePenalties[this.myTurnColor]++;
         const count = this.timePenalties[this.myTurnColor];
         console.log(this.timePenalties);
@@ -313,7 +301,7 @@ export class Game {
     /**
      * Displays warning popup for the other player
      */
-    displayWarningForOther() {
+    displayWarningForOther () {
         this.timePenalties[this.opponentColor()]++;
         const count = this.timePenalties[this.opponentColor()];
         console.log(this.timePenalties);
@@ -323,18 +311,17 @@ export class Game {
     }
 
     /**
-     * 
+     *
      * @param {number} count the number of penalties
      * @returns {string} the message to be displayed
      */
-    getStringFromCount(count) {
-        const warning = "warning";
-        if (count == 1)
-            return "1st warning";
-        else if (count == 2)
-            return "2nd warning";
-        else if (count == 3) {
-            return "Game ended!";
+    getStringFromCount (count) {
+        if (count == 1) {
+            return '1st warning';
+        } else if (count == 2) {
+            return '2nd warning';
+        } else if (count == 3) {
+            return 'Game ended!';
         }
     }
 
@@ -342,15 +329,15 @@ export class Game {
      * cheks if the game was ended and sends a message to the server
      * @param {number} count number of penalties
      */
-    checkGameEndedByPenalties(count) {
+    checkGameEndedByPenalties (count) {
         if (count == 3) {
             this.handleGameEndByTimePenalty();
             const data = {
-                "event": Messages.GAME_LOST_PENALTY,
-                "message": "ran out of time",
+                event: Messages.GAME_LOST_PENALTY,
+                message: 'ran out of time'
             }
             this.socket.send(JSON.stringify(data));
-            console.log("ended game due to time penalty");
+            console.log('ended game due to time penalty');
         }
     }
 
@@ -359,7 +346,7 @@ export class Game {
      * Adds a penalty to me based on the timer
      * If a player has 3 penalties, the game ends and the other player wins
      */
-    addTimePenalty() {
+    addTimePenalty () {
         if (this.myTurnColor == this.generalTurnColor) {
             this.clickRandomColumn();
             this.displayWarningForMe();
@@ -369,16 +356,13 @@ export class Game {
     /**
      * changes the player's turn
      */
-    changeGlobalTurn() {
-        console.log("Change global turn");
-        if (this.generalTurnColor == 'red')
-            this.generalTurnColor = 'orange';
-        else
-            this.generalTurnColor = 'red';
+    changeGlobalTurn () {
+        console.log('Change global turn');
+        if (this.generalTurnColor == 'red') { this.generalTurnColor = 'orange'; } else { this.generalTurnColor = 'red'; }
         this.updateCirclesBasedOnColor(this.generalTurnColor);
 
         if (this.myTurnColor == this.generalTurnColor) {
-            console.log("changed hover");
+            console.log('changed hover');
             this.board.makeBoardActive();
         } else {
             this.board.makeBoardInactive();
@@ -386,18 +370,18 @@ export class Game {
         resetTurnTimer();
     }
 
-    handleRematchRequest() {
-        winMethodText.style.color = "#0da700";
-        winMethodText.innerHTML = "The other player wants to play with you again";
-        rematchButton.className += " rematch-animation";
+    handleRematchRequest () {
+        winMethodText.style.color = '#0da700';
+        winMethodText.innerHTML = 'The other player wants to play with you again';
+        rematchButton.className += ' rematch-animation';
         this.opponentRequestedRematch = true;
     }
 
-    handleRematchAccepted() {
+    handleRematchAccepted () {
         this.resetGame();
     }
 
-    setPlayerColors() {
+    setPlayerColors () {
         if (this.myTurnColor == 'red') {
             playerDivs[0].style.borderColor = 'red';
             playerDivs[1].style.borderColor = 'orange';
@@ -414,24 +398,24 @@ export class Game {
     /**
      * function called when a player click on the rematch button
      */
-    rematchClick() {
+    rematchClick () {
         this.myTurnColor = this.opponentColor();
         if (this.opponentRequestedRematch == false) {
             // I am the first to click the rematch button
-            winMethodText.innerHTML = "Waiting for opponent to accept...";
-            winMethodText.style.color = "#0da700";
-            rematchButton.className += " rematch-animation";
+            winMethodText.innerHTML = 'Waiting for opponent to accept...';
+            winMethodText.style.color = '#0da700';
+            rematchButton.className += ' rematch-animation';
             const data = {
-                "event": Messages.GAME_REMATCH_REQUEST,
-                "message": "waiting for opponent to accept rematch"
+                event: Messages.GAME_REMATCH_REQUEST,
+                message: 'waiting for opponent to accept rematch'
             }
             this.socket.send(JSON.stringify(data));
         } else {
-            // I am accepting the rematch 
-            winMethodText.innerHTML = "Accepting the rematch offer!";
+            // I am accepting the rematch
+            winMethodText.innerHTML = 'Accepting the rematch offer!';
             const data = {
-                "event": Messages.GAME_REMATCH_ACCEPTED,
-                "message": "I accepeted the rematch offer",
+                event: Messages.GAME_REMATCH_ACCEPTED,
+                message: 'I accepeted the rematch offer'
             }
             this.socket.send(JSON.stringify(data));
             this.resetGame(); // reseting the game for me
@@ -441,29 +425,28 @@ export class Game {
     /**
      * resets the game by clearing the board and resting the player's turn
      */
-    resetGame() {
+    resetGame () {
         this.board.clearBoard();
         this.setPlayerColors();
 
-        winIconYou.style.display = "none"; // no one won
-        winIconOpponent.style.display = "none"; // no one won
+        winIconYou.style.display = 'none'; // no one won
+        winIconOpponent.style.display = 'none'; // no one won
 
-        rematchButton.className = "";
+        rematchButton.className = '';
 
         this.gameEnded = false;
         this.opponentRequestedRematch = false;
 
         this.generalTurnColor = 'red';
-        if (this.myTurnColor == "red")
-            this.board.makeBoardActive();
+        if (this.myTurnColor == 'red') { this.board.makeBoardActive(); }
         this.timePenalties = {
-            "red": 0,
-            "orange": 0
+            red: 0,
+            orange: 0
         };
         this.updateCirclesBasedOnColor('red'); // red is the first player
 
         wonMessageText.style.display = 'none';
-        winMethodText.style.color = "black";
+        winMethodText.style.color = 'black';
 
         startTimers();
     }
