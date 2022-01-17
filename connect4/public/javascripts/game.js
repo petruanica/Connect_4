@@ -86,7 +86,7 @@ export class Game {
         const columns = document.querySelectorAll('.board-column');
         let columnIndex = 0;
         for (const column of columns) {
-            const click = this.clickColumn.bind(this, columnIndex);
+            const click = this.clickColumn.bind(this, columnIndex,false);
             column.addEventListener('click', click);
             columnIndex++;
         }
@@ -200,7 +200,7 @@ export class Game {
      */
     clickColumn (column, randomClicked = false) {
         // player clicks on the column
-
+        console.log("!!!!Random clicked",randomClicked);
         if (this.gameEnded == true) {
             return;
         }
@@ -221,7 +221,7 @@ export class Game {
 
         const [outcome, positions] = this.board.checkWin(column, row, this.myTurnColor);
         console.log('Game ended is: ', outcome);
-        if (outcome == true && randomClicked == false) {
+        if (outcome == true && this.timePenalties[this.myTurnColor] != 3) {
             this.handleWonGame(positions, this.myTurnColor);
             data = {
                 event: Messages.GAME_WON,
@@ -289,7 +289,7 @@ export class Game {
      * Displays warning popup for me
      */
     displayWarningForMe () {
-        this.timePenalties[this.myTurnColor]++;
+        
         const count = this.timePenalties[this.myTurnColor];
         console.log(this.timePenalties);
         warningYou.firstElementChild.innerText = this.getStringFromCount(count);
@@ -348,6 +348,7 @@ export class Game {
      */
     addTimePenalty () {
         if (this.myTurnColor == this.generalTurnColor) {
+            this.timePenalties[this.myTurnColor]++;
             this.clickRandomColumn();
             this.displayWarningForMe();
         }
