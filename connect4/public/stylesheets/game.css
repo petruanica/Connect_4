@@ -46,7 +46,7 @@ main {
 /* textul din player div */
 .player-div span {
     margin: 0 3px;
-    min-width: 60px;
+    min-width: 80px;
     /* margin-left si margin-right sunt 3 ca sa distantez un pic de imagine */
     padding-top: 3px;
     /* ca sa aliniez textul cu imaginea*/
@@ -59,7 +59,7 @@ main {
     width: 30px;
     height: 30px;
     left: calc(50% - 15px);
-    top: calc(100% + 30px);
+    top: calc(100% + 35px);
     background-color: rgba(0, 170, 212, 255);
     display: flex;
     justify-content: center;
@@ -125,14 +125,29 @@ main {
     /* fata de player div care position relative */
     display: none;
     /* initial e none dar e setat block in main.js cand se decide culoarea jucatorului */
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
-    top: calc(100% + 5px);
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     /* fix deasupra la player-div plus inca 5 px*/
-    left: calc(50% - 5px);
+    /* left: calc(50% - 6px); */
     /* fix la mijloc dar trebuie sa scad 10/2 din width */
+    animation: floatBubbleTurn 1.5s normal linear infinite;
 }
+
+@keyframes floatBubbleTurn {
+    50% {
+        transform: scale(1.3, 1.3);
+    }
+    60% {
+        transform: scale(1.3, 1.3);
+    }
+}
+
 
 .player-win-icon {
     position: absolute;
@@ -261,7 +276,6 @@ main {
 .board-cell.red {
     background-size: 60%;
     background-color: red;
-    background-image: url("../images/delft_flame.png");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -269,7 +283,6 @@ main {
 .board-cell.orange {
     background-size: 60%;
     background-color: orange;
-    background-image: url("../images/delft_flame.png");
     background-repeat: no-repeat;
     background-position: center;
 }

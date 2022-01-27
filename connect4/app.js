@@ -14,9 +14,12 @@ const indexRouter = require('./routes/index');
 const app = express();
 const port = process.argv[2];
 
+// console.log(fs.readFileSync.toString());
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+console.log(app.use.toString())
 app.use('/', indexRouter);
 app.use(express.static(path.join(__dirname, '/public')));
 
@@ -113,6 +116,7 @@ let games = [];
 let currentGame = {};
 let queue = [];
 let gameCount = 0;
+
 
 webSocketServer.on('connection', (socket) => {
     const webSocket = new improvedws.ImprovedSocket(socket);

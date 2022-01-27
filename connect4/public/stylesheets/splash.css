@@ -101,34 +101,7 @@ button {
     animation: fadebackground 1s infinite alternate ease-in-out;
 }
 
-.waiting-animation::before {
-    position: absolute;
-    content: "";
-    top: calc(50% - 7.5px);
-    left: 0%;
-    width: 0;
-    height: 0;
-    transform: rotate(-90deg);
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 15px solid rgb(0, 118, 139);
-    animation: fadeBorders 1s infinite alternate;
-}
 
-
-.waiting-animation::after {
-    position: absolute;
-    content: "";
-    top: calc(50% - 7.5px);
-    right: 0%;
-    width: 0;
-    height: 0;
-    transform: rotate(90deg);
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 15px solid rgb(0, 118, 139);
-    animation: fadeBorders 1s infinite alternate;
-}
 
 #games-total,
 #avg-length {
