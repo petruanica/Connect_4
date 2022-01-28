@@ -2,9 +2,6 @@
   "name": "connect4",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-      "start": "cd connect4 && node app.js 3000"
-  },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
