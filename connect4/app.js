@@ -23,11 +23,11 @@ app.use(express.static(path.join(__dirname, '/public')));
 const server = http.createServer(app);
 server.on('connection', updateGameStats);
 
-server.listen(port);
+server.listen(process.env.PORT || port);
 const webSocketServer = new ws.Server({ server });
 
 function updateGameStats () {
-    const data = fs.readFileSync('general_stats.json');
+    const data = fs.readFileSync('connect4/general_stats.json');
     const stats = JSON.parse(data.toString());
     gameStats.gamesPlayed = stats.gamesPlayed;
     if (stats.actualGamesPlayed == 0) { gameStats.averageGameLength = 0; } else { gameStats.averageGameLength = Math.round(stats.gamesLengthSum / stats.actualGamesPlayed * 10) / 10; }
@@ -35,7 +35,7 @@ function updateGameStats () {
 }
 
 function addGameToStats (isRealGame = true, gameLength = undefined) {
-    const data = fs.readFileSync('general_stats.json');
+    const data = fs.readFileSync('connect4/general_stats.json');
     const stats = JSON.parse(data.toString());
     stats.gamesPlayed = stats.gamesPlayed + 1;
     if (gameLength != undefined) {
@@ -47,7 +47,7 @@ function addGameToStats (isRealGame = true, gameLength = undefined) {
     }
     if (stats.actualGamesPlayed == 0) { gameStats.averageGameLength = 0; } else { gameStats.averageGameLength = Math.round(stats.gamesLengthSum / stats.actualGamesPlayed * 10) / 10; }
     // 2 decimal round
-    fs.writeFileSync('general_stats.json', JSON.stringify(stats));
+    fs.writeFileSync('connect4/general_stats.json', JSON.stringify(stats));
     updateClients();
 }
 

@@ -18,10 +18,10 @@ router.get('/', function(req, res, next) {
     res.render('splash.ejs', gameStats);
 });
 router.get('/game', function(req, res, next) {
-    res.sendFile('game.html', { root: "./public" });
+    res.sendFile('game.html', { root: "./connect4/public" });
 });
 router.get('/tutorial', function(req, res, next) {
-    res.sendFile('tutorial.html', { root: "./public" });
+    res.sendFile('tutorial.html', { root: "./connect4/public" });
 });
 
 module.exports = router;
