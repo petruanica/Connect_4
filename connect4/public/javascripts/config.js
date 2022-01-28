@@ -1,7 +1,7 @@
 class Config {
     constructor () {
         
-        this.WEB_SOCKET_URL = 'ws://192.168.0.101:'+(process.env.PORT || 3000); /* WebSocket URL */
+        this.WEB_SOCKET_URL = 'ws://connect4-fun-game.herokuapp.com/'; /* WebSocket URL */
         this.TIMER_SECONDS = 15;
     }
 }
