@@ -57,14 +57,13 @@ socket.onopen = () => {
 // close socket nicely
 window.onbeforeunload = () => {
     console.log("Unloading everything!");
-    // if (game.gameEnded == false) {
-    console.log("Hey here");
-    const data = {
-        event: Messages.PLAYER_DISCONNECTED,
-        message: 'Goodbye!'
+    if (game.gameEnded == false) {
+        const data = {
+            event: Messages.PLAYER_DISCONNECTED,
+            message: 'Goodbye!'
+        }
+        socket.send(JSON.stringify(data));
     }
-    socket.send(JSON.stringify(data));
-    // }
     socket.close();
 }
 
