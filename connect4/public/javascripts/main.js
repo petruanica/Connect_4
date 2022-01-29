@@ -51,6 +51,7 @@ socket.onopen = () => {
         event: Messages.GAME_STARTED,
         message: 'Hello from a game!'
     }
+    console.log("Game started!");
     socket.send(JSON.stringify(data));
 };
 
