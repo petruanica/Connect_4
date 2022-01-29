@@ -1,6 +1,6 @@
 #title {
     align-self: stretch;
-    width: 425.5px;
+    width: 400px;
     border-radius: 10px;
 }
 
@@ -274,24 +274,18 @@ main {
 }
 
 .board-cell.red {
-    background-size: 60%;
     background-color: red;
-    background-repeat: no-repeat;
-    background-position: center;
+    opacity: 80%;
 }
 
 .board-cell.orange {
-    background-size: 60%;
     background-color: orange;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .board-margin-bottom {
     height: 20px;
     width: 100%;
     background-color: rgba(0, 102, 128, 255);
-
 }
 
 button {

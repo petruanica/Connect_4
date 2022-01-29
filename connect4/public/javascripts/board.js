@@ -53,20 +53,20 @@ export class Board {
      * creates the board using the 'board-column' and 'board-cell' class names
      */
     initializeBoard () {
-        const board = document.querySelector('#board');
-        for (let column = 0; column < this.columns; column++) {
-            const boardColumn = document.createElement('div');
-            boardColumn.className = 'board-column';
-            for (let row = 0; row < this.rows; row++) {
-                const boardCell = document.createElement('div');
-                boardCell.className = 'board-cell';
-                boardColumn.appendChild(boardCell);
-                this.boardPieces[column][this.rows - row - 1] = boardCell;
+        const boardCells = document.querySelectorAll(".board-cell");
+        let row = 0;
+        let column = 0;
+        console.log(boardCells);
+        for(const boardCell of boardCells){
+            this.boardPieces[column][this.rows - row - 1] = boardCell;
+            row++;
+            if(row == this.rows){
+                row = 0;
+                column++;
             }
-            // const func = clickColumnWrapper(column);
-            // boardColumn.addEventListener('click', func); // nu poti pune parametru la functie cand o chemi
-            board.appendChild(boardColumn);
         }
+        console.log(this.boardPieces);
+        
     }
 
     makeBoardActive () {

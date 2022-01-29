@@ -23,8 +23,6 @@ body {
 body {
     background: repeating-linear-gradient(-45deg, #c0e0e98e, #c0e0e98e 2.5px, white 2.5px, white 5px);
     font-family: Virgil, serif;
-    /* min-width: 1200px;
-    min-height: 700px; */
 }
 
 
@@ -43,6 +41,29 @@ button:active {
     background-color: #c0e0e98e;
 }
 
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:absolute;
+    bottom: 5px;
+}
+footer>a{
+    font-size: 16px;
+    text-decoration: none;
+}
+footer>a:hover{
+    color: #6ebbd573;
+}
+footer>a:visited{
+    color: black;
+}
+footer>img{
+    width: 20px;
+    margin-right: 5px;
+    height: 20px;
+    background-color: white;
+}
 
  /* Minimum width/height for this game is 1400px x 700px */
  
