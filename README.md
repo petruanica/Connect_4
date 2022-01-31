@@ -20,4 +20,4 @@ If you would like to contribute feel free to submit a pull request.
 
 To get started you can clone the repository and then run `npm start` from the root directory.
 
-Hope you enjoyed our little game :)
+Hope you enjoyed our game :)
