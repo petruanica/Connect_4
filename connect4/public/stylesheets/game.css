@@ -103,6 +103,7 @@ main {
 }
 
 .player-info {
+    display: none;
     position: absolute;
     bottom: calc(100% + 10px);
     left: 0;
@@ -150,6 +151,7 @@ main {
 
 
 .player-win-icon {
+    display: none;
     position: absolute;
     bottom: calc(100% + 4px);
     left: calc(50% - 15px);
