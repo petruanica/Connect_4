@@ -36,9 +36,6 @@ const scoreOpponent = document.querySelectorAll('.player-score')[1];
 const winIconYou = document.querySelectorAll('.player-win-icon')[0];
 const winIconOpponent = document.querySelectorAll('.player-win-icon')[1];
 
-winIconYou.style.display = 'none';
-winIconOpponent.style.display = 'none';
-
 export class Game {
     constructor (socket, turnColor) {
         this.socket = socket;

@@ -5,6 +5,11 @@
 import { Game } from './game.js';
 import { config } from './config.js';
 
+
+if (window.performance.getEntries('navigation').map((nav) => nav.type).includes('back_forward')) {
+    window.location.href = './';
+}
+
 console.log('I came in from :', document.referrer); //
 if (document.referrer == '') {
     window.location.href = './';
@@ -18,6 +23,9 @@ if (window.performance.getEntriesByType('navigation').map((nav) => nav.type).inc
 
 const socket = new WebSocket(config.WEB_SOCKET_URL);
 let game;
+
+
+
 
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
